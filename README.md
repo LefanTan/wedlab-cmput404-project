@@ -1,1 +1,1 @@
-# wedlab-cmput404-project
+# CMPUT404 Project
