@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT social_distribution.wsgi:application
+web: gunicorn social_distribution.wsgi
