@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   server:
+    image: server:registry.heroku.com/cmput404-wed/server
     restart: always
+    container_name: wed-cmput404-server
     build: ./server
     volumes:
       - ./server:/app
@@ -12,6 +14,7 @@ services:
       - ./server/.env
   postgres:
     restart: always
+    container_name: wed-cmput404-database
     image: postgres:13.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
