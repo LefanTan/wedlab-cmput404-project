@@ -1,1 +1,1 @@
-web: python manage.py runserver 0.0.0.0:\$PORT
+web: waitress-serve --port=$PORT social_distribution.wsgi:application
