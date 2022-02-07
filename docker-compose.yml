@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  server:
+    restart: always
+    build: ./server
+    volumes:
+      - ./server:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - ./server/.env
+  postgres:
+    restart: always
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=server
+
+volumes:
+  postgres_data: 
