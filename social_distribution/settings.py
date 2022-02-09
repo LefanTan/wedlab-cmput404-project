@@ -77,7 +77,7 @@ DATABASES = {
     # }
 
     'default': dj_database_url.config(
-        default=subprocess.check_output(['bash','-c', 'heroku config:get DATABASE_URL -a social-dist-wed']).decode('utf-8'),
+        default=subprocess.check_output('heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
         conn_max_age=600, 
         ssl_require=True
         )
