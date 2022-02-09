@@ -120,3 +120,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
+
+import os, subprocess, dj_database_url
+
+bashCommand = 'heroku config:get DATABASE_URL -a social-dist-wed' #Use your app_name
+
+output = subprocess.check_output(['bash','-c', bashCommand]).decode('utf-8') # executing the bash command and converting byte to string
+
+DATABASES['default'] = dj_database_url.config(default=output,conn_max_age=600, ssl_require=True) #making connection to heroku DB without having to set DATABASE_URL env variable
