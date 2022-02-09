@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-import django_heroku
+import django_heroku, subprocess, dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -71,16 +71,17 @@ WSGI_APPLICATION = 'social_distribution.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
 
-# import os, subprocess, dj_database_url
-# bashCommand = 'heroku config:get DATABASE_URL -a social-dist-wed' #Use your app_name
-# output = subprocess.check_output(['bash','-c', bashCommand]).decode('utf-8') # executing the bash command and converting byte to string
-# DATABASES['default'] = dj_database_url.config(default=output,conn_max_age=600, ssl_require=True) #making connection to heroku DB without having to set DATABASE_URL env variable
+    'default': dj_database_url.config(
+        default=subprocess.check_output(['bash','-c', 'heroku config:get DATABASE_URL -a social-dist-wed']).decode('utf-8'),
+        conn_max_age=600, 
+        ssl_require=True
+        )
+}
 
 
 # Password validation
