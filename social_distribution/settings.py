@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'social_distribution.wsgi.application'
 
 if 'DYNO' in os.environ:
     DATABASES = {
-        'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
+        'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
     }
 else:
     DATABASES = {
@@ -87,7 +87,6 @@ else:
     }
 
 print('DATABASE [Current] :', DATABASES['default'])
-print('ENV [Current] :', os.environ)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
