@@ -73,20 +73,21 @@ WSGI_APPLICATION = 'social_distribution.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
+if os.environ.get('ENV') == 'PRODUCTION':
+    DATABASES = {
+        'default':  dj_database_url.config(conn_max_age=600, ssl_require=True)
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=subprocess.check_output('heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
+            conn_max_age=600,
+            ssl_require=True
+            )
+    }
 
-    'default': dj_database_url.config(
-        default=subprocess.check_output(
-            'heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
 print('DATABASE [Current] :', DATABASES['default'])
+print('ENV [Current] :', os.environ.get('ENV'))
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
