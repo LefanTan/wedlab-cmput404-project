@@ -90,8 +90,7 @@ else:
     }
 
 print('DATABASE [Current] :', DATABASES['default'])
-print("x:",os.environ.get("DATABASE_URL"))
-print("y:",subprocess.check_output('heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'))
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
