@@ -24,4 +24,19 @@ class Post(models.Model):
         (AUTHORIZED_USER, 'Authorized users')
     ]
 
+    # Choices for categories
+    # CATEGORY_CHOICES = []
 
+    title = models.CharField()
+    id = models.CharField(primary_key=True)
+    source = models.URLField()
+    origin = models.CharField()
+    contentType = models.CharField()
+    imageSource = models.URLField()
+    authorId = models.CharField()
+    # category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=)
+    count = models.IntegerField()
+    comments = models.CharField()
+    publishedDate = models.DateTimeField(auto_now=True)
+    visibility = models.CharField(max_length=2, choices=VISIBILITY_CHOICES, default=PUBLIC)
+    unlisted = models.BooleanField()
