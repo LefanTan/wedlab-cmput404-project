@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
@@ -82,7 +81,7 @@ if 'DYNO' in os.environ:
             conn_max_age=600,
             ssl_require=True)
     }
-elif 'TEST' in os.environ:
+elif 'TEST' in os.environ and os.environ['TEST']:
     DATABASES = {
         'default': dj_database_url.config(
             default=subprocess.check_output(
@@ -135,6 +134,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+SITE_ID = 1
 
 
 # Static files (CSS, JavaScript, Images)
