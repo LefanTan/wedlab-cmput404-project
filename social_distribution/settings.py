@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+from pickle import TRUE
 import django_heroku
 import subprocess
 import dj_database_url
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'service',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +72,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'social_distribution.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    )
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -81,7 +91,7 @@ if 'DYNO' in os.environ:
             conn_max_age=600,
             ssl_require=True)
     }
-elif 'TEST' in os.environ and os.environ['TEST']:
+elif 'TEST' in os.environ and os.environ['TEST'] == TRUE:
     DATABASES = {
         'default': dj_database_url.config(
             default=subprocess.check_output(
@@ -134,8 +144,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-SITE_ID = 1
 
 
 # Static files (CSS, JavaScript, Images)

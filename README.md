@@ -10,6 +10,7 @@
    - Password: root
 2. Run `python manage.py migrate` to apply migration to the postgres
 3. Create a copy of the `.env.example` and name it `.env`. Populate the env file (add a secret key)
+   - If you want to test locally but use the heroku test db, change `TEST` to `TRUE`
 4. Create a virtualenv in the root folder, then run `pip install -r requirements.txt`
 5. Run `heroku local` for non window user to start the server. Access it at `http://localhost:8000`
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window`

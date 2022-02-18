@@ -1,14 +1,15 @@
+from pickle import TRUE
 from django.db import models
 
 
 class Author(models.Model):
     id = models.CharField(max_length=1000, primary_key=True)
-    type = models.CharField(max_length=1000)
-    displayName = models.CharField(max_length=1000)
-    url = models.URLField(max_length=1000)
-    host = models.CharField(max_length=1000)
-    github = models.URLField(max_length=1000)
-    profileImage = models.ImageField()
+    type = models.CharField(max_length=255)
+    displayName = models.CharField(max_length=255)
+    url = models.URLField(max_length=500)
+    host = models.URLField(max_length=500)
+    github = models.URLField(max_length=500)
+    profileImage = models.URLField(max_length=500)
 
 
 class Post(models.Model):
@@ -33,7 +34,8 @@ class Post(models.Model):
     origin = models.CharField(max_length=1000)
     contentType = models.CharField(max_length=1000)
     imageSource = models.URLField(max_length=1000)
-    authorId = models.CharField(max_length=1000)
+    authorId = models.ForeignKey(
+        Author, on_delete=models.CASCADE)
     # category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=)
     count = models.IntegerField()
     comments = models.CharField(max_length=1000)
