@@ -38,5 +38,6 @@ class Post(models.Model):
     count = models.IntegerField()
     comments = models.CharField()
     publishedDate = models.DateTimeField(auto_now=True)
-    visibility = models.CharField(max_length=2, choices=VISIBILITY_CHOICES, default=PUBLIC)
+    visibility = models.CharField(
+        max_length=2, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField()
