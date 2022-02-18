@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'social_distribution_app.apps.SocialDistributionAppConfig',
+    'service',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,18 +78,31 @@ WSGI_APPLICATION = 'social_distribution.wsgi.application'
 if 'DYNO' in os.environ:
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ.get("DATABASE_URL"), 
-            conn_max_age=600, 
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
             ssl_require=True)
+    }
+elif 'TEST' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=subprocess.check_output(
+                'heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=subprocess.check_output('heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
-            conn_max_age=600,
-            ssl_require=True
-            )
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'admin',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
     }
+
 
 print('DATABASE [Current] :', DATABASES['default'])
 
