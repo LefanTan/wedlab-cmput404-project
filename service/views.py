@@ -9,6 +9,10 @@ from .models import Author, Post
 # Create your views here.
 
 
+def signup(request):
+    return render(request, 'registration/signup.html')
+
+
 @api_view(['GET'])
 def author_list(request):
     if request.method == 'GET':
