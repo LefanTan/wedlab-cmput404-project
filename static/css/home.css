@@ -32,4 +32,6 @@ header > .create {
   margin-left: 1rem;
   width: 3rem;
   height: 3rem;
+
+  object-fit: contain;
 }

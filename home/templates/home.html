@@ -10,6 +10,7 @@
 
 {% block content %}
 <header class="px-4 py-2 border-bottom">
+  <a href="{% url 'logout' %}"  class="btn btn-outline-danger btn-sm logout">Logout</a>
   <button class="btn create">+ Create</button>
   <button aria-label="inbox" class="inbox"><i class="fa-solid fa-inbox"></i></button>
   <img class="rounded-circle profile-pic" src="{{ profileImage }}" alt="profile pic"/>

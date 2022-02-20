@@ -17,7 +17,8 @@ form {
 }
 
 label,
-input[type] {
+input[type],
+a {
   font-size: 0.85rem;
 }
 
