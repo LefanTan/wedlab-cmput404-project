@@ -1,0 +1,35 @@
+header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+header > .create {
+  padding: 0.25rem 0.5rem;
+  color: white;
+  background-color: var(--primary-400);
+  height: fit-content;
+  margin-left: auto;
+}
+
+.inbox {
+  background-color: transparent;
+  color: rgb(87, 87, 87);
+  border: none;
+  margin-left: 1rem;
+  transition: 200ms;
+}
+
+.inbox:hover {
+  transform: scale(1.1);
+}
+
+.inbox > i {
+  font-size: 1.5rem;
+}
+
+.profile-pic {
+  margin-left: 1rem;
+  width: 3rem;
+  height: 3rem;
+}
