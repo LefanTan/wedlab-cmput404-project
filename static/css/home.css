@@ -35,3 +35,11 @@ header > .create {
 
   object-fit: contain;
 }
+
+.profile-pic-default {
+  background-color: var(--primary-400);
+  color: white;
+  padding: 0.5rem;
+  margin-left: 1rem;
+  font-size: 1rem;
+}
