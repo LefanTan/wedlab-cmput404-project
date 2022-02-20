@@ -3,9 +3,8 @@ from django.db import models
 
 
 class Author(models.Model):
-    id = models.CharField(max_length=1000, primary_key=True)
-    type = models.CharField(max_length=255)
-    displayName = models.CharField(max_length=255, unique=TRUE)
+    id = models.AutoField(primary_key=True)
+    displayName = models.CharField(max_length=255)
     url = models.URLField(max_length=500)
     host = models.URLField(max_length=500)
     github = models.URLField(max_length=500)
@@ -29,7 +28,7 @@ class Post(models.Model):
     # CATEGORY_CHOICES = []
 
     title = models.CharField(max_length=1000)
-    id = models.CharField(max_length=1000, primary_key=True)
+    id = models.AutoField(primary_key=True)
     source = models.URLField(max_length=1000)
     origin = models.CharField(max_length=1000)
     contentType = models.CharField(max_length=1000)

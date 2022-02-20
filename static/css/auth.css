@@ -1,5 +1,6 @@
 main {
   background: linear-gradient(to top, #ffff 50%, var(--primary-300) 50%);
+  padding: 1rem;
 }
 
 form {

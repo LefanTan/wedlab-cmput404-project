@@ -1,19 +1,45 @@
-from django.shortcuts import render
+from django.conf import settings
+from django.http import QueryDict
+from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
 
 from service.serializers import AuthorSerializer
 from .models import Author, Post
 
-# Create your views here.
+# Create your views here
 
 
 def signup(request):
-    return render(request, 'registration/signup.html')
+    if request.method == 'POST':
+        body = QueryDict(request.body.decode("utf-8"))
+
+        try:
+            # Create user object and Author object
+            user = User.objects.create_user(
+                body['username'], password=body['password'])
+            user.save()
+
+            author = Author.objects.create(
+                displayName=body['username'],
+                host=request.build_absolute_uri('/'),
+                github=body['github']
+            )
+            author.profileImage = body['profileImage']
+            author.url = f"{author.host}{author.id}"
+            author.save()
+
+        except Exception as e:
+            return render(request, 'registration/signup.html', {"error": e})
+
+        return redirect('login')
+    if request.method == 'GET':
+        return render(request, 'registration/signup.html')
 
 
-@api_view(['GET'])
+@ api_view(['GET'])
 def author_list(request):
     if request.method == 'GET':
         author_list = Author.objects.all()
@@ -21,7 +47,7 @@ def author_list(request):
         return Response(serializer.data)
 
 
-@api_view(['GET'])
+@ api_view(['GET'])
 def author_detail(request, pk):
     try:
         author = Author.objects.get(pk=pk)
@@ -33,7 +59,7 @@ def author_detail(request, pk):
         return Response(serializer.data)
 
 
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@ api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def posts(request, author_pk, post_pk):
 
     if request.method == 'GET':

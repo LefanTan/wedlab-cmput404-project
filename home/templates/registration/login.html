@@ -11,14 +11,18 @@
         {% csrf_token %}
         <h1 class="mb-3">Login</h1>
         <div class="mb-3">
-            <label for="displayName" class="form-label">Display Name</label>
-            <input type="text" class="form-control" id="displayName" placeholder="Enter your display name here" required>
+            <label for="username" class="form-label">Display/User Name</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your display/user name here" required>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Enter a good secure password" required>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Enter a good secure password" required>
         </div>
+        <a class="d-block mb-3" href="{% url 'signup' %}">Don't have an account? Sign up here</a>
+        {% if form.errors %}
+            <p class="text-danger">username or password not correct</p>
+        {% endif %}
         <button type="submit" class="btn">Login</button>
     </form>
-<main>
+</main>
 {% endblock %}
