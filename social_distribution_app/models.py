@@ -1,6 +1,14 @@
 from django.db import models
 
 
+# Reference: https://stackoverflow.com/questions/45710889/list-field-in-model-django
+class Category(models.Model):
+    category = models.CharField(max_length=100)
+
+    def __str__(self):
+       return self.category
+
+
 class Author(models.Model):
     id = models.CharField(max_length=1000, primary_key=True)
     type = models.CharField(max_length=1000)
@@ -24,19 +32,18 @@ class Post(models.Model):
         (AUTHORIZED_USER, 'Authorized users')
     ]
 
-    # Choices for categories
-    # CATEGORY_CHOICES = []
 
     title = models.CharField(max_length=1000)
-    id = models.CharField(max_length=1000, primary_key=True)
+    id = models.URLField(max_length=1000, primary_key=True)
     source = models.URLField(max_length=1000)
-    origin = models.CharField(max_length=1000)
+    origin = models.URLField(max_length=1000)
+    description = models.CharField(max_length=1000)
     contentType = models.CharField(max_length=1000)
     imageSource = models.URLField(max_length=1000)
     authorId = models.CharField(max_length=1000)
-    # category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=)
+    category = models.ManyToManyField(Category)
     count = models.IntegerField(max_length=1000)
-    comments = models.CharField(max_length=1000)
+    comments = models.URLField(max_length=1000)
     publishedDate = models.DateTimeField(max_length=1000, auto_now=True)
     visibility = models.CharField(max_length=2, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField(max_length=1000)
