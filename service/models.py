@@ -1,9 +1,10 @@
-from pickle import TRUE
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Author(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     displayName = models.CharField(max_length=255)
     url = models.URLField(max_length=500)
     host = models.URLField(max_length=500)

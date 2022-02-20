@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.http import QueryDict
 from django.shortcuts import redirect, render
 from rest_framework import status
@@ -9,20 +8,30 @@ from django.contrib.auth.models import User
 from service.serializers import AuthorSerializer
 from .models import Author, Post
 
-# Create your views here
-
 
 def signup(request):
     if request.method == 'POST':
         body = QueryDict(request.body.decode("utf-8"))
 
         try:
-            # Create user object and Author object
+            # If succeed, author already succeed
+            Author.objects.get(displayName=body['username'])
+            return render(request, status=status.HTTP_400_BAD_REQUEST, template_name='registration/signup.html', context={"error": "Author already exist!"})
+        except Author.DoesNotExist:
+            pass
+
+        try:
+            # Create user object
             user = User.objects.create_user(
                 body['username'], password=body['password'])
             user.save()
+        except Exception as e:
+            return render(request, status=status.HTTP_400_BAD_REQUEST, template_name='registration/signup.html', context={"error": e})
 
+        try:
+            # Create Author object
             author = Author.objects.create(
+                user=user,
                 displayName=body['username'],
                 host=request.build_absolute_uri('/'),
                 github=body['github']
@@ -30,9 +39,8 @@ def signup(request):
             author.profileImage = body['profileImage']
             author.url = f"{author.host}{author.id}"
             author.save()
-
         except Exception as e:
-            return render(request, 'registration/signup.html', {"error": e})
+            return render(request, status=status.HTTP_400_BAD_REQUEST, template_name='registration/signup.html', context={"error": e})
 
         return redirect('login')
     if request.method == 'GET':
