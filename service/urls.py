@@ -9,6 +9,7 @@ urlpatterns = [
         path('authors/<int:pk>', views.author_detail),
 
         # Post Endpoints
-        path('authors/<int:author_pk>/posts/<int:post_pk>', views.posts)
+        path('authors/<int:author_pk>/posts/<int:post_pk>', views.post_detail),
+        path('authors/<int:author_pk>/posts', views.posts)
     ]))
 ]
