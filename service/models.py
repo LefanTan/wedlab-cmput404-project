@@ -16,7 +16,7 @@ class Author(models.Model):
     url = models.URLField(max_length=250)
     host = models.URLField(max_length=250)
     github = models.URLField(max_length=250)
-    profileImage = models.URLField(max_length=250)
+    profileImage = models.URLField(max_length=250, null=True, blank=True)
 
 
 class Category(models.Model):
@@ -62,7 +62,7 @@ class Post(models.Model):
     origin = models.CharField(max_length=250)
     contentType = models.CharField(
         max_length=2, choices=CONTENT_TYPES, default=PLAIN)
-    imageSource = models.URLField(max_length=250)
+    imageSource = models.URLField(max_length=250, null=True, blank=True)
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
