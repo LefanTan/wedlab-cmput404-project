@@ -1,6 +1,4 @@
 import json
-from tkinter.tix import Form
-from unicodedata import category
 import uuid
 from django.shortcuts import redirect, render
 from rest_framework import status
@@ -9,7 +7,6 @@ from rest_framework.decorators import api_view, parser_classes, authentication_c
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
 
 from service.serializers import AuthorSerializer, CategorySerializer, PostSerializer, UserSerializer
 from .models import Author, Category, Post
@@ -144,20 +141,7 @@ def posts(request, author_pk):
             posts = author.post_set.all()
 
             postsData = PostSerializer(posts, many=True).data
-            newData = []
-            for post in postsData:
-                newDict = {}
-                newDict.update(post)
-
-                # grab associated categories and append
-                category_list = []
-                for category in Post.objects.get(pk=post.get('id')).categories.all():
-                    category_list.append(category.name)
-                newDict['categories'] = category_list
-
-                newData.append(newDict)
-
-            return Response(newData)
+            return Response(postsData)
         except Author.DoesNotExist:
             return Response('Author doesn\'t exist', status=status.HTTP_404_NOT_FOUND)
     if request.method == 'POST':

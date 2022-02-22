@@ -40,11 +40,11 @@ class Post(models.Model):
     ]
 
     # Choices for content-type
-    MARKDOWN = 'MD'
-    PLAIN = 'PT'
-    BASE64 = 'B6'
-    PNG = 'PG'
-    JPEG = 'JG'
+    MARKDOWN = 'text/markdown'
+    PLAIN = 'text/plain'
+    BASE64 = 'application/base64'
+    PNG = 'image/png;base64'
+    JPEG = 'image/jpeg;base64'
     CONTENT_TYPES = [
         (MARKDOWN, 'text/markdown'),
         (PLAIN, 'text/plain'),
@@ -61,7 +61,7 @@ class Post(models.Model):
     source = models.URLField(max_length=250)
     origin = models.CharField(max_length=250)
     contentType = models.CharField(
-        max_length=2, choices=CONTENT_TYPES, default=PLAIN)
+        max_length=50, choices=CONTENT_TYPES, default=PLAIN)
     imageSource = models.URLField(max_length=250, null=True, blank=True)
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE)
