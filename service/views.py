@@ -121,8 +121,18 @@ def post_detail(request, author_pk, post_pk):
                 return Response(f"Author of id-{author_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
             except Post.DoesNotExist:
                 return Response(f"Post object of id-{post_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
+    # Deletes a post
     if request.method == 'DELETE':
-        pass
+        try:
+            author = Author.objects.get(pk=author_pk)
+            post = Post.objects.get(pk=post_pk)
+
+            post.delete()
+            return Response(f"Post-{post.id} deleted successfully")
+        except Author.DoesNotExist:
+            return Response(f"Author of id-{author_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
+        except Post.DoesNotExist:
+            return Response(f"Post object of id-{post_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
 
 @ api_view(['GET', 'POST'])
@@ -166,6 +176,7 @@ def posts(request, author_pk):
                 return Response('Author doesn\'t exist', status=status.HTTP_404_NOT_FOUND)
 
 
+# Helper method to create a post
 def create_post(request, author, id=None):
     # Grab category data
     category_list = []
