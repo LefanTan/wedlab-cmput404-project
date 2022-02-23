@@ -7,12 +7,14 @@ for (let tagContainer of tagContainersArray) {
   const tags = tagContainer.getElementsByClassName("tags-container")[0];
 
   const deleteItemHandler = (e) => {
-    e.target.parentNode.removeChild(e.target);
+    console.log(e.currentTarget);
+    e.currentTarget.parentNode.removeChild(e.currentTarget);
   };
 
   const keyUpHandler = (e) => {
     if (e.key === "Enter" || e.keyCode === 13) {
       e.preventDefault();
+      if (e.currentTarget.value === "") return;
 
       const newButton = document.createElement("button");
       newButton.addEventListener("click", deleteItemHandler);

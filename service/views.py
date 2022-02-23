@@ -162,27 +162,34 @@ def posts(request, author_pk):
 
 # Helper method to create a post
 def create_post(request, author, id=None):
-    # Grab category data
-    category_list = []
-    for category in json.loads(request.data.get('categories').replace('\'', '"')):
-        category_obj, created = Category.objects.get_or_create(
-            name=category)
-        category_list.append(category_obj)
+    try:
+        # Do something with the image file here
+        imageFile = request.data.get('imageFile').file
+        print(imageFile)
 
-    cpy = request.data.copy()
-    author_serializer = AuthorSerializer(author)
-    category_serializer = CategorySerializer(category_list, many=True)
+        # Grab category data
+        category_list = []
+        for category in request.data.getlist('categories'):
+            category_obj, created = Category.objects.get_or_create(
+                name=category)
+            category_list.append(category_obj)
 
-    # TODO: Use proper values later
-    cpy['source'] = "https://temp.com"
-    cpy['origin'] = "https://temp.com"
+        cpy = request.data.copy()
+        author_serializer = AuthorSerializer(author)
+        category_serializer = CategorySerializer(category_list, many=True)
 
-    if id:
-        cpy['id'] = id
+        # TODO: Use proper values later
+        cpy['source'] = "https://temp.com"
+        cpy['origin'] = "https://temp.com"
 
-    post_serializer = PostSerializer(data=cpy)
-    if post_serializer.is_valid():
-        post_serializer.save(author=author_serializer.data,
-                             categories=category_serializer.data)
-        return Response(post_serializer.data)
+        if id:
+            cpy['id'] = id
+
+        post_serializer = PostSerializer(data=cpy)
+        if post_serializer.is_valid():
+            post_serializer.save(author=author_serializer.data,
+                                 categories=category_serializer.data)
+            return Response(post_serializer.data)
+    except Exception as e:
+        return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
     return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

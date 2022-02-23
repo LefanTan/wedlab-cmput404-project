@@ -27,5 +27,6 @@ def post_form(request):
     author, success = auth_check_middleware(request)
 
     if success:
-        return render(request, 'post_form.html', context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+        if request.method == 'GET':
+            return render(request, 'post_form.html', context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
