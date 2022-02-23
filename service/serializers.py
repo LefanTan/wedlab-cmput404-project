@@ -16,7 +16,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ['type', 'id', 'displayName', 'user', 'uuid',
+        fields = ['type', 'id', 'displayName', 'user',
                   'url', 'host', 'github', 'profileImage']
 
     def create(self, validated_data):
@@ -31,7 +31,6 @@ class AuthorSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         ret['id'] = ret['url']
         ret.pop('user')
-        ret.pop('uuid')
         return ret
 
 

@@ -1,5 +1,5 @@
-import json
 import uuid
+from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
@@ -19,7 +19,7 @@ def signup(request):
         body = request.data
 
         try:
-            # If succeed, author already succeed
+            # If succeed, author already exist
             Author.objects.get(displayName=body.get('username'))
             return render(request, status=status.HTTP_400_BAD_REQUEST, template_name='registration/signup.html', context={"error": "Author already exist!"})
         except Author.DoesNotExist:
@@ -27,9 +27,9 @@ def signup(request):
 
         # Create Author object
         cp = body.copy()
-        cp['uuid'] = uuid.uuid4().hex
+        cp['id'] = uuid.uuid4().hex
         cp['host'] = request.build_absolute_uri('/')
-        cp['url'] = f"{cp.get('host')}authors/{cp.get('uuid')}"
+        cp['url'] = f"{cp.get('host')}authors/{cp.get('id')}"
         cp['displayName'] = cp['username']
 
         user_data = {
@@ -47,24 +47,40 @@ def signup(request):
 
 
 @ api_view(['GET'])
+# Return a list of authors
 def author_list(request):
     if request.method == 'GET':
         author_list = Author.objects.all()
-        serializer = AuthorSerializer(author_list, many=True)
 
-        return Response({"type": "authors", "items": serializer.data})
+        page_number = request.GET.get('page')
+        size = request.GET.get('size')
+
+        if page_number and size:
+            paginator = Paginator(author_list, size)
+            author_list = paginator.get_page(page_number).object_list
+        data = AuthorSerializer(author_list, many=True).data
+
+        return Response({"type": "authors", "items": data})
 
 
-@ api_view(['GET'])
+@ api_view(['GET', 'POST'])
+# Return a specific author
 def author_detail(request, pk):
     try:
         author = Author.objects.get(pk=pk)
     except Author.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response("Author doens't exist", status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = AuthorSerializer(author)
         return Response(serializer.data)
+    # Update author
+    if request.method == 'POST':
+        serializer = AuthorSerializer(author, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @ api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -72,29 +88,27 @@ def author_detail(request, pk):
 # These decorators will cause the entire view to require authentication
 # @authentication_classes([BasicAuthentication])
 # @permission_classes([IsAuthenticated])
+# Return a specific Post
 def post_detail(request, author_pk, post_pk):
     if request.method == 'GET':
         try:
             author = Author.objects.get(pk=author_pk)
-            post = Post.objects.get(pk=post_pk)
+            post = author.post_set.get(pk=post_pk)
 
-            authorData = AuthorSerializer(author).data
             postData = PostSerializer(post).data
-
-            postData['author'] = authorData
 
             return Response(postData)
         except Author.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
         except Post.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response("Post doesn't exist", status=status.HTTP_404_NOT_FOUND)
     # Create a post
     if request.method == 'PUT':
         try:
             author = Author.objects.get(pk=author_pk)
-            post = Post.objects.get(pk=post_pk)
+            post = author.post_set.get(pk=post_pk)
 
-            return Response(f"post object of id-{post_pk} already exist, use POST to update the post object", status=status.HTTP_400_BAD_REQUEST)
+            return Response(f"Post object of id-{post_pk} already exist, use POST to update the post object", status=status.HTTP_400_BAD_REQUEST)
         except Author.DoesNotExist:
             return Response(f"Author of id-{author_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
         except Post.DoesNotExist:
@@ -107,7 +121,7 @@ def post_detail(request, author_pk, post_pk):
         else:
             try:
                 author = Author.objects.get(pk=author_pk)
-                post = Post.objects.get(pk=post_pk)
+                post = author.post_set.get(pk=post_pk)
 
                 postSerializer = PostSerializer(post, data=request.data)
                 if postSerializer.is_valid():
@@ -117,30 +131,38 @@ def post_detail(request, author_pk, post_pk):
             except Author.DoesNotExist:
                 return Response(f"Author of id-{author_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
             except Post.DoesNotExist:
-                return Response(f"Post object of id-{post_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
+                return Response(f"Author of id-{author_pk} doesn't have this post", status=status.HTTP_404_NOT_FOUND)
     # Deletes a post
     if request.method == 'DELETE':
         try:
             author = Author.objects.get(pk=author_pk)
-            post = Post.objects.get(pk=post_pk)
+            post = author.post_set.get(pk=post_pk)
 
             post.delete()
             return Response(f"Post-{post.id} deleted successfully")
         except Author.DoesNotExist:
             return Response(f"Author of id-{author_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
         except Post.DoesNotExist:
-            return Response(f"Post object of id-{post_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
+            return Response(f"Author of id-{author_pk} doesn't have this post", status=status.HTTP_404_NOT_FOUND)
 
 
 @ api_view(['GET', 'POST'])
 @ parser_classes([MultiPartParser, FormParser])
+# Return a list of Post or to create a post with incremental ID
 def posts(request, author_pk):
     if request.method == 'GET':
         try:
             author = Author.objects.get(pk=author_pk)
             posts = author.post_set.all()
 
+            page_number = request.GET.get('page')
+            size = request.GET.get('size')
+
+            if page_number and size:
+                paginator = Paginator(posts, size)
+                posts = paginator.get_page(page_number).object_list
             postsData = PostSerializer(posts, many=True).data
+
             return Response(postsData)
         except Author.DoesNotExist:
             return Response('Author doesn\'t exist', status=status.HTTP_404_NOT_FOUND)
@@ -163,9 +185,9 @@ def posts(request, author_pk):
 # Helper method to create a post
 def create_post(request, author, id=None):
     try:
-        # Do something with the image file here
-        imageFile = request.data.get('imageFile').file
-        print(imageFile)
+        # Do something with the image file here to create an image post
+        if request.data.get('imageFile'):
+            imageFile = request.data.get('imageFile').file
 
         # Grab category data
         category_list = []

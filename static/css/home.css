@@ -8,6 +8,12 @@ header > .create {
   margin-left: auto;
 }
 
+.container {
+  height: 100%;
+  width: 100%;
+  max-width: 100rem;
+}
+
 .inbox {
   background-color: transparent;
   color: rgb(87, 87, 87);
@@ -38,4 +44,17 @@ header > .create {
   padding: 0.5rem;
   margin-left: 1rem;
   font-size: 1rem;
+}
+
+main {
+  margin-left: auto;
+  margin-right: auto;
+
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

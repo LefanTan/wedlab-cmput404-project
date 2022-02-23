@@ -6,10 +6,10 @@ urlpatterns = [
     path('service/', include([
         # Author Endpoints
         path('authors/', views.author_list),
-        path('authors/<int:pk>', views.author_detail),
+        path('authors/<str:pk>', views.author_detail),
 
         # Post Endpoints
-        path('authors/<int:author_pk>/posts/<int:post_pk>', views.post_detail),
-        path('authors/<int:author_pk>/posts', views.posts)
+        path('authors/<str:author_pk>/posts/<str:post_pk>', views.post_detail),
+        path('authors/<str:author_pk>/posts', views.posts)
     ]))
 ]

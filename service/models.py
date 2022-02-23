@@ -8,8 +8,8 @@ def generate_uuid_hex():
 
 
 class Author(models.Model):
-    id = models.AutoField(primary_key=True)
-    uuid = models.CharField(default=generate_uuid_hex, max_length=250)
+    id = models.CharField(
+        primary_key=True, default=generate_uuid_hex, max_length=250)
     type = models.CharField(default="author", max_length=125)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     displayName = models.CharField(max_length=255)
@@ -53,9 +53,9 @@ class Post(models.Model):
         (JPEG, 'image/jpeg;base64'),
     ]
 
-    id = models.AutoField(primary_key=True)
+    id = models.CharField(
+        primary_key=True, default=generate_uuid_hex, max_length=250)
     title = models.CharField(max_length=250)
-    uuid = models.CharField(default=generate_uuid_hex, max_length=250)
     type = models.CharField(default="post", max_length=125)
     description = models.CharField(max_length=500, default="")
     source = models.URLField(max_length=250)
