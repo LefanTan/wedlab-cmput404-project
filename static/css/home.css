@@ -5,10 +5,6 @@ header {
 }
 
 header > .create {
-  padding: 0.25rem 0.5rem;
-  color: white;
-  background-color: var(--primary-400);
-  height: fit-content;
   margin-left: auto;
 }
 

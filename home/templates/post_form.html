@@ -1,0 +1,63 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Home{% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{%static 'css/post_form.css' %}" />
+<link rel="stylesheet" href="{%static 'css/tag.css' %}" />
+<script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>
+<script src="{%static 'js/tag.js' %}" crossorigin="anonymous" defer></script>
+<script src="{%static 'js/post_form.js' %}" crossorigin="anonymous" defer></script>
+{% endblock %}
+
+{% block content %}
+<header class="py-2 px-3 border-bottom">
+  <a href="{% url 'home' %}" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</a>
+</header>
+<main class="p-4 d-flex align-items-start justify-content-center">
+  <form class="d-block" enctype=multipart/form-data>
+    <h1 class="mb-3">{% if name == "post_create" %}Create{% else %}Edit{% endif %} Post</h1>
+
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title" required/>
+      <label for="title">Title</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <textarea name="description" id="description" class="form-control" placeholder="What is your post about?" required></textarea>
+      <label for="description">Description</label>
+    </div>
+
+    <label class="mb-1" for="categories">Categories</label>
+    <div class="mb-3 tag-container">
+      <div class="tags-container">
+        <button type="button" class="tag"><i class="fa-solid fa-x"></i> web</button>
+        <button type="button" class="tag"><i class="fa-solid fa-x"></i> funny</button>
+        <button type="button" class="tag"><i class="fa-solid fa-x"></i> joke</button>
+        <button type="button" class="tag"><i class="fa-solid fa-x"></i> social media</button>
+      </div>
+      <input type="text" name="categories" id="categories" class="form-control" placeholder="Add categories here..."/>
+    </div>
+
+    <div class="d-flex mb-3">
+      <div class="form-check form-switch">
+        <label class="form-check-label" for="is_markdown">Markdown</label>
+        <input class="form-check-input" type="checkbox" role="switch" id="is_markdown">
+      </div>
+
+      <div class="form-check form-switch mx-4">
+        <label class="form-check-label" for="unlisted">Unlisted</label>
+        <input class="form-check-input" type="checkbox" role="switch" id="unlisted">
+      </div>
+    </div>
+
+    <label class="mb-1" for="imageFile">Image</label>
+    <input class="form-control mb-3" type="file" accept="image/*" name="imageFile" id="imageFile"/>
+
+    <label class="mb-1" for="visibility">Visibility</label>
+    <select class="form-select mb-3" name="visibility" id="visibility">
+      <option value="public" selected>Public</option>
+      <option value="private">Private</option>
+    </select>
+
+    <button class="btn green-btn d-block ms-auto" type="submit">{% if name == "post_create" %}Create{% else %}Save{% endif %}</button>
+  </form>
+</main>
+{% endblock %}

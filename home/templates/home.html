@@ -1,17 +1,11 @@
 {% extends 'base.html' %} {% load static %} {% block title %}Home{% endblock %}
 {% block stylesheet %}<link rel="stylesheet" href="{%static 'css/home.css' %}" /><script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>{% endblock %}
 
-<!-- {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-{% endif %} -->
 
 {% block content %}
 <header class="px-4 py-2 border-bottom">
   <a href="{% url 'logout' %}"  class="btn btn-outline-danger btn-sm logout">Logout</a>
-  <button class="btn create">+ Create</button>
+  <a href="{% url 'post_create' %}" class="btn green-btn create">+ Create</a>
   <button aria-label="inbox" class="inbox"><i class="fa-solid fa-inbox"></i></button>
   {% if profileImage %}
   <img class="rounded-circle profile-pic" src="{{ profileImage }}" alt="profile picture"/>

@@ -22,3 +22,25 @@ body {
 h1 {
   font-size: 3rem;
 }
+
+.form-control:focus,
+.form-check-input:focus,
+.form-select:focus,
+.green-btn:focus {
+  outline: 0 none;
+  border: 2px solid var(--primary-300);
+  box-shadow: 0 0 15px var(--primary-300);
+}
+
+.form-check-input:checked {
+  border-color: var(--primary-400);
+  background-color: var(--primary-500);
+}
+
+.green-btn {
+  padding: 0.25rem 0.5rem;
+  color: white;
+  background-color: var(--primary-400);
+  height: fit-content;
+  margin-left: auto;
+}
