@@ -182,3 +182,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if 'DYNO' in os.environ and os.environ.get('CI') == False:
     print('Using heroku settings')
     django_heroku.settings(locals())
+
+django_heroku.settings(locals())
