@@ -20,6 +20,8 @@ class AuthEndpointsTestCase(APITestCase):
             "github": "https://link.com"
         }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
 
+        print(os.environ.get('CI'))
+
         success = self.apiClient.login(username="admin", password="root")
 
         self.assertEqual(response.status_code, 302)
