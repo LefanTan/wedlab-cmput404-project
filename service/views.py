@@ -7,6 +7,7 @@ from rest_framework.decorators import api_view, parser_classes, authentication_c
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.models import User
 
 from service.serializers import AuthorSerializer, CategorySerializer, PostSerializer, UserSerializer
 from .models import Author, Category, Post
@@ -64,6 +65,7 @@ def author_list(request):
 
 
 @ api_view(['GET', 'POST'])
+@ parser_classes([FormParser, MultiPartParser])
 # Return a specific author
 def author_detail(request, pk):
     try:
@@ -76,11 +78,24 @@ def author_detail(request, pk):
         return Response(serializer.data)
     # Update author
     if request.method == 'POST':
-        serializer = AuthorSerializer(author, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not request.user.is_authenticated or request.user.id != author.user_id:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            password = request.data.get('password')
+            username = request.data.get('username')
+            if password:
+                request.user.set_password(password)
+
+            if username:
+                request.user.username = username
+                request.user.save()
+
+            serializer = AuthorSerializer(
+                author, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @ api_view(['GET', 'POST', 'PUT', 'DELETE'])
@@ -123,7 +138,8 @@ def post_detail(request, author_pk, post_pk):
                 author = Author.objects.get(pk=author_pk)
                 post = author.post_set.get(pk=post_pk)
 
-                postSerializer = PostSerializer(post, data=request.data)
+                postSerializer = PostSerializer(
+                    post, data=request.data, partial=True)
                 if postSerializer.is_valid():
                     postSerializer.save()
                     return Response(postSerializer.data)
@@ -200,7 +216,7 @@ def create_post(request, author, id=None):
         author_serializer = AuthorSerializer(author)
         category_serializer = CategorySerializer(category_list, many=True)
 
-        # TODO: Use proper values later
+        # TODO: Use proper values later when implementing post sharing
         cpy['source'] = "https://temp.com"
         cpy['origin'] = "https://temp.com"
 

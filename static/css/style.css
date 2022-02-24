@@ -26,7 +26,8 @@ h1 {
 .form-control:focus,
 .form-check-input:focus,
 .form-select:focus,
-.green-btn:focus {
+.green-btn:focus,
+button:focus {
   outline: 0 none;
   border: 2px solid var(--primary-300);
   box-shadow: 0 0 15px var(--primary-300);
@@ -43,4 +44,18 @@ h1 {
   background-color: var(--primary-400);
   height: fit-content;
   margin-left: auto;
+}
+
+button[type="submit"] {
+  float: right;
+  background-color: var(--primary-400);
+  color: white;
+  font-weight: 500;
+
+  transition: 200ms;
+}
+
+button[type="submit"]:hover {
+  color: white;
+  transform: scale(1.1);
 }

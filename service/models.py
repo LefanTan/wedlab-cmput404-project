@@ -28,10 +28,10 @@ class Category(models.Model):
 
 class Post(models.Model):
     # Choices for visibilities
-    PUBLIC = 'PU'
-    FRIENDS = 'FO'
-    PRIVATE = 'PR'
-    AUTHORIZED_USER = 'AU'
+    PUBLIC = 'PUBLIC'
+    FRIENDS = 'FRIENDS'
+    PRIVATE = 'PRIVATE'
+    AUTHORIZED_USER = 'AUTHORIZED'
     VISIBILITY_CHOICES = [
         (PUBLIC, 'Public'),
         (FRIENDS, 'Friends-Only'),
@@ -68,5 +68,5 @@ class Post(models.Model):
     categories = models.ManyToManyField(Category)
     publishedDate = models.DateTimeField(max_length=250, auto_now=True)
     visibility = models.CharField(
-        max_length=2, choices=VISIBILITY_CHOICES, default=PUBLIC)
+        max_length=25, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField(default=False)

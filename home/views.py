@@ -20,6 +20,7 @@ def auth_check_middleware(request):
 def home(request):
     author, success = auth_check_middleware(request)
 
+    # TODO: Query all posts to be display in home feed
     try:
         pass
     except Exception as e:
@@ -38,6 +39,8 @@ def post_create(request):
             return render(request, 'post_form.html', context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
 
+# IN PROGRESS
+
 
 def post_edit(request, post_pk):
     author, success = auth_check_middleware(request)
@@ -51,4 +54,18 @@ def post_edit(request, post_pk):
     if success:
         if request.method == 'GET':
             return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": model_to_dict(post), "name": request.resolver_match.url_name})
+    return author
+
+
+def profile(request, author_pk):
+    author, success = auth_check_middleware(request)
+
+    try:
+        request_author = Author.objects.get(pk=author_pk)
+    except Exception as e:
+        return page_not_found(request, e)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'profile.html', context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name, "edit": author.id == author_pk, "error": request.GET.get('error')})
     return author

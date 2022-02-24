@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Home{% endblock %}
+{% extends 'base.html' %} {% load static %} {% block title %}Post{% endblock %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{%static 'css/post_form.css' %}" />
 <link rel="stylesheet" href="{%static 'css/tag.css' %}" />
@@ -14,7 +14,7 @@
   <a href="{% url 'home' %}" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</a>
 </header>
 <main class="p-4 d-flex align-items-start justify-content-center">
-  <form class="d-block" enctype=multipart/form-data>
+  <form class="d-block">
     {% csrf_token %}
     <h1 class="mb-3">{% if name == "post_create" %}Create{% else %}Edit{% endif %} Post</h1>
 
@@ -52,8 +52,8 @@
 
     <label class="mb-1" for="visibility">Visibility</label>
     <select class="form-select mb-3" name="visibility" id="visibility">
-      <option value="PU" selected>Public</option>
-      <option value="PR">Private</option>
+      <option value="PUBLIC" selected>Public</option>
+      <option value="PRIVATE">Private</option>
     </select>
 
     <button class="btn green-btn d-block ms-auto" type="submit">{% if name == "post_create" %}Create{% else %}Save{% endif %}</button>
