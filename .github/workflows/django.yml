@@ -11,19 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-    services:
-      postgres:
-        image: postgres:14.1-alpine
-        env:
-          POSTGRES_USER: admin
-          POSTGRES_PASSWORD: root
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+    # services:
+    #   postgres:
+    #     image: postgres:14.1-alpine
+    #     env:
+    #       POSTGRES_USER: admin
+    #       POSTGRES_PASSWORD: root
+    #     options: >-
+    #       --health-cmd pg_isready
+    #       --health-interval 10s
+    #       --health-timeout 5s
+    #       --health-retries 5
+    #     ports:
+    #       - 5432:5432
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.10
@@ -34,9 +34,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      # - name: Run Docker Compose
-      #   working-directory: ./
-      #   run: docker-compose up -d --build
+      - name: Run Docker Compose
+        working-directory: ./
+        run: docker-compose up -d --build
 
       - name: Sleep for 30 seconds
         uses: jakejarvis/wait-action@master
