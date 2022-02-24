@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from .models import Author
+import os
 import urllib
 from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory, APIClient, APITestCase
@@ -19,6 +20,7 @@ class AuthEndpointsTestCase(APITestCase):
         }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
 
         print(response.content)
+        print(os.environ.get('CI'))
 
         success = self.apiClient.login(username="admin", password="root")
 
