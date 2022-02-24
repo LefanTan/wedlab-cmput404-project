@@ -29,7 +29,7 @@ DEBUG = True
 # TEMP Secret Key
 SECRET_KEY = "*"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -179,5 +179,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-if os.environ.get('CI') == None or os.environ.get('CI') == False:
+if DEBUG == False:
+    print('Using heroku settings')
     django_heroku.settings(locals())

@@ -1,5 +1,6 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.conf import settings
 from .models import Author
 import os
 import urllib
@@ -12,6 +13,7 @@ class AuthEndpointsTestCase(APITestCase):
         self.factory = APIRequestFactory()
         self.apiClient = APIClient()
 
+    @override_settings(DEBUG=True)
     def test_create_user(self):
         response = self.apiClient.post(reverse('signup'), data=urllib.parse.urlencode({
             "username": "admin",
@@ -20,7 +22,7 @@ class AuthEndpointsTestCase(APITestCase):
         }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
 
         print(response.content)
-        print(os.environ.get('CI'))
+        print(settings.DEBUG)
 
         success = self.apiClient.login(username="admin", password="root")
 
