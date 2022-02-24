@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-from pickle import TRUE
 import django_heroku
 import subprocess
 import dj_database_url
@@ -101,7 +100,7 @@ if 'DYNO' in os.environ:
             conn_max_age=600,
             ssl_require=True)
     }
-elif 'TEST' in os.environ and os.environ['TEST'] == TRUE:
+elif 'TEST' in os.environ and os.environ['TEST'] == True:
     DATABASES = {
         'default': dj_database_url.config(
             default=subprocess.check_output(
@@ -180,5 +179,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-if os.environ.get('CI') != False:
+if os.environ.get('CI') == None or os.environ.get('CI') == False:
     django_heroku.settings(locals())
