@@ -39,10 +39,9 @@ def post_create(request):
             return render(request, 'post_form.html', context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
 
-# IN PROGRESS
-
 
 def post_edit(request, post_pk):
+    # IN PROGRESS
     author, success = auth_check_middleware(request)
 
     # Get Post object that we want to edit, only allow post made by author
