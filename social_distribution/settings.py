@@ -180,4 +180,5 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-django_heroku.settings(locals())
+if os.environ.get('CI') == False:
+    django_heroku.settings(locals())

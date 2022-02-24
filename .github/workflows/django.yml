@@ -9,9 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: True
     services:
       postgres:
-        image: postgres:14
+        image: postgres:14.1-alpine
         env:
           POSTGRES_USER: admin
           POSTGRES_PASSWORD: root
@@ -36,10 +38,10 @@ jobs:
       #   working-directory: ./
       #   run: docker-compose up -d --build
 
-      # - name: Sleep for 30 seconds
-      #   uses: jakejarvis/wait-action@master
-      #   with:
-      #     time: "60s"
+      - name: Sleep for 30 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: "10s"
       - name: Run Tests
         run: |
           python manage.py makemigrations
