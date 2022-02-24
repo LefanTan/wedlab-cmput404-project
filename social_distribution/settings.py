@@ -100,7 +100,7 @@ if 'DYNO' in os.environ:
             conn_max_age=600,
             ssl_require=True)
     }
-elif 'TEST' in os.environ and os.environ['TEST'] == True:
+elif 'TEST' in os.environ and os.environ['TEST'] == 'true':
     DATABASES = {
         'default': dj_database_url.config(
             default=subprocess.check_output(
@@ -179,6 +179,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-if 'DYNO' in os.environ and os.environ.get('CI') == False:
+if 'DYNO' in os.environ and os.environ.get('CI') == 'false':
     print('Using heroku settings')
     django_heroku.settings(locals())
