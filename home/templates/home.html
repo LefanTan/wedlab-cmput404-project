@@ -1,23 +1,91 @@
 {% extends 'base.html' %} {% load static %} {% block title %}Home{% endblock %}
-{% block stylesheet %}<link rel="stylesheet" href="{%static 'css/home.css' %}" /><script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>{% endblock %}
-
+{% block stylesheet %}
+  <link rel="stylesheet" href="{%static 'css/home.css' %}" />
+  <script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>
+{% endblock %}
+{% load markdown %}
 
 {% block content %}
 <header class="px-4 py-2 border-bottom">
   <a href="{% url 'logout' %}"  class="btn btn-outline-danger btn-sm logout">Logout</a>
   <a href="{% url 'post_create' %}" class="btn green-btn create">+ Create</a>
   <button aria-label="inbox" class="inbox"><i class="fa-solid fa-inbox"></i></button>
-  <a class="profile-link" href="{% url 'profile' author_pk=id %}">
-  {% if profileImage %}
-    <img class="rounded-circle profile-pic" src="{{ profileImage }}" alt="profile picture"/>
+  <a class="profile-link" href="{{ author.url }}">
+  {% if author.profileImage %}
+    <img class="rounded-circle profile-pic" src="{{ author.profileImage }}" alt="profile picture"/>
     {% else %}
     <i class="rounded-circle profile-pic-default fa-solid fa-user" aria-label="profile picture"></i>
-    {% endif %}
+  {% endif %}
   </a>
 </header>
 <div class="container">
   <main>
-    
+    {% for post in posts %}
+      <div class="post">
+        <div class='d-flex align-items-start'>
+          <a href="{{ post.author.url }}" target="_blank" aria-label="Link to profile">
+            {% if post.author.profileImage %}
+            <img class="rounded-circle profile-pic" src="{{ post.author.profileImage }}" alt="profile picture"/>
+            {% else %}
+            <i class="rounded-circle profile-pic-default fa-solid fa-user" aria-label="profile picture"></i>
+            {% endif %}
+          </a>
+          <div class="ms-3 w-100">
+            <div class="d-flex">
+              <p class="mt-1 mb-0 fw-bolder">{{ post.author.displayName }}</p>
+              {% comment %} Date can be added in the future? <p class="ms-3 mt-1 mb-0">{{ post.dateDifference }}</p> {% endcomment %}
+            </div>
+            {% if post.description and post.description != "" %}
+              <div aria-label="description" class="description mt-3 w-100">
+                  {% if post.contentType == 'text/markdown' %}
+                    <p>{{ post.description | markdown_extract | safe }}</p>
+                  {% else %}
+                    <p class="w-100">{{ post.description }}</p>
+                  {% endif %}
+              </div>
+            {% endif %}
+            {% if post.imageSource %}
+              <img class="image bg-white" src="{{ post.imageSource }}"/>
+            {% endif %}
+            <div class="icons mt-2 d-flex justify-content-start align-items-center">
+              <button class="me-4"><i class="fa-regular fa-heart"></i></button>
+              <button><i class="fa-solid fa-share"></i></button>
+            </div>
+            <div class="mt-4 w-100">
+              {% for commentObj in post.commentsSrc.comments %}
+                <div class="d-flex mt-2">
+                  <a class="me-3" href="{{ commentObj.author.url }}">
+                    {% if author.profileImage %}
+                      <img class="rounded-circle profile-pic" src="{{ commentObj.author.profileImage }}" alt="profile picture"/>
+                    {% else %}
+                      <i class="rounded-circle profile-pic-default fa-solid fa-user" aria-label="profile picture"></i>
+                    {% endif %}
+                  </a>
+                  <div class="comment">
+                    <p class="fw-bolder mb-1">{{ commentObj.author.displayName }}</p>
+                    {% if commentObj.contentType == 'text/markdown' %}
+                      <p>{{ commentObj.comment | markdown_extract | safe }}</p>
+                    {% else %}
+                      <p class="w-100">{{ commentObj.comment }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endfor %}
+              <div class='comment-text-box mt-2 d-flex align-items-center w-100'>
+                {% if author.profileImage %}
+                <img class="rounded-circle profile-pic" src="{{ author.profileImage }}" alt="profile picture"/>
+                {% else %}
+                <i class="rounded-circle profile-pic-default fa-solid fa-user" aria-label="profile picture"></i>
+                {% endif %}
+                <input class='ms-3 me-2 form-control' type="text" placeholder="Enter your comment"/>
+                <button aria-label="post comment" data-comment-id="{{ post.id }}" class="send-button"><i class="fa-solid fa-paper-plane"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+    {% endfor %}
   </main>
 </div>
 {% endblock %}

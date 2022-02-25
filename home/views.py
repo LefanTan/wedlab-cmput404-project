@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.views.defaults import page_not_found
 from service.models import Author, Post
+from service.serializers import PostSerializer
 from django.forms.models import model_to_dict
 
 
@@ -20,14 +21,15 @@ def auth_check_middleware(request):
 def home(request):
     author, success = auth_check_middleware(request)
 
-    # TODO: Query all posts to be display in home feed
+    # TODO: Query all posts to be display in home feed, for now, query user's posts
     try:
-        pass
+        posts = author.post_set.all()
+        postsData = PostSerializer(posts, many=True).data
     except Exception as e:
         pass
 
     if success:
-        return render(request, 'home.html', model_to_dict(author))
+        return render(request, 'home.html', {"author": model_to_dict(author), "posts": postsData})
     return author
 
 
