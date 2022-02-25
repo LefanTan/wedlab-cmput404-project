@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Signup Here{% endblock %}
+
+{% block stylesheet %}<link rel="stylesheet" href="{%static 'css/auth.css' %}"/>{% endblock %}
+
+{% block content %}
+<main class="w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+    <form method="post" >
+        {% csrf_token %}
+        <h1 class="mb-3">Sign up</h1>
+        <div class="mb-3">
+            <label for="username" class="form-label">Display/User Name</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Enter your display/user name here" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Enter a good secure password" required>
+        </div>
+        <div class="mb-3">
+            <label for="github" class="form-label">Github</label>
+            <input type="url" class="form-control" name="github" id="github" placeholder="Enter your github link here" required>
+        </div>
+        <div class="mb-3">
+            <label for="profileImage" class="form-label">Profile Image URL</label>
+            <input type="url" class="form-control" name="profileImage" id="profileImage" placeholder="Enter your profile link here">
+        </div>
+        <a class="d-block mb-3" href="{% url 'login' %}">Have an account already? Login here</a>
+        {% if error %}
+            <p class="text-danger">{{ error }}</p>
+        {% endif %}
+        <button type="submit" class="btn">Sign up!</button>
+    </form>
+</main>
+{% endblock %}

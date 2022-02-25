@@ -1,0 +1,31 @@
+main {
+  background: linear-gradient(to top, #ffff 50%, var(--primary-300) 50%);
+  padding: 1rem;
+}
+
+form {
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  border-radius: 10px;
+  border: 0.5rem solid var(--primary-400);
+
+  width: 30rem;
+  max-width: 100%;
+
+  background-color: white;
+
+  box-shadow: 0.25rem 0.75rem 30px rgba(139, 139, 139, 0.534);
+}
+
+label,
+input[type],
+a {
+  font-size: 0.85rem;
+}
+
+label {
+  font-weight: 500;
+}
+
+h1 {
+  color: var(--primary-800);
+}

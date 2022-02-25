@@ -2,11 +2,6 @@
 
 Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change.
 
-Fixes # (issue)
-
-## Screenshots/GIFs of changes
-
-
 ## Type of change
 
 Please delete options that are not relevant.
@@ -19,4 +14,5 @@ Please delete options that are not relevant.
 
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
+- [ ] I have made tests related to my feature
 - [ ] Any dependent changes have been merged and published in downstream modules

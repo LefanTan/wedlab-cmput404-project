@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Home{% endblock %}
+{% block stylesheet %}<link rel="stylesheet" href="{%static 'css/home.css' %}" /><script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>{% endblock %}
+
+
+{% block content %}
+<header class="px-4 py-2 border-bottom">
+  <a href="{% url 'logout' %}"  class="btn btn-outline-danger btn-sm logout">Logout</a>
+  <a href="{% url 'post_create' %}" class="btn green-btn create">+ Create</a>
+  <button aria-label="inbox" class="inbox"><i class="fa-solid fa-inbox"></i></button>
+  <a class="profile-link" href="{% url 'profile' author_pk=id %}">
+  {% if profileImage %}
+    <img class="rounded-circle profile-pic" src="{{ profileImage }}" alt="profile picture"/>
+    {% else %}
+    <i class="rounded-circle profile-pic-default fa-solid fa-user" aria-label="profile picture"></i>
+    {% endif %}
+  </a>
+</header>
+<div class="container">
+  <main>
+    
+  </main>
+</div>
+{% endblock %}
