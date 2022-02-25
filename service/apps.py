@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class SocialDistributionAppConfig(AppConfig):
+class ServiceAppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'social_distribution_app'
+    name = 'service'

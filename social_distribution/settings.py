@@ -26,17 +26,21 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# TEMP Secret Key
+SECRET_KEY = "*"
+
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'social_distribution_app.apps.SocialDistributionAppConfig',
+    'home',
+    'service',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
@@ -56,7 +60,7 @@ ROOT_URLCONF = 'social_distribution.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +75,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'social_distribution.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+    ),
+    'TEST_REQUEST_RENDERER_CLASSES': [
+        'rest_framework.renderers.MultiPartRenderer',
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+        'rest_framework.renderers.HTMLFormRenderer'
+    ],
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -78,18 +96,31 @@ WSGI_APPLICATION = 'social_distribution.wsgi.application'
 if 'DYNO' in os.environ:
     DATABASES = {
         'default': dj_database_url.config(
-            default=os.environ.get("DATABASE_URL"), 
-            conn_max_age=600, 
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
             ssl_require=True)
+    }
+elif 'TEST' in os.environ and os.environ['TEST'] == 'true':
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=subprocess.check_output(
+                'heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
     DATABASES = {
-        'default': dj_database_url.config(
-            default=subprocess.check_output('heroku config:get DATABASE_URL -a social-dist-wed', shell=True).decode('utf-8'),
-            conn_max_age=600,
-            ssl_require=True
-            )
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'postgres',
+            'USER': 'admin',
+            'PASSWORD': 'root',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
     }
+
 
 print('DATABASE [Current] :', DATABASES['default'])
 
@@ -111,6 +142,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Auth
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = '/auth/login'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -131,13 +170,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-)
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-django_heroku.settings(locals())
+if 'DYNO' in os.environ and os.environ.get('CI') == 'false':
+    print('Using heroku settings')
+    django_heroku.settings(locals())
