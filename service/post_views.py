@@ -82,6 +82,7 @@ def post_detail(request, author_pk, post_pk):
 @ parser_classes([MultiPartParser, FormParser])
 # Return a list of Post or to create a post with incremental ID
 def posts(request, author_pk):
+
     if request.method == 'GET':
         try:
             page_number = request.GET.get('page')

@@ -10,7 +10,7 @@
 <header class="px-4 py-2 border-bottom">
   <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
   {% if edit %}
-    <a href="{% url 'post_create' %}" class="btn green-btn create">+ Create</a>
+    <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
   {% endif %}
 </header>
 <div class="container">
@@ -29,7 +29,7 @@
                 <div class="d-flex">
                 <p class="mt-1 mb-0 fw-bolder">{{ post.author.displayName }}</p>
                 {% if edit %}
-                    <a href="{% url 'post_edit' post_pk=post.id %}" aria-label="edit post" class='d-flex align-items-center ms-auto edit-post'><i class="fa-solid fa-pen-to-square fs-5"></i></a>
+                    <a href="{% url 'home_post_edit' post_pk=post.id %}" aria-label="edit post" class='d-flex align-items-center ms-auto edit-post'><i class="fa-solid fa-pen-to-square fs-5"></i></a>
                 {% endif %}
                 {% comment %} Date can be added in the future? <p class="ms-3 mt-1 mb-0">{{ post.dateDifference }}</p> {% endcomment %}
                 </div>

@@ -8,7 +8,7 @@
 {% block content %}
 <header class="px-4 py-2 border-bottom">
   <a href="{% url 'logout' %}"  class="btn btn-outline-danger btn-sm logout">Logout</a>
-  <a href="{% url 'post_create' %}" class="btn green-btn create">+ Create</a>
+  <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
   <button aria-label="inbox" class="inbox"><i class="fa-solid fa-inbox"></i></button>
   <a class="profile-link" href="{{ author.url }}">
   {% if author.profileImage %}
