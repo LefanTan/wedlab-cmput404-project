@@ -35,8 +35,9 @@
               <p class="mt-1 mb-0 fw-bolder">{{ post.author.displayName }}</p>
               {% comment %} Date can be added in the future? <p class="ms-3 mt-1 mb-0">{{ post.dateDifference }}</p> {% endcomment %}
             </div>
+            <h2 class="mt-3 post-title">{{ post.title }}</h2>
             {% if post.description and post.description != "" %}
-              <div aria-label="description" class="description mt-3 w-100">
+              <div aria-label="description" class="description w-100">
                   {% if post.contentType == 'text/markdown' %}
                     <p>{{ post.description | markdown_extract | safe }}</p>
                   {% else %}
@@ -47,7 +48,12 @@
             {% if post.imageSource %}
               <img class="image bg-white" src="{{ post.imageSource }}"/>
             {% endif %}
-            <div class="icons mt-2 d-flex justify-content-start align-items-center">
+            <div class="mt-2 d-flex justify-content-start align-items-center">
+              {% for category in post.categories %}
+              <p class="category-button">{{ category }}</p>
+              {% endfor %}
+            </div>
+            <div class="icons mt-3 d-flex justify-content-start align-items-center">
               <button class="me-4"><i class="fa-regular fa-heart"></i></button>
               <button><i class="fa-solid fa-share"></i></button>
             </div>
@@ -55,7 +61,7 @@
               {% for commentObj in post.commentsSrc.comments %}
                 <div class="d-flex mt-2">
                   <a class="me-3" href="{{ commentObj.author.url }}">
-                    {% if author.profileImage %}
+                    {% if commentObj.author.profileImage %}
                       <img class="rounded-circle profile-pic" src="{{ commentObj.author.profileImage }}" alt="profile picture"/>
                     {% else %}
                       <i class="rounded-circle profile-pic-default fa-solid fa-user" aria-label="profile picture"></i>

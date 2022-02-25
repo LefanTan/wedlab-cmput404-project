@@ -29,3 +29,8 @@ main {
   min-height: calc(100% - 60px);
   height: fit-content;
 }
+
+.view-post {
+  background-color: var(--primary-400);
+  color: white;
+}

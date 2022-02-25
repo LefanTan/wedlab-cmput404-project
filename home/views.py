@@ -14,15 +14,16 @@ def auth_check_middleware(request):
     try:
         author = Author.objects.get(user=request.user.id)
     except Exception as e:
-        return (page_not_found(request, e), False)
+        return (redirect('login'), False)
     return (author, True)
 
 
 def home(request):
     author, success = auth_check_middleware(request)
 
-    # TODO: Query all posts to be display in home feed, for now, query user's posts
+    # TODO: Use posts that has arrived in user's Inbox
     try:
+        # using all author's own post for now
         posts = author.post_set.all()
         postsData = PostSerializer(posts, many=True).data
     except Exception as e:
@@ -30,6 +31,29 @@ def home(request):
 
     if success:
         return render(request, 'home.html', {"author": model_to_dict(author), "posts": postsData})
+    return author
+
+
+def post_list(request, author_pk):
+    # Show a list of post made by author_pk
+
+    author, success = auth_check_middleware(request)
+
+    try:
+        # Get public and listed posts for other profiles
+        if author_pk == author.id:
+            posts = author.post_set.all().order_by('-publishedDate')
+        else:
+            posts = Post.objects.filter(
+                author=author_pk, unlisted=False, visibility='PUBLIC')
+
+        postsData = PostSerializer(posts, many=True).data
+    except Exception as e:
+        return page_not_found(request, e)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'post_list.html', {"author": model_to_dict(author), "posts": postsData, "edit": author_pk == author.id})
     return author
 
 
@@ -49,16 +73,18 @@ def post_edit(request, post_pk):
     # Get Post object that we want to edit, only allow post made by author
     try:
         post = Post.objects.get(pk=post_pk, author=author.id)
+        postData = PostSerializer(post).data
     except Exception as e:
         return page_not_found(request, e)
 
     if success:
         if request.method == 'GET':
-            return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": model_to_dict(post), "name": request.resolver_match.url_name})
+            return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": postData, "name": request.resolver_match.url_name})
     return author
 
 
 def profile(request, author_pk):
+    # Show author's profile
     author, success = auth_check_middleware(request)
 
     try:
