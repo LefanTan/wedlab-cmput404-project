@@ -14,4 +14,5 @@ Please delete options that are not relevant.
 
 - [ ] I have commented my code, particularly in hard-to-understand areas
 - [ ] I have made corresponding changes to the documentation
+- [ ] I have made tests related to my feature
 - [ ] Any dependent changes have been merged and published in downstream modules
