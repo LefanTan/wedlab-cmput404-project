@@ -25,3 +25,11 @@ h1 {
 #description {
   height: 10rem;
 }
+
+.post-image {
+  max-width: 50%;
+  display: block;
+  background-color: white;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}

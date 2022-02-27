@@ -68,9 +68,10 @@ def post_detail(request, author_pk, post_pk):
         try:
             author = Author.objects.get(pk=author_pk)
             post = author.post_set.get(pk=post_pk)
+            post_id = post.id
 
             post.delete()
-            return Response(f"Post-{post.id} deleted successfully")
+            return Response(f"Post-{post_id} deleted successfully")
         except Author.DoesNotExist:
             return Response(f"Author of id-{author_pk} doesn't exist", status=status.HTTP_404_NOT_FOUND)
         except Post.DoesNotExist:
@@ -81,13 +82,14 @@ def post_detail(request, author_pk, post_pk):
 @ parser_classes([MultiPartParser, FormParser])
 # Return a list of Post or to create a post with incremental ID
 def posts(request, author_pk):
+
     if request.method == 'GET':
         try:
-            author = Author.objects.get(pk=author_pk)
-            posts = author.post_set.all()
-
             page_number = request.GET.get('page')
             size = request.GET.get('size')
+
+            author = Author.objects.get(pk=author_pk)
+            posts = author.post_set.all()
 
             if page_number and size:
                 paginator = Paginator(posts, size)

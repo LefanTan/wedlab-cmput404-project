@@ -7,7 +7,6 @@ for (let tagContainer of tagContainersArray) {
   const tags = tagContainer.getElementsByClassName("tags-container")[0];
 
   const deleteItemHandler = (e) => {
-    console.log(e.currentTarget);
     e.currentTarget.parentNode.removeChild(e.currentTarget);
   };
 

@@ -11,8 +11,9 @@
 {% endblock %}
 
 {% block content %}
-<header class="py-2 px-3 border-bottom">
-    <a href="{% url 'home' %}" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</a>
+<header class="py-2 px-3 border-bottom d-flex">
+    <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+    <a href="{% url 'home_post_list' author_pk=author.id %}" class="view-post btn ms-auto me-2">View Posts</a>
 </header>
 <main class="d-flex p-2 px-3 flex-column justify-content-center align-items-center">
     <form>
