@@ -1,0 +1,36 @@
+.back {
+  color: var(--primary-800);
+  font-weight: 500;
+}
+
+.back > i {
+  margin-right: 0.5rem;
+}
+
+h1 {
+  color: var(--primary-800);
+}
+
+form {
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  border-radius: 10px;
+  border: 0.5rem solid var(--primary-400);
+
+  width: 30rem;
+  max-width: 100%;
+
+  background-color: white;
+
+  box-shadow: 0.25rem 0.75rem 30px rgba(139, 139, 139, 0.534);
+}
+
+main {
+  width: 100%;
+  min-height: calc(100% - 60px);
+  height: fit-content;
+}
+
+.view-post {
+  background-color: var(--primary-400);
+  color: white;
+}
