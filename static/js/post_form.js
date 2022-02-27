@@ -40,8 +40,7 @@ const submitHandler = (e) => {
 
   request.open(
     "POST",
-    `../../service/authors/${authorObj.id}/posts${
-      nameObj === "post_edit" ? "/" + postObj.id : ""
+    `../../service/authors/${authorObj.id}/posts${nameObj === "post_edit" ? "/" + postObj.id : ""
     }`
   );
   request.send(formData);
@@ -71,5 +70,5 @@ const deleteHandler = (e) => {
   request.send(formData);
 };
 
-deleteButton.addEventListener("click", deleteHandler);
+deleteButton?.addEventListener("click", deleteHandler);
 form.addEventListener("submit", submitHandler);
