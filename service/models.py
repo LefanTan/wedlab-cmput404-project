@@ -57,7 +57,7 @@ class Post(models.Model):
         primary_key=True, default=generate_uuid_hex, max_length=250)
     title = models.CharField(max_length=250)
     type = models.CharField(default="post", max_length=125)
-    description = models.CharField(max_length=500, default="")
+    description = models.CharField(max_length=500)
     source = models.URLField(max_length=250)
     origin = models.CharField(max_length=250)
     contentType = models.CharField(

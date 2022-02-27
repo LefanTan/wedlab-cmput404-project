@@ -1,0 +1,19 @@
+.back {
+  color: var(--primary-800);
+  font-weight: 500;
+  float: left;
+}
+
+.back > i {
+  margin-right: 0.5rem;
+}
+
+.edit-post {
+  color: var(--primary-800);
+  transition: 200ms;
+}
+
+.edit-post:hover {
+  color: var(--primary-800);
+  transform: scale(1.2);
+}

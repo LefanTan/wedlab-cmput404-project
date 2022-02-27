@@ -77,7 +77,6 @@ class PostEndpointsTestCase(APITestCase):
             "github": "https://link.com"
         }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
         self.apiClient.login(username="admin", password="root")
-
         self.author = Author.objects.get(displayName="admin")
 
     def test_create_post_with_list(self):
