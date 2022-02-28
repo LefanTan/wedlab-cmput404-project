@@ -18,7 +18,7 @@
 <main class="p-4 d-flex align-items-start justify-content-center">
   <form class="d-block">
     {% csrf_token %}
-    <h1 class="mb-3">{% if name == "post_create" %}Create{% else %}Edit{% endif %} Post</h1>
+    <h1 class="mb-3">{% if name == "home_post_create" %}Create{% else %}Edit{% endif %} Post</h1>
 
     <div class="form-floating mb-3">
       <input type="text" class="form-control" name="title" id="title" placeholder="Enter your post title" value="{{ post.title }}" required/>
@@ -52,11 +52,11 @@
       </div>
     </div>
 
-    {% if name == 'post_edit' and post.imageSource %}
+    {% if name == 'home_post_edit' and post.imageSource %}
       <img class='post-image' src="{{ post.imageSource }}" />
     {% endif %}
 
-    <label class="mb-1" for="imageFile">{% if name == 'post_edit' %}New {% endif %}Image</label>
+    <label class="mb-1" for="imageFile">{% if name == 'home_post_edit' %}New {% endif %}Image</label>
     <input class="form-control mb-3" type="file" accept="image/*" name="imageFile" id="imageFile"/>
 
     <label class="mb-1" for="visibility">Visibility</label>
@@ -66,8 +66,8 @@
     </select>
 
     <div>
-      {% if name == "post_edit" %}<button id="delete" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Delete</button>{% endif %}
-      <button class="btn green-btn ms-auto" type="submit">{% if name == "post_create" %}Create{% else %}Save{% endif %}</button>
+      {% if name == "home_post_edit" %}<button id="delete" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Delete</button>{% endif %}
+      <button class="btn green-btn ms-auto" type="submit">{% if name == "home_post_create" %}Create{% else %}Save{% endif %}</button>
     </div>
   </form>
 </main>
