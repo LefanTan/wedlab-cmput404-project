@@ -12,7 +12,7 @@
   >
   <a href="{% url "add_friends" %}" class="btn green-btn create">Add Friends</a>
   <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
-  <button aria-label="inbox" class="inbox">
+  <button aria-label="inbox" class="inbox" onclick="location.href='{% url 'inbox' %}'">
     <i class="fa-solid fa-inbox"></i>
   </button>
   <a class="profile-link" href="{{ author.url }}">
