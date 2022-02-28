@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 
 def generate_uuid_hex():
@@ -70,3 +72,14 @@ class Post(models.Model):
     visibility = models.CharField(
         max_length=25, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField(default=False)
+
+    @staticmethod
+    def get_api_type():
+        return 'post'
+class InboxObject(models.Model):
+    id = models.CharField(primary_key=True, editable=False, default=uuid.uuid4, max_length=500)
+    # the target author that the object (follow, like, post) is sent to
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='inbox_objects')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    object_id = models.CharField(max_length=500, null=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
