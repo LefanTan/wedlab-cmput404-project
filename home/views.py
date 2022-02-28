@@ -78,6 +78,16 @@ def post_create(request):
     return author
 
 
+def inbox(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'inbox.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+    return author
+
+
 def post_edit(request, post_pk):
     # IN PROGRESS
     author, success = auth_check_middleware(request)
