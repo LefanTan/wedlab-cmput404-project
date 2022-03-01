@@ -1,13 +1,9 @@
-import uuid
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
 
 from service.serializers import AuthorSerializer, CategorySerializer, PostSerializer, UserSerializer
 from .models import Author, Category, Post
