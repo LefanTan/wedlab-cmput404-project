@@ -78,12 +78,13 @@ def author_detail(request, pk):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         else:
             password = request.data.get('password')
-            username = request.data.get('username')
+            displayName = request.data.get('displayName')
+
             if password:
                 request.user.set_password(password)
 
-            if username:
-                request.user.username = username
+            if displayName:
+                request.user.username = displayName
                 request.user.save()
 
             serializer = AuthorSerializer(
