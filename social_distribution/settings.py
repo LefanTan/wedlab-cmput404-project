@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'home',
     'service',
     'rest_framework',
+    'drf_yasg',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

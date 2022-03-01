@@ -5,11 +5,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
+from drf_yasg.utils import swagger_auto_schema
 
 from service.serializers import AuthorSerializer
 from .models import Author
 
 
+@swagger_auto_schema(method='get', auto_schema=None)
+@swagger_auto_schema(method='post', operation_description="Signs an author up. A new author and user object will be created.")
 @api_view(['GET', 'POST'])
 @parser_classes([FormParser])
 def signup(request):
@@ -43,7 +46,8 @@ def signup(request):
         return render(request, 'registration/signup.html')
 
 
-@ api_view(['GET'])
+@swagger_auto_schema(method='get', operation_description="Get a list of author")
+@api_view(['GET'])
 # Return a list of authors
 def author_list(request):
     if request.method == 'GET':
@@ -60,8 +64,10 @@ def author_list(request):
         return Response({"type": "authors", "items": data})
 
 
-@ api_view(['GET', 'POST'])
-@ parser_classes([FormParser, MultiPartParser])
+@swagger_auto_schema(method='get', operation_description="Get a specific author")
+@swagger_auto_schema(method='post', operation_description="Update a specific of author")
+@api_view(['GET', 'POST'])
+@parser_classes([FormParser, MultiPartParser])
 # Return a specific author
 def author_detail(request, pk):
     try:
