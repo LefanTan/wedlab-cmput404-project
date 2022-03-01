@@ -1,10 +1,10 @@
 from rest_framework import status
 from django.urls import reverse
-from .models import Author
+from service.models import Author
 import json
 import urllib
 from django.contrib.auth.models import User
-from rest_framework.test import APIRequestFactory, APIClient, APITestCase
+from rest_framework.test import APIClient, APITestCase
 
 
 def get_dict(byte):
@@ -13,7 +13,6 @@ def get_dict(byte):
 
 class AuthorEndpointsTestCase(APITestCase):
     def setUp(self):
-        self.factory = APIRequestFactory()
         self.apiClient = APIClient()
         self.default_user = User.objects.create_user(
             username="default_user", password="root")
@@ -36,7 +35,9 @@ class AuthorEndpointsTestCase(APITestCase):
             self.fail('Unable to retrieve author object')
 
         self.assertTrue(success)
+        self.assertEqual(author.displayName, "admin")
 
+    # Test author_list GET
     def test_get_authors(self):
         # User 1
         self.apiClient.post(reverse('signup'), data=urllib.parse.urlencode({
@@ -65,37 +66,51 @@ class AuthorEndpointsTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(3, len(dict.get('items')))
 
-
-class PostEndpointsTestCase(APITestCase):
-    def setUp(self):
-        self.factory = APIRequestFactory()
-        self.apiClient = APIClient()
-
+    # Test author_detail GET
+    def test_get_specific_author(self):
+        # User 1
         self.apiClient.post(reverse('signup'), data=urllib.parse.urlencode({
-            "username": "admin",
+            "username": "user1",
             "password": "root",
             "github": "https://link.com"
         }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
-        self.apiClient.login(username="admin", password="root")
-        self.author = Author.objects.get(displayName="admin")
 
-    def test_create_post_with_list(self):
-        # Create two post
-        self.apiClient.post(reverse('post_list', kwargs={"author_pk": self.author.id}), data=urllib.parse.urlencode({
-            "title": "title1",
-            "description": "description text",
-        }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
-        self.apiClient.post(reverse('post_list', kwargs={"author_pk": self.author.id}), data=urllib.parse.urlencode({
-            "title": "title2",
-            "description": "description text",
-        }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
+        author = Author.objects.get(displayName="user1")
 
-        # query the post by author id
-        response = self.apiClient.get(reverse('post_list', kwargs={
-            "author_pk": self.author.id}), SERVER_NAME="test.com")
+        response = self.apiClient.get(reverse(
+            'author_detail', kwargs={"pk": author.id}), SERVER_NAME="test.com")
 
         dict = get_dict(response.content)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual("title1", dict[0].get('title'))
-        self.assertEqual("title2", dict[1].get('title'))
+        self.assertEqual(dict.get('displayName'), "user1")
+        self.assertEqual(dict.get('type'), "author")
+
+    # Test author_detail POST / Test update profile
+    def test_post_specific_author(self):
+        # User 1
+        self.apiClient.post(reverse('signup'), data=urllib.parse.urlencode({
+            "username": "user1",
+            "password": "root",
+            "github": "https://link.com"
+        }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
+        author = Author.objects.get(displayName="user1")
+
+        self.apiClient.login(username="user1", password="root")
+
+        response = self.apiClient.post(reverse(
+            'author_detail', kwargs={"pk": author.id}), data=urllib.parse.urlencode({
+                "displayName": "newusername",
+                "github": "https://newlink.com"
+            }), SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Login again with new username
+        success = self.apiClient.login(username="newusername", password="root")
+        self.assertTrue(success)
+
+        dict = get_dict(response.content)
+
+        self.assertEqual(dict.get('displayName'), "newusername")
+        self.assertEqual(dict.get('github'), "https://newlink.com")

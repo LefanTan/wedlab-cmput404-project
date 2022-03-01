@@ -25,8 +25,7 @@ const submitHandler = (e) => {
   request.onload = function (e) {
     if (request.readyState === 4) {
       if (request.status === 200) {
-        console.log(JSON.parse(request.responseText));
-        console.log(nameObj);
+        // console.log(JSON.parse(request.responseText));
 
         history.back();
       } else {
