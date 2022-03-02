@@ -65,12 +65,12 @@ def post_list(request, author_pk):
     return author
 
 
-def add_friends(request):
+def follow_request(request):
     author, success = auth_check_middleware(request)
 
     if success:
         if request.method == 'GET':
-            return render(request, 'add_friends_form.html',
+            return render(request, 'followrequest_form.html',
                           context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
 

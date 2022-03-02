@@ -2,10 +2,9 @@
 {% load static %}
 {% block title %}Add Friends{% endblock %}
 {% block stylesheet %}
-    <link rel="stylesheet" href="{%static 'css/add_friends_form.css' %}" />
-    <script src="{%static 'js/add_friends_form.js' %}" crossorigin="anonymous" defer></script>
+    <link rel="stylesheet" href="{%static 'css/followrequest_form.css' %}" />
+    <script src="{%static 'js/followrequest_form.js' %}" crossorigin="anonymous" defer></script>
     {{ author|json_script:"author" }}
-    {{ follow|json_script:"follow" }}
 {% endblock %}
 
 
@@ -20,12 +19,9 @@
         <h1 class="mb-3">Send Friend Request</h1>
 
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" name="username" id="username" placeholder="Enter the username you want to send a request" required/>
-            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" name="displayName" id="displayName" placeholder="Enter the username you want to send a request" required/>
+            <label for="displayName" class="form-label">Username</label>
         </div>
-        {% if form.errors %}
-            <p class="text-danger">The username is not exist, try again.</p>
-        {% endif %}
         <div>
             <button class="btn" type="submit">Send</button>
         </div>

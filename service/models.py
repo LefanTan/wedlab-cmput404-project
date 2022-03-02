@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 
 
 def generate_uuid_hex():
@@ -12,7 +14,7 @@ class Author(models.Model):
         primary_key=True, default=generate_uuid_hex, max_length=250)
     type = models.CharField(default="author", max_length=125)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    displayName = models.CharField(max_length=255, unique=True)
+    displayName = models.CharField(max_length=255)
     url = models.URLField(max_length=250)
     host = models.URLField(max_length=250)
     github = models.URLField(max_length=250)
@@ -25,7 +27,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
+class InboxObject(models.Model):
+    id = models.CharField(primary_key=True, editable=False, default=generate_uuid_hex, max_length=250)
+    # the author that the object (follow, like, post) is sent to
+    author = models.ForeignKey(
+        Author, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    object_id = models.CharField(max_length=250, null=True)
+    content_object = GenericForeignKey('content_type', 'object_id')
+    
 class Post(models.Model):
     # Choices for visibilities
     PUBLIC = 'PUBLIC'
@@ -70,12 +80,16 @@ class Post(models.Model):
     visibility = models.CharField(
         max_length=25, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField(default=False)
+    inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
 
 
 class FollowRequest(models.Model):
+    id = models.CharField(
+        primary_key=True, default=generate_uuid_hex, max_length=250)
     summary = models.CharField(max_length=500)
     type = models.CharField(default="Follow", max_length=125)
     actor = models.OneToOneField(
         Author, related_name='actor', on_delete=models.CASCADE)
     object = models.OneToOneField(
         Author, related_name='object', on_delete=models.CASCADE)
+

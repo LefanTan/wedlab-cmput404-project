@@ -2,7 +2,7 @@ from unicodedata import category
 from datetime import date, datetime
 import markdown
 from rest_framework import serializers
-from .models import Author, Category, Post, FollowRequest
+from .models import Author, Category, InboxObject, Post, FollowRequest
 from django.contrib.auth.models import User
 
 
@@ -42,7 +42,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(many=False, required=False)
+    author = AuthorSerializer(many=False, required=False, read_only=True)
     categories = serializers.SlugRelatedField(
         slug_field='name', read_only=True, many=True)
 
@@ -122,6 +122,22 @@ class PostSerializer(serializers.ModelSerializer):
         return ret
 
 
+class InboxObjectSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(many=False, required=True)
+    object = serializers.JSONField()
+
+    class Meta:
+        model = InboxObject
+        fields = ['author', 'object']
+
+    def create(self, validated_data):
+        return InboxObject.objects.create(**validated_data)
+
+    def to_representation(self, instance):
+        # the representation is the json object
+        return super().to_representation(instance)
+
+
 class FollowRequestSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(many=False, required=False)
 
@@ -130,12 +146,10 @@ class FollowRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        author_data = validated_data.pop('author')
-        author_obj = Author.objects.get(url=author_data.get('url'))
-        request = FollowRequest.objects.create(
-            **validated_data, author=author_obj)
-        request.save()
-        return request
+        followId = validated_data.pop('id')
+        follow = FollowRequest.objects.create(**validated_data, id=followId)
+        follow.save()
+        return follow
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
