@@ -7,6 +7,7 @@ urlpatterns = [
     path('authors/<str:author_pk>/posts', post_list, name='home_post_list'),
     path('add_friends', add_friends, name='add_friends'),
     path('post/create', post_create, name='home_post_create'),
-    path('inbox', inbox, name='inbox'),
+    path('messages', messages, name='messages'),
+    path('requests', requests, name='requests'),
     path('post/<str:post_pk>/edit', post_edit, name='home_post_edit')
 ]

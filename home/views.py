@@ -85,12 +85,22 @@ def post_create(request):
     return author
 
 
-def inbox(request):
+def messages(request):
     author, success = auth_check_middleware(request)
 
     if success:
         if request.method == 'GET':
-            return render(request, 'inbox.html',
+            return render(request, 'messages.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+    return author
+
+
+def requests(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'requests.html',
                           context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
 
