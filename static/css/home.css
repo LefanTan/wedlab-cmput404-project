@@ -16,11 +16,19 @@ header > .create {
 
 .inbox {
   background-color: transparent;
-  color: rgb(87, 87, 87);
+  color: var(--primary-400);
   border: none;
+  outline: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
   margin-left: 1rem;
-  transition: 200ms;
 }
+
 
 .inbox:hover {
   transform: scale(1.1);
@@ -28,6 +36,22 @@ header > .create {
 
 .inbox > i {
   font-size: 1.5rem;
+}
+
+
+.inbox .button_badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: indianred;
+  display: flex;
+  color: #dddddd;
+  align-items: center;
+  justify-content: center;
+  font-size: small;
 }
 
 .profile-link {
@@ -49,15 +73,12 @@ header > .create {
 .profile-pic-default {
   background-color: var(--primary-400);
   color: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   min-width: 3rem;
   min-height: 3rem;
   font-size: 1rem;
-
   position: relative;
 }
 
