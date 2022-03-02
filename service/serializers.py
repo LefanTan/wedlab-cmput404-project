@@ -120,9 +120,12 @@ class PostSerializer(serializers.ModelSerializer):
         #     ]
         # }
         return ret
+
+
 class InboxObjectSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(many=False, required=True)
     object = serializers.JSONField()
+
     class Meta:
         model = InboxObject
         fields = ['author', 'object']
@@ -132,4 +135,4 @@ class InboxObjectSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         # the representation is the json object
-        return instance.object
+        return super().to_representation(instance)

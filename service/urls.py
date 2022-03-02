@@ -1,5 +1,5 @@
 from django.urls import path, include
-from service import author_views, post_views
+from service import author_views, post_views, inbox_views
 
 urlpatterns = [
     path('auth/signup/', author_views.signup, name='signup'),
@@ -12,6 +12,10 @@ urlpatterns = [
         path('authors/<str:author_pk>/posts/<str:post_pk>',
              post_views.post_detail, name='post_detail'),
         path('authors/<str:author_pk>/posts',
-             post_views.posts, name='post_list')
+             post_views.posts, name='post_list'),
+
+        #Inbox Endpoint
+        path('authors/<str:pk>/inbox', inbox_views.inbox_list, name="inbox_list")
+
     ]))
 ]
