@@ -1,44 +1,31 @@
 const form = document.querySelector("form");
 
-const authorObj = JSON.parse(document.getElementById("author").textContent);
-const followObj = JSON.parse(document.getElementById("follow").textContent);
+const followObj = JSON.parse(document.getElementById("followrequest").textContent);
 
 
-console.log(nameObj);
-if (!!window.performance && window.PerformanceNavigationTiming.type === 2) {
-  window.location.reload();
-}
-
-const submitHandler = (e) => {
+const handleSubmit = (e) => {
   e.preventDefault();
   let formData = new FormData(form);
 
-  const categoriesButton = form.querySelectorAll("[data-value]");
-  for (let button of categoriesButton) {
-    formData.append("categories", button.getAttribute("data-value"));
-  }
-
-  var request = new XMLHttpRequest();
-  request.onload = function (e) {
-    if (request.readyState === 4) {
-      if (request.status === 200) {
-        // console.log(JSON.parse(request.responseText));
-
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", `../../add_friends`, true);
+  xhr.onload = function (e) {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        //console.log(JSON.parse(xhr.responseText));
         history.back();
       } else {
-        console.error(request.statusText);
+        console.log("error: ", xhr.statusText);
+        console.error(xhr.statusText);
+
+        // Send error message to django
+        location.href =
+          location.href +
+          "?error=The username is not exist, try again.";
       }
     }
   };
-
-  request.open(
-    "POST",
-    `../../service/authors/${authorObj.id}/posts${
-      nameObj === "home_post_edit" ? "/" + postObj.id : ""
-    }`
-  );
-  request.send(formData);
+  xhr.send(formData);
 };
 
-deleteButton?.addEventListener("click", deleteHandler);
-form.addEventListener("submit", submitHandler);
+form.addEventListener("submit", handleSubmit);
