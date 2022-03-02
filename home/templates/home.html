@@ -10,10 +10,11 @@
   <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm logout"
     >Logout</a
   >
-  <a href="{% url "add_friends" %}" class="btn green-btn create">Add Friends</a>
+  <a href="{% url "add_friends" %}" class="btn green-btn add-friends">Add Friends</a>
   <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
   <button aria-label="inbox" class="inbox" onclick="location.href='{% url 'inbox' %}'">
-    <i class="fa-solid fa-inbox"></i>
+    <span class="fa-solid fa-inbox"></span>
+    <span class="button_badge">2</span>
   </button>
   <a class="profile-link" href="{{ author.url }}">
     {% if author.profileImage %}
