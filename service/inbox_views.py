@@ -20,18 +20,15 @@ def serialize_inbox_item(item):
         #    serializer = LikeSerializer
         return serializer(item.content_object).data
 
-def deserialize_inbox_data(data):
+def get_inbox_object(data):
         type = data['type']
         if type == 'post':
-            serializer = PostSerializer
-            post = Post.objects.get(pk=data['id'])
-            return serializer(post, data=data, partial=True)
+            object = Post.objects.get(pk=data['id'])
         #elif type == 'Follow':
-        #    serializer = FollowRequestSerializer
+        #    object = FollowRequest.objects.get(pk=data['id'])
         #elif type == 'Like':
-        #    serializer = LikeSerializer
-
-        return serializer(data=data)
+        #    object = Like.objects.get(pk=data['id'])
+        return object
 
 @ api_view(['GET','POST'])
 # Return a list of posts in inbox
@@ -56,12 +53,10 @@ def inbox_list(request, pk):
         except:
             return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
-        serializer = deserialize_inbox_data(request.data)
-        if serializer.is_valid():
-            # save the post/like/follow request to database
-            item = serializer.save()
+        item = get_inbox_object(request.data)
+        if item:
             # create an InboxObject which links to target author
             inbox_item = InboxObject(content_object=item, author=author)
             inbox_item.save()
-            return Response({'req': request.data, 'saved': model_to_dict(inbox_item)})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'request': request.data, 'saved': model_to_dict(inbox_item)})
+        return Response(status=status.HTTP_400_BAD_REQUEST)
