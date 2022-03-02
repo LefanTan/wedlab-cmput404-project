@@ -2,7 +2,7 @@ from unicodedata import category
 from datetime import date, datetime
 import markdown
 from rest_framework import serializers
-from .models import Author, Category, Post
+from .models import Author, Category, Post, FollowRequest
 from django.contrib.auth.models import User
 
 
@@ -119,4 +119,24 @@ class PostSerializer(serializers.ModelSerializer):
         #         }
         #     ]
         # }
+        return ret
+
+
+class FollowRequestSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(many=False, required=False)
+
+    class Meta:
+        model = FollowRequest
+        fields = '__all__'
+
+    def create(self, validated_data):
+        author_data = validated_data.pop('author')
+        author_obj = Author.objects.get(url=author_data.get('url'))
+        request = FollowRequest.objects.create(
+            **validated_data, author=author_obj)
+        request.save()
+        return request
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
         return ret

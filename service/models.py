@@ -12,7 +12,7 @@ class Author(models.Model):
         primary_key=True, default=generate_uuid_hex, max_length=250)
     type = models.CharField(default="author", max_length=125)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    displayName = models.CharField(max_length=255)
+    displayName = models.CharField(max_length=255, unique=True)
     url = models.URLField(max_length=250)
     host = models.URLField(max_length=250)
     github = models.URLField(max_length=250)
@@ -70,3 +70,12 @@ class Post(models.Model):
     visibility = models.CharField(
         max_length=25, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField(default=False)
+
+
+class FollowRequest(models.Model):
+    summary = models.CharField(max_length=500)
+    type = models.CharField(default="Follow", max_length=125)
+    actor = models.OneToOneField(
+        Author, related_name='actor', on_delete=models.CASCADE)
+    object = models.OneToOneField(
+        Author, related_name='object', on_delete=models.CASCADE)
