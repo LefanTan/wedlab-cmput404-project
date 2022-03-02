@@ -7,7 +7,7 @@ const handleSubmit = (e) => {
   let formData = new FormData(form);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", `../../service/${authorObj.id}/addfriends/`, true);
+  xhr.open("POST", `../../service/${authorObj.id}/sendfollowrequest/`, true);
   xhr.onload = function (e) {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {

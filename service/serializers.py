@@ -130,9 +130,7 @@ class FollowRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        print('validate:', validated_data)
         followId = validated_data.pop('id')
-        print('id:', followId)
         follow = FollowRequest.objects.create(**validated_data, id=followId)
         follow.save()
         return follow
