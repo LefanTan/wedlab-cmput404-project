@@ -20,7 +20,7 @@ const handleSubmit = (e) => {
         // Send error message to django
         location.href =
           location.href +
-          "?error=The username is not exist, try again.";
+          "?error=You have sent the request to this user";
       }
     }
   };
