@@ -3,8 +3,8 @@
 {% block title %}Add Friends{% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="{%static 'css/add_friends_form.css' %}" />
-{#    <script src="{%static 'js/add_friends_form.js' %}" crossorigin="anonymous" defer></script>#}
-{#    {{ followrequest|json_script:"followrequest" }}#}
+    <script src="{%static 'js/add_friends_form.js' %}" crossorigin="anonymous" defer></script>
+    {{ author|json_script:"author" }}
 {% endblock %}
 
 

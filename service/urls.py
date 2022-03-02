@@ -31,7 +31,7 @@ urlpatterns = [
              post_views.posts, name='post_list'),
 
         # Send Request Endpoints
-        path('add_friends/',
+        path('<str:author_pk>/addfriends/',
              add_friends_views.send_request, name='follow_request')
     ]))
 ]

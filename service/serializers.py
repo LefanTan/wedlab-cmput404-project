@@ -130,13 +130,12 @@ class FollowRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        return FollowRequest.objects.create(**validated_data)
-        # author_data = validated_data.pop('author')
-        # author_obj = Author.objects.get(url=author_data.get('url'))
-        # request = FollowRequest.objects.create(
-        #     **validated_data, author=author_obj)
-        # request.save()
-        # return request
+        print('validate:', validated_data)
+        followId = validated_data.pop('id')
+        print('id:', followId)
+        follow = FollowRequest.objects.create(**validated_data, id=followId)
+        follow.save()
+        return follow
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
