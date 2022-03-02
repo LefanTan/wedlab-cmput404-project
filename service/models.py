@@ -76,6 +76,6 @@ class FollowRequest(models.Model):
     summary = models.CharField(max_length=500)
     type = models.CharField(default="Follow", max_length=125)
     actor = models.OneToOneField(
-        Author, on_delete=models.CASCADE)
+        Author, related_name='actor', on_delete=models.CASCADE)
     object = models.OneToOneField(
-        Author, on_delete=models.CASCADE)
+        Author, related_name='object', on_delete=models.CASCADE)
