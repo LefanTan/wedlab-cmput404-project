@@ -4,7 +4,7 @@ const deleteButton = document.getElementById("delete");
 const authorObj = JSON.parse(document.getElementById("author").textContent);
 const postObj = JSON.parse(document.getElementById("post").textContent);
 const nameObj = JSON.parse(document.getElementById("name").textContent);
-
+console.log(nameObj);
 if (!!window.performance && window.PerformanceNavigationTiming.type == 2) {
   window.location.reload();
 }
@@ -25,13 +25,9 @@ const submitHandler = (e) => {
   request.onload = function (e) {
     if (request.readyState === 4) {
       if (request.status === 200) {
-        //console.log(JSON.parse(request.responseText));
+        // console.log(JSON.parse(request.responseText));
 
-        if (nameObj == "post_edit") {
-          history.back();
-        } else {
-          location.href = "/";
-        }
+        history.back();
       } else {
         console.error(request.statusText);
       }
@@ -40,7 +36,8 @@ const submitHandler = (e) => {
 
   request.open(
     "POST",
-    `../../service/authors/${authorObj.id}/posts${nameObj === "post_edit" ? "/" + postObj.id : ""
+    `../../service/authors/${authorObj.id}/posts${
+      nameObj === "home_post_edit" ? "/" + postObj.id : ""
     }`
   );
   request.send(formData);
