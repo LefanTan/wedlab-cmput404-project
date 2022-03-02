@@ -11,26 +11,28 @@ from .models import Author, InboxObject, Post
 
 
 def serialize_inbox_item(item):
-        model = item.content_type.model_class()
-        if model is Post:
-            serializer = PostSerializer   
-        #elif model is FollowRequest:
-        #    serializer = FollowRequestSerializer
-        #elif model is Like:
-        #    serializer = LikeSerializer
-        return serializer(item.content_object).data
+    model = item.content_type.model_class()
+    if model is Post:
+        serializer = PostSerializer
+    # elif model is FollowRequest:
+    #    serializer = FollowRequestSerializer
+    # elif model is Like:
+    #    serializer = LikeSerializer
+    return serializer(item.content_object).data
+
 
 def get_inbox_object(data):
-        type = data['type']
-        if type == 'post':
-            object = Post.objects.get(pk=data['id'])
-        #elif type == 'Follow':
-        #    object = FollowRequest.objects.get(pk=data['id'])
-        #elif type == 'Like':
-        #    object = Like.objects.get(pk=data['id'])
-        return object
+    type = data['type']
+    if type == 'post':
+        object = Post.objects.get(pk=data['id'])
+    # elif type == 'Follow':
+    #    object = FollowRequest.objects.get(pk=data['id'])
+    # elif type == 'Like':
+    #    object = Like.objects.get(pk=data['id'])
+    return object
 
-@ api_view(['GET','POST'])
+
+@api_view(['GET', 'POST'])
 # Return a list of posts in inbox
 def inbox_list(request, pk):
     if request.method == 'GET':
@@ -40,7 +42,7 @@ def inbox_list(request, pk):
             return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
         author_url = AuthorSerializer(author).data['id']
 
-        #Authors can only view their own inbox
+        # Authors can only view their own inbox
         if not request.user.is_authenticated or request.user.id != author.user_id:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         inbox_list = InboxObject.objects.filter(author=author)

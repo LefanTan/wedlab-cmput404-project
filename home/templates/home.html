@@ -16,15 +16,11 @@
   <div class="dropdown">
     <button aria-label="inbox" class="inbox">
         <span class="fa-solid fa-inbox"></span>
-        <span class="badge button_badge">2</span>
+        <span class="dot button_dot"></span>
     </button>
     <div class="dropdown-contents">
-        <div>
-            <a href="{% url 'messages' %}">Messages<span class="badge messages-badge">1</span></a>
-        </div>
-        <div>
-            <a href="{% url 'requests' %}">Friend Requests<span class="badge requests-badge">1</span></a>
-        </div>
+            <a href="{% url 'messages' %}">Messages<span class="dot messages-dot"></span></a>
+            <a href="{% url 'requests' %}">Friend Requests<span class="dot requests-dot"></span></a>
     </div>
   </div>
 

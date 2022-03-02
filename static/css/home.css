@@ -36,7 +36,7 @@ header {
   justify-content: center;
   width: 50px;
   height: 50px;
-  font-size: 40px;
+  font-size:40px;
   margin-left: 1rem;
 }
 
@@ -59,7 +59,7 @@ header {
   color: darkolivegreen;
   padding: 12px 16px;
   text-decoration: none;
-  display: inline-block;
+  display: flex;
   border-radius: 20px;
   border:1px solid #adc2a9;
   text-align: center;
@@ -82,34 +82,31 @@ header {
   font-size: 1.5rem;
 }
 
-.badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: indianred;
-  display: flex;
-  color: #dddddd;
-  align-items: center;
-  justify-content: center;
-  font-size: small;
-}
-
-.messages-badge {
-  position: absolute;
-  float: right;
-}
-
-.requests-badge {
+.dropdown-contents .requests-dot {
   position: absolute;
   top: 45px;
   right: -2.5px;
   float: right;
 }
 
+.dot {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: indianred;
+  border: 1px solid white;
+  display: flex;
+  font-size: x-small;
 
+}
+
+.messages-dot {
+  position: absolute;
+  float: right;
+}
 
 .profile-link {
   margin-left: 1rem;
