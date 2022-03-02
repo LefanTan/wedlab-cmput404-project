@@ -1,8 +1,8 @@
 from django.urls import path, include
+from service import author_views, post_views, inbox_views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from service import author_views, post_views
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -28,6 +28,10 @@ urlpatterns = [
         path('authors/<str:author_pk>/posts/<str:post_pk>',
              post_views.post_detail, name='post_detail'),
         path('authors/<str:author_pk>/posts',
-             post_views.posts, name='post_list')
+             post_views.posts, name='post_list'),
+
+        #Inbox Endpoint
+        path('authors/<str:pk>/inbox', inbox_views.inbox_list, name="inbox_list")
+
     ]))
 ]

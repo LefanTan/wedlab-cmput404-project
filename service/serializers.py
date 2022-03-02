@@ -2,7 +2,7 @@ from unicodedata import category
 from datetime import date, datetime
 import markdown
 from rest_framework import serializers
-from .models import Author, Category, Post
+from .models import Author, Category, InboxObject, Post
 from django.contrib.auth.models import User
 
 
@@ -42,7 +42,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(many=False, required=False)
+    author = AuthorSerializer(many=False, required=False, read_only=True)
     categories = serializers.SlugRelatedField(
         slug_field='name', read_only=True, many=True)
 
@@ -120,3 +120,19 @@ class PostSerializer(serializers.ModelSerializer):
         #     ]
         # }
         return ret
+
+
+class InboxObjectSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(many=False, required=True)
+    object = serializers.JSONField()
+
+    class Meta:
+        model = InboxObject
+        fields = ['author', 'object']
+
+    def create(self, validated_data):
+        return InboxObject.objects.create(**validated_data)
+
+    def to_representation(self, instance):
+        # the representation is the json object
+        return super().to_representation(instance)
