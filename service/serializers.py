@@ -42,7 +42,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(many=False, required=False)
+    author = AuthorSerializer(many=False, required=False, read_only=True)
     categories = serializers.SlugRelatedField(
         slug_field='name', read_only=True, many=True)
 
