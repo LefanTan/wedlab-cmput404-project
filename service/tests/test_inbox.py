@@ -34,15 +34,27 @@ class InboxEndpointsTestCase(APITestCase):
 
     #test inbox_list POST and GET
     def test_inbox_list(self):
+        #test that inbox is empty at first
+        response = self.apiClient.get(reverse('inbox_list', kwargs={
+            "pk": self.author.id}), SERVER_NAME="test.com")
+        dict = get_dict(response.content)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(0, len(dict.get('items')))
+
+        #POST a post to inbox
         response = self.apiClient.post(reverse('inbox_list', kwargs={"pk": self.author.id}), 
         data=self.post_info, format='json',
         SERVER_NAME="test.com")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        #test that inbox contains one item, the post
         response = self.apiClient.get(reverse('inbox_list', kwargs={
             "pk": self.author.id}), SERVER_NAME="test.com")
         dict = get_dict(response.content)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(1, len(dict.get('items')))
+        self.assertEqual('test_title', (dict.get('items')[0].get('title')))
+        self.assertEqual('post', (dict.get('items')[0].get('type')))
