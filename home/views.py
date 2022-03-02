@@ -1,4 +1,5 @@
 from django.shortcuts import redirect, render
+from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
 from service.models import Author, Post
 from service.serializers import PostSerializer
@@ -23,8 +24,14 @@ def home(request):
 
     # TODO: Use posts that has arrived in user's Inbox
     try:
-        # using all author's own post for now
-        posts = author.post_set.all()
+        page_number = request.GET.get('page') or 1
+        size = request.GET.get('size') or 5
+
+        post_objs = Post.objects.filter(visibility="PUBLIC", unlisted=False)
+
+        paginator = Paginator(post_objs, size)
+        posts = paginator.get_page(page_number).object_list
+
         postsData = PostSerializer(posts, many=True).data
     except Exception as e:
         pass

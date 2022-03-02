@@ -6,15 +6,13 @@ const handleSubmit = (e) => {
   e.preventDefault();
   let formData = new FormData(form);
 
-  formData.append("displayName", formData.get("username"));
-
   let xhr = new XMLHttpRequest();
   xhr.open("POST", `../../service/authors/${authorObj.id}`, true);
   xhr.onload = function (e) {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
         //console.log(JSON.parse(xhr.responseText));
-        location.href = "/";
+        history.back();
       } else {
         console.log("error: ", xhr.statusText);
         console.error(xhr.statusText);

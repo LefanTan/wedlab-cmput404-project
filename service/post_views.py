@@ -1,23 +1,21 @@
-import uuid
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
+from drf_yasg.utils import swagger_auto_schema
 
 from service.serializers import AuthorSerializer, CategorySerializer, PostSerializer, UserSerializer
 from .models import Author, Category, Post
 
 
-@ api_view(['GET', 'POST', 'PUT', 'DELETE'])
-@ parser_classes([MultiPartParser, FormParser])
-# These decorators will cause the entire view to require authentication
-# @authentication_classes([BasicAuthentication])
-# @permission_classes([IsAuthenticated])
+@swagger_auto_schema(method='get', operation_description="Retrieve a specific post from an author")
+@swagger_auto_schema(method='post', operation_description="Updates a specific post from an author")
+@swagger_auto_schema(method='put', operation_description="Creates a specific post from an author")
+@swagger_auto_schema(method='delete', operation_description="Deletes a specific post from an author")
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@parser_classes([MultiPartParser, FormParser])
 # Return a specific Post
 def post_detail(request, author_pk, post_pk):
     if request.method == 'GET':
@@ -78,6 +76,8 @@ def post_detail(request, author_pk, post_pk):
             return Response(f"Author of id-{author_pk} doesn't have this post", status=status.HTTP_404_NOT_FOUND)
 
 
+@swagger_auto_schema(method='get', operation_description="Retrieve an existing post from an author")
+@swagger_auto_schema(method='post', operation_description="Creates a new post from an author")
 @ api_view(['GET', 'POST'])
 @ parser_classes([MultiPartParser, FormParser])
 # Return a list of Post or to create a post with incremental ID
