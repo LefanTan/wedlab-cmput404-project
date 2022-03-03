@@ -16,11 +16,24 @@
   <div class="dropdown">
     <button aria-label="inbox" class="inbox">
         <span class="fa-solid fa-inbox"></span>
-        <span class="dot button_dot"></span>
+        {% if item != None %}
+            <span class="dot button_dot"></span>
+        {% endif %}
     </button>
     <div class="dropdown-contents">
-            <a href="{% url 'messages' %}">Messages<span class="dot messages-dot"></span></a>
-            <a href="{% url 'requests' %}">Friend Requests<span class="dot requests-dot"></span></a>
+            <a href="{% url 'messages' %}">
+                Messages
+                {% if item != None %}
+                    <span class="dot messages-dot"></span>
+                {% endif %}
+            </a>
+            {# This page will not be built for now #}
+            <a href="{% url 'requests' %}">
+                Friend Requests
+                {% if item != None %}
+                    <span class="dot requests-dot"></span>
+                {% endif %}
+            </a>
     </div>
   </div>
 

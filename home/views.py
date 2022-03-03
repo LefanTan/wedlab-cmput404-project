@@ -21,6 +21,11 @@ def auth_check_middleware(request):
 
 def home(request):
     author, success = auth_check_middleware(request)
+    item = None
+    try:
+        item = InboxObject.objects.get(author=author)
+    except Exception as e:
+        pass
 
     # TODO: Use posts that has arrived in user's Inbox
     try:
@@ -37,7 +42,7 @@ def home(request):
         pass
 
     if success:
-        return render(request, 'home.html', {"author": model_to_dict(author), "posts": postsData})
+        return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData})
     return author
 
 
@@ -88,20 +93,18 @@ def post_create(request):
 def messages(request):
     author, success = auth_check_middleware(request)
     content = None
+    item = None
 
-    # page_number = request.GET.get('page') or 1
-    # size = request.GET.get('size') or 5
+    try:
+        item = InboxObject.objects.get(author=author)
+        model = item.content_type.model_class()
 
-    item = InboxObject.objects.get(author=author)
-    model = item.content_type.model_class()
-
-    # paginator = Paginator(item, size)
-    # requests = paginator.get_page(page_number).object_list
-
-    if model is Post:
+        if model is Post:
+            pass
+        if model is FollowRequest:
+            content = FollowRequest.objects.get(id=item.object_id)
+    except Exception as e:
         pass
-    if model is FollowRequest:
-        content = FollowRequest.objects.get(id=item.object_id)
 
     if success:
         if request.method == 'GET':
