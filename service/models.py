@@ -94,3 +94,4 @@ class FollowRequest(models.Model):
         Author, related_name='actor', on_delete=models.CASCADE)
     object = models.OneToOneField(
         Author, related_name='object', on_delete=models.CASCADE)
+    inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
