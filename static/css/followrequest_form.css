@@ -1,0 +1,23 @@
+.back {
+  color: var(--primary-800);
+  font-weight: 500;
+}
+
+.back > i {
+  margin-right: 0.5rem;
+}
+
+main {
+  width: 100%;
+  min-height: calc(100% - 60px);
+  height: fit-content;
+}
+
+form {
+  width: 30rem;
+  max-width: 100%;
+}
+
+h1 {
+  color: var(--primary-800);
+}
