@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
-from service.models import Author, Post
-from service.serializers import PostSerializer
+from service.models import Author, Post, FollowRequest, InboxObject
+from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
 
 
@@ -98,10 +98,23 @@ def messages(request):
 def requests(request):
     author, success = auth_check_middleware(request)
 
+    try:
+        page_number = request.GET.get('page') or 1
+        size = request.GET.get('size') or 5
+
+        inbox_objs = InboxObject.objects.get(object=author)
+
+        paginator = Paginator(inbox_objs, size)
+        requests = paginator.get_page(page_number).object_list
+
+        data = FollowRequestSerializer(requests, many=True).data
+    except Exception as e:
+        pass
+
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "post": data, "name": request.resolver_match.url_name})
     return author
 
 
