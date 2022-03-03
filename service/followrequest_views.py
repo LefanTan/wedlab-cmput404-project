@@ -46,7 +46,8 @@ def send_request(request, author_pk):
                     object = FollowRequest.objects.get(pk=data['id'])
                     inbox_item = InboxObject(content_object=object, author=author)
                     inbox_item.save()
-                    return Response(follow_serializer.data, model_to_dict(inbox_item))
+                    # , model_to_dict(inbox_item)
+                    return Response(follow_serializer.data)
                 return Response("Data not valid", status=status.HTTP_400_BAD_REQUEST)
             except Author.DoesNotExist:
                 return Response("Username does not exist!", status=status.HTTP_400_BAD_REQUEST)

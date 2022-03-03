@@ -3,10 +3,6 @@ from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
 from service.models import Author, Post, FollowRequest, InboxObject
 from service.serializers import PostSerializer, FollowRequestSerializer
-
-from service.models import Author, Post, InboxObject
-from service.serializers import PostSerializer
-
 from django.forms.models import model_to_dict
 
 
@@ -14,13 +10,13 @@ def auth_check_middleware(request):
     # Check if user is authenticated and also check if the user is an Author
 
     if not request.user.is_authenticated:
-        return redirect('login'), False
+        return (redirect('login'), False)
 
     try:
         author = Author.objects.get(user=request.user.id)
     except Exception as e:
-        return redirect('login'), False
-    return author, True
+        return (redirect('login'), False)
+    return (author, True)
 
 
 def home(request):
@@ -90,19 +86,23 @@ def post_create(request):
 
 
 def messages(request):
-    content = None
     author, success = auth_check_middleware(request)
-    try:
-        item = InboxObject.objects.get(author=author)
-        model = item.content_type.model_class()
+    content = None
 
-        if model is Post:
-            pass
-        elif model is FollowRequest:
-            content = FollowRequest.objects.get(id=item.object_id)
+    # page_number = request.GET.get('page') or 1
+    # size = request.GET.get('size') or 5
 
-    except Exception as e:
+    item = InboxObject.objects.get(author=author)
+    model = item.content_type.model_class()
+
+    # paginator = Paginator(item, size)
+    # requests = paginator.get_page(page_number).object_list
+
+    if model is Post:
         pass
+    if model is FollowRequest:
+        content = FollowRequest.objects.get(id=item.object_id)
+
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
@@ -112,12 +112,30 @@ def messages(request):
 
 def requests(request):
     author, success = auth_check_middleware(request)
+    content = None
+
+    try:
+        # page_number = request.GET.get('page') or 1
+        # size = request.GET.get('size') or 5
+
+        item = InboxObject.objects.get(object=author)
+        model = item.content_type.model_class()
+
+        # paginator = Paginator(item, size)
+        # requests = paginator.get_page(page_number).object_list
+
+        if model is Post:
+            pass
+        if model is FollowRequest:
+            content = FollowRequest.objects.get(id=item.object_id)
+
+    except Exception as e:
+        pass
 
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author),
-                                   "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
     return author
 
 
