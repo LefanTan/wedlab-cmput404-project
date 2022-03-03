@@ -60,7 +60,18 @@ def post_list(request, author_pk):
 
     if success:
         if request.method == 'GET':
-            return render(request, 'post_list.html', {"author": model_to_dict(author), "posts": postsData, "edit": author_pk == author.id})
+            return render(request, 'post_list.html',
+                          {"author": model_to_dict(author), "posts": postsData, "edit": author_pk == author.id})
+    return author
+
+
+def follow_request(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'followrequest_form.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
 
 
@@ -69,7 +80,28 @@ def post_create(request):
 
     if success:
         if request.method == 'GET':
-            return render(request, 'post_form.html', context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+            return render(request, 'post_form.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+    return author
+
+
+def messages(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'messages.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+    return author
+
+
+def requests(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'requests.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
     return author
 
 
@@ -86,7 +118,8 @@ def post_edit(request, post_pk):
 
     if success:
         if request.method == 'GET':
-            return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": postData, "name": request.resolver_match.url_name})
+            return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": postData,
+                                                              "name": request.resolver_match.url_name})
     return author
 
 
@@ -101,5 +134,7 @@ def profile(request, author_pk):
 
     if success:
         if request.method == 'GET':
-            return render(request, 'profile.html', context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name, "edit": author.id == author_pk, "error": request.GET.get('error')})
+            return render(request, 'profile.html',
+                          context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name,
+                                   "edit": author.id == author_pk, "error": request.GET.get('error')})
     return author

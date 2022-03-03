@@ -27,6 +27,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+
 class InboxObject(models.Model):
     id = models.CharField(primary_key=True, editable=False, default=generate_uuid_hex, max_length=250)
     # the author that the object (follow, like, post) is sent to
@@ -35,7 +36,8 @@ class InboxObject(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
     object_id = models.CharField(max_length=250, null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-    
+
+
 class Post(models.Model):
     # Choices for visibilities
     PUBLIC = 'PUBLIC'
@@ -81,3 +83,14 @@ class Post(models.Model):
         max_length=25, choices=VISIBILITY_CHOICES, default=PUBLIC)
     unlisted = models.BooleanField(default=False)
     inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
+
+
+class FollowRequest(models.Model):
+    id = models.CharField(
+        primary_key=True, default=generate_uuid_hex, max_length=250)
+    summary = models.CharField(max_length=500)
+    type = models.CharField(default="Follow", max_length=125)
+    actor = models.OneToOneField(
+        Author, related_name='actor', on_delete=models.CASCADE)
+    object = models.OneToOneField(
+        Author, related_name='object', on_delete=models.CASCADE)

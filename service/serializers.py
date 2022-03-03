@@ -2,7 +2,7 @@ from unicodedata import category
 from datetime import date, datetime
 import markdown
 from rest_framework import serializers
-from .models import Author, Category, InboxObject, Post
+from .models import Author, Category, InboxObject, Post, FollowRequest
 from django.contrib.auth.models import User
 
 
@@ -136,3 +136,21 @@ class InboxObjectSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         # the representation is the json object
         return super().to_representation(instance)
+
+
+class FollowRequestSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(many=False, required=False)
+
+    class Meta:
+        model = FollowRequest
+        fields = '__all__'
+
+    def create(self, validated_data):
+        followId = validated_data.pop('id')
+        follow = FollowRequest.objects.create(**validated_data, id=followId)
+        follow.save()
+        return follow
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        return ret

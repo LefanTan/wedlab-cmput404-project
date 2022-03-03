@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Add Friends{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{%static 'css/followrequest_form.css' %}" />
+    <script src="{%static 'js/followrequest_form.js' %}" crossorigin="anonymous" defer></script>
+    {{ author|json_script:"author" }}
+{% endblock %}
+
+
+{% block content %}
+<header class="py-2 px-3 border-bottom">
+  <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+</header>
+<main class="p-4 d-flex align-items-start justify-content-center">
+
+    <form class="d-block">
+        {% csrf_token %}
+        <h1 class="mb-3">Send Friend Request</h1>
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" name="displayName" id="displayName" placeholder="Enter the username you want to send a request" required/>
+            <label for="displayName" class="form-label">Username</label>
+        </div>
+        <div>
+            <button class="btn" type="submit">Send</button>
+        </div>
+    </form>
+</main>
+{% endblock %}
