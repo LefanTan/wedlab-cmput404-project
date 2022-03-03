@@ -22,6 +22,34 @@ h1 {
   color: var(--primary-800);
 }
 
-#description {
-  height: 10rem;
+p {
+  display: inline-block;
+  vertical-align: bottom;
+  color: var(--primary-800);
+  margin-top: 10px;
+}
+
+.actions .confirm, .reject {
+  color: #778377;
+  border-style: solid;
+  border-color: var(--primary-500);
+  background-color: white;
+  border-radius: 20px;
+  font-size: small;
+  height: 30px;
+  width: 70px;
+  float: right;
+  margin: 5px;
+}
+
+.column {
+  background-color:transparent;
+  font-size: medium;
+  color: white;
+  font-family: Courier, serif;
+}
+
+.rows {
+  margin-top: 20px;
+  border-bottom: darkolivegreen 1px solid;
 }

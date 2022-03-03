@@ -3,6 +3,10 @@ from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
 from service.models import Author, Post, FollowRequest, InboxObject
 from service.serializers import PostSerializer, FollowRequestSerializer
+
+from service.models import Author, Post, InboxObject
+from service.serializers import PostSerializer
+
 from django.forms.models import model_to_dict
 
 
@@ -10,13 +14,13 @@ def auth_check_middleware(request):
     # Check if user is authenticated and also check if the user is an Author
 
     if not request.user.is_authenticated:
-        return (redirect('login'), False)
+        return redirect('login'), False
 
     try:
         author = Author.objects.get(user=request.user.id)
     except Exception as e:
-        return (redirect('login'), False)
-    return (author, True)
+        return redirect('login'), False
+    return author, True
 
 
 def home(request):
@@ -86,10 +90,10 @@ def post_create(request):
 
 
 def messages(request):
+    content = None
     author, success = auth_check_middleware(request)
-
     try:
-        item = InboxObject.objects.all().get(author=author)
+        item = InboxObject.objects.get(author=author)
         model = item.content_type.model_class()
 
         if model is Post:
@@ -99,7 +103,6 @@ def messages(request):
 
     except Exception as e:
         pass
-
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
