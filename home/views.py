@@ -118,14 +118,8 @@ def requests(request):
     content = None
 
     try:
-        # page_number = request.GET.get('page') or 1
-        # size = request.GET.get('size') or 5
-
         item = InboxObject.objects.get(object=author)
         model = item.content_type.model_class()
-
-        # paginator = Paginator(item, size)
-        # requests = paginator.get_page(page_number).object_list
 
         if model is Post:
             pass
