@@ -18,6 +18,10 @@
             <div class="column">
                 <p>{{ content.summary }}</p>
 {#                <p>message1</p>#}
+                <span class="actions">
+                    <button class="confirm">Confirm</button>
+                    <button class="reject">Reject</button>
+                </span>
             </div>
         </div>
         {% if form.errors %}
