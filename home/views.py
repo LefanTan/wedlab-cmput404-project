@@ -88,33 +88,33 @@ def post_create(request):
 def messages(request):
     author, success = auth_check_middleware(request)
 
+    try:
+        item = InboxObject.objects.all().get(author=author)
+        model = item.content_type.model_class()
+
+        if model is Post:
+            pass
+        elif model is FollowRequest:
+            content = FollowRequest.objects.get(id=item.object_id)
+
+    except Exception as e:
+        pass
+
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
     return author
 
 
 def requests(request):
     author, success = auth_check_middleware(request)
 
-    try:
-        page_number = request.GET.get('page') or 1
-        size = request.GET.get('size') or 5
-
-        inbox_objs = InboxObject.objects.get(object=author)
-
-        paginator = Paginator(inbox_objs, size)
-        requests = paginator.get_page(page_number).object_list
-
-        data = FollowRequestSerializer(requests, many=True).data
-    except Exception as e:
-        pass
-
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "post": data, "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author),
+                                   "name": request.resolver_match.url_name})
     return author
 
 
