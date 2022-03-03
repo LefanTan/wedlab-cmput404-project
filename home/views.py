@@ -138,3 +138,14 @@ def profile(request, author_pk):
                           context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name,
                                    "edit": author.id == author_pk, "error": request.GET.get('error')})
     return author
+
+def share_post(request, post_pk):
+    # Show author's profile
+    author, success = auth_check_middleware(request)
+    post = Post.objects.get(pk=post_pk)
+    postData = PostSerializer(post).data
+    allAuthors = Author.objects.all()
+    if success:
+        if request.method == 'GET':
+            return render(request, 'sharepost.html', context={"requesting_author": model_to_dict(author), "post": postData, "allauthors": allAuthors})
+    return author

@@ -14,7 +14,7 @@ class Author(models.Model):
         primary_key=True, default=generate_uuid_hex, max_length=250)
     type = models.CharField(default="author", max_length=125)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    displayName = models.CharField(max_length=255)
+    displayName = models.CharField(max_length=255, unique=True)
     url = models.URLField(max_length=250)
     host = models.URLField(max_length=250)
     github = models.URLField(max_length=250)

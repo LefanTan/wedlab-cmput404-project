@@ -27,10 +27,6 @@ class InboxEndpointsTestCase(APITestCase):
             description="description",
             visibility="PUBLIC"
         )
-        self.post_info = {
-            "id": self.post.id,
-            "type": "post"
-        }
 
     #test inbox_list POST and GET
     def test_inbox_list(self):
@@ -44,8 +40,11 @@ class InboxEndpointsTestCase(APITestCase):
 
         #POST a post to inbox
         response = self.apiClient.post(reverse('inbox_list', kwargs={"pk": self.author.id}), 
-        data=self.post_info, format='json',
-        SERVER_NAME="test.com")
+        data=urllib.parse.urlencode({
+            "id": self.post.id,
+            "type": "post"
+        }),
+        SERVER_NAME="test.com", content_type="application/x-www-form-urlencoded")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
