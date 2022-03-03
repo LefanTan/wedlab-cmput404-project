@@ -2,12 +2,15 @@ import uuid
 from django.core.paginator import Paginator
 from django.forms import model_to_dict
 from django.shortcuts import redirect, render
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.generics import ListCreateAPIView
 from service.serializers import AuthorSerializer, PostSerializer
 from .models import Author, InboxObject, Post
+from drf_yasg.utils import swagger_auto_schema
+
 
 
 def serialize_inbox_item(item):
@@ -31,8 +34,10 @@ def get_inbox_object(data):
     #    object = Like.objects.get(pk=data['id'])
     return object
 
-
+@swagger_auto_schema(method='get', operation_description="Retrieve a list of inbox items of an author")
+@swagger_auto_schema(method='post', operation_description="Posts a post/like/follow request to an author's inbox")
 @api_view(['GET', 'POST'])
+@parser_classes([MultiPartParser, FormParser])
 # Return a list of posts in inbox
 def inbox_list(request, pk):
     if request.method == 'GET':
@@ -53,7 +58,10 @@ def inbox_list(request, pk):
         try:
             author = Author.objects.get(pk=pk)
         except:
-            return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
+            try:
+                author = Author.objects.get(displayName=pk)
+            except:
+                return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
         item = get_inbox_object(request.data)
         if item:
