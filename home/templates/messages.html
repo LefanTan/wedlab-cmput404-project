@@ -14,19 +14,21 @@
     <form method="get">
         {% csrf_token %}
         <h1 class="mb-3">Inbox Messages</h1>
+    {% if item %}
+{#        {% for contents in content %}#}
         <div class="rows">
             <div class="column">
-                <p>{{ content.summary }}</p>
-{#                <p>message1</p>#}
-                <span class="actions">
-                    <button class="confirm">Confirm</button>
-                    <button class="reject">Reject</button>
-                </span>
+            <p>{{ contents.summary }}</p>
+            <span class="actions">
+                <button class="confirm">Confirm</button>
+                <button class="reject">Reject</button>
+            </span>
             </div>
         </div>
-        {% if form.errors %}
-            <p>There is no messages in inbox right now.</p>
-        {% endif %}
+{#        {% endfor %}#}
+    {% else %}
+        <p>There is no messages in inbox right now.</p>
+    {% endif %}
     </form>
 </main>
 {% endblock %}
