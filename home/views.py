@@ -1,8 +1,8 @@
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
-from service.models import Author, Post
-from service.serializers import PostSerializer
+from service.models import Author, Post, FollowRequest, InboxObject
+from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
 
 
@@ -21,6 +21,11 @@ def auth_check_middleware(request):
 
 def home(request):
     author, success = auth_check_middleware(request)
+    item = None
+    try:
+        item = InboxObject.objects.get(author=author)
+    except Exception as e:
+        pass
 
     # TODO: Use posts that has arrived in user's Inbox
     try:
@@ -37,7 +42,7 @@ def home(request):
         pass
 
     if success:
-        return render(request, 'home.html', {"author": model_to_dict(author), "posts": postsData})
+        return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData})
     return author
 
 
@@ -87,21 +92,47 @@ def post_create(request):
 
 def messages(request):
     author, success = auth_check_middleware(request)
+    content = None
+    item = None
+
+    try:
+        item = InboxObject.objects.get(author=author)
+        model = item.content_type.model_class()
+
+        if model is Post:
+            pass
+        if model is FollowRequest:
+            content = FollowRequest.objects.get(id=item.object_id)
+    except Exception as e:
+        pass
 
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "item": item, "content": content, "name": request.resolver_match.url_name})
     return author
 
 
 def requests(request):
     author, success = auth_check_middleware(request)
+    content = None
+
+    try:
+        item = InboxObject.objects.get(object=author)
+        model = item.content_type.model_class()
+
+        if model is Post:
+            pass
+        if model is FollowRequest:
+            content = FollowRequest.objects.get(id=item.object_id)
+
+    except Exception as e:
+        pass
 
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
     return author
 
 

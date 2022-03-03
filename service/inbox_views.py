@@ -7,18 +7,19 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.generics import ListCreateAPIView
-from service.serializers import AuthorSerializer, PostSerializer
-from .models import Author, InboxObject, Post
-from drf_yasg.utils import swagger_auto_schema
 
+from service.serializers import AuthorSerializer, PostSerializer, FollowRequestSerializer
+from .models import Author, InboxObject, Post, FollowRequest
+
+from drf_yasg.utils import swagger_auto_schema
 
 
 def serialize_inbox_item(item):
     model = item.content_type.model_class()
     if model is Post:
         serializer = PostSerializer
-    # elif model is FollowRequest:
-    #    serializer = FollowRequestSerializer
+    elif model is FollowRequest:
+       serializer = FollowRequestSerializer
     # elif model is Like:
     #    serializer = LikeSerializer
     return serializer(item.content_object).data
@@ -28,8 +29,8 @@ def get_inbox_object(data):
     type = data['type']
     if type == 'post':
         object = Post.objects.get(pk=data['id'])
-    # elif type == 'Follow':
-    #    object = FollowRequest.objects.get(pk=data['id'])
+    elif type == 'Follow':
+       object = FollowRequest.objects.get(pk=data['id'])
     # elif type == 'Like':
     #    object = Like.objects.get(pk=data['id'])
     return object

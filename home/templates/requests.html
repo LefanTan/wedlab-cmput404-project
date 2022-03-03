@@ -9,23 +9,16 @@
 <header class="py-2 px-3 border-bottom">
   <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
 </header>
-<main class="p-4 d-flex align-items-start justify-content-center">
-
-    <form method="get">
-        {% csrf_token %}
-        <h1 class="mb-3">Friend Requests</h1>
-        <div class="rows">
-            <div class="column">
-                <p>request1</p>
-            </div>
-            <div class="column">
-                <p>request2</p>
-            </div>
-
-        </div>
-        {% if form.errors %}
-            <p>There is no friend requests in inbox right now.</p>
-        {% endif %}
-    </form>
-</main>
+<div class="container">
+  <main>
+    {% for request in requests %}
+    <div class="re">
+      <div class="d-flex align-items-start">
+        <h2 class="mt-3 post-title">{{ request.summary }}</h2>
+      </div>
+    </div>
+    <hr />
+    {% endfor %}
+  </main>
+</div>
 {% endblock %}
