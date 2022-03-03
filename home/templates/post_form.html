@@ -63,6 +63,7 @@
     <select class="form-select mb-3" name="visibility" id="visibility">
       <option value="PUBLIC" {% if post.visibility == 'PUBLIC' %}selected{% endif %}>Public</option>
       <option value="PRIVATE" {% if post.visibility == 'PRIVATE' %}selected{% endif %}>Private</option>
+      <option value="FRIENDS" {% if post.visibility == 'FRIENDS' %}selected{% endif %}>Friends-Only</option>
     </select>
 
     <div>
