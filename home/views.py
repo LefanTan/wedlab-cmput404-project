@@ -87,34 +87,55 @@ def post_create(request):
 
 def messages(request):
     author, success = auth_check_middleware(request)
+    content = None
+
+    # page_number = request.GET.get('page') or 1
+    # size = request.GET.get('size') or 5
+
+    item = InboxObject.objects.get(author=author)
+    model = item.content_type.model_class()
+
+    # paginator = Paginator(item, size)
+    # requests = paginator.get_page(page_number).object_list
+
+    if model is Post:
+        pass
+    if model is FollowRequest:
+        content = FollowRequest.objects.get(id=item.object_id)
 
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
     return author
 
 
 def requests(request):
     author, success = auth_check_middleware(request)
+    content = None
 
     try:
-        page_number = request.GET.get('page') or 1
-        size = request.GET.get('size') or 5
+        # page_number = request.GET.get('page') or 1
+        # size = request.GET.get('size') or 5
 
-        inbox_objs = InboxObject.objects.get(object=author)
+        item = InboxObject.objects.get(object=author)
+        model = item.content_type.model_class()
 
-        paginator = Paginator(inbox_objs, size)
-        requests = paginator.get_page(page_number).object_list
+        # paginator = Paginator(item, size)
+        # requests = paginator.get_page(page_number).object_list
 
-        data = FollowRequestSerializer(requests, many=True).data
+        if model is Post:
+            pass
+        if model is FollowRequest:
+            content = FollowRequest.objects.get(id=item.object_id)
+
     except Exception as e:
         pass
 
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "post": data, "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
     return author
 
 
