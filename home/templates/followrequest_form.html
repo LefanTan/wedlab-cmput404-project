@@ -3,6 +3,10 @@
 {% block title %}Add Friends{% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="{%static 'css/followrequest_form.css' %}" />
+    <script
+    src="https://kit.fontawesome.com/04c5b72d3b.js"
+    crossorigin="anonymous"
+    ></script>
     <script src="{%static 'js/followrequest_form.js' %}" crossorigin="anonymous" defer></script>
     {{ author|json_script:"author" }}
 {% endblock %}

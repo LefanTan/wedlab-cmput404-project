@@ -5,18 +5,16 @@ header {
   width: 100%;
 }
 
-
-.add, .create {
+.add,
+.create {
   display: flex;
   justify-content: space-between;
-  margin-left: 1.5%;
+  margin-left: 1rem;
 }
 
 .logout {
-  position: absolute;
   display: flex;
   height: fit-content;
-  left: 10px;
 }
 
 .container {
@@ -36,32 +34,32 @@ header {
   justify-content: center;
   width: 50px;
   height: 50px;
-  font-size:40px;
+  font-size: 40px;
   margin-left: 1rem;
 }
 
 .dropdown {
   position: relative;
   display: inline-block;
-
 }
 
 .dropdown-contents {
   display: none;
   position: absolute;
   font-size: small;
+  border-radius: 10px;
+  border: 1.5px solid var(--primary-400);
+  overflow: hidden;
   min-width: 100%;
   z-index: 1;
 }
 
 .dropdown-contents a {
   background-color: white;
-  color: darkolivegreen;
-  padding: 12px 16px;
+  color: var(--primary-800);
+  padding: 0.5rem 1rem;
   text-decoration: none;
   display: flex;
-  border-radius: 20px;
-  border:1px solid #adc2a9;
   text-align: center;
 }
 
@@ -73,10 +71,9 @@ header {
   transform: scale(1.1);
 }
 
-.dropdown:hover .dropdown-contents{
+.dropdown:hover .dropdown-contents {
   display: block;
 }
-
 
 .inbox > i {
   font-size: 1.5rem;
@@ -100,7 +97,6 @@ header {
   border: 1px solid white;
   display: flex;
   font-size: x-small;
-
 }
 
 .messages-dot {

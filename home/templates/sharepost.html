@@ -1,56 +1,84 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Share Post{% endblock %} {% block stylesheet %}
+{% extends 'base.html' %} {% load static %} {% block title %}Share Post{%
+endblock %} {% block stylesheet %}
 <link rel="stylesheet" href="{%static 'css/share_post.css' %}" />
-<script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>
-<script src="{%static 'js/share_post.js' %}" crossorigin="anonymous" defer></script>
-{{ post|json_script:"post" }} {{ author|json_script:"author" }} {% endblock %} {% block content %}
-
+<script
+  src="https://kit.fontawesome.com/04c5b72d3b.js"
+  crossorigin="anonymous"
+></script>
+<script
+  src="{%static 'js/share_post.js' %}"
+  crossorigin="anonymous"
+  defer
+></script>
+{{ post|json_script:"post" }} {{ author|json_script:"author" }} {% endblock %}
+{% block content %}
 
 <header class="py-2 px-3 border-bottom">
-    <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i
-            class="fa-solid fa-arrow-left-long"></i>Back</button>
+  <button onClick="javascript:history.go(-1);" class="btn p-1 back">
+    <i class="fa-solid fa-arrow-left-long"></i>Back
+  </button>
 </header>
 <main class="p-4 d-flex align-items-start justify-content-center">
-    <form class="d-block">
-        {% csrf_token %}
-        <h1 class="mb-3">Share Post</h1>
-        <div class="post">
-            <div class="d-flex align-items-start">
-                <a href=" {{ post.author.url }} " target="_blank " aria-label="Link to profile ">
-                    {% if post.author.profileImage %}
-                    <img class="rounded-circle profile-pic " src="{{ post.author.profileImage }} "
-                        alt="profile picture " />
-                    {% else %}
-                    <i class="rounded-circle profile-pic-default fa-solid fa-user " aria-label="profile picture "></i>
-                    {% endif %}
-                </a>
-                <div class="mt-2 w-100 " style="margin-left:8px; ">
-                    <div class="d-flex ">
-                        <p class="mt-1 mb-0 fw-bolder ">{{ post.author.displayName }}</p>
-                    </div>
-                    <h2 class="mt-2 post-title ">{{ post.title }}</h2>
-                    {% if post.description and post.description != " " %}
-                    <div aria-label="description " class="description w-100 ">
-                        <p class="w-100 ">{{ post.description }}</p>
-                    </div>
-                    {% endif %} {% if post.imageSource %}
-                    <img class="image bg-white " src="{{ post.imageSource }} " /> {% endif %}
-                </div>
-            </div>
+  <form class="d-block">
+    {% csrf_token %}
+    <h1 class="mb-3">Share Post</h1>
+    <div class="post">
+      <div class="d-flex align-items-start">
+        <a
+          href=" {{ post.author.url }} "
+          target="_blank "
+          aria-label="Link to profile "
+        >
+          {% if post.author.profileImage %}
+          <img
+            class="rounded-circle profile-pic"
+            src="{{ post.author.profileImage }} "
+            alt="profile picture "
+          />
+          {% else %}
+          <i
+            class="rounded-circle profile-pic-default fa-solid fa-user"
+            aria-label="profile picture "
+          ></i>
+          {% endif %}
+        </a>
+        <div class="mt-2 w-100" style="margin-left: 8px">
+          <div class="d-flex">
+            <p class="mt-1 mb-0 fw-bolder">{{ post.author.displayName }}</p>
+          </div>
+          <h2 class="mt-2 post-title">{{ post.title }}</h2>
+          {% if post.description and post.description != " " %}
+          <div aria-label="description " class="description w-100">
+            <p class="w-100">{{ post.description }}</p>
+          </div>
+          {% endif %} {% if post.imageSource %}
+          <img class="image bg-white" src="{{ post.imageSource }} " /> {% endif
+          %}
         </div>
-        <hr />
-        <label class="mb-1 ">Choose person to share post with:</label>
-        <div class="form-floating mb-3 ">
-            <datalist id="authors ">
-                {% for author in allauthors %}
-                <option value="{{author.displayName}}">{{ author.displayName }}</option>
-                {% endfor %}
-            </datalist>
-            <input type="text " class="form-control " id="targetName" autoComplete="on " list="authors " placeholder="Search users here... " required />
-            <label for="displayName " class="form-label ">Username</label>
-        </div>
-        <div>
-            <button class="btn green-btn ms-auto " type="submit ">Share</button>
-        </div>
-    </form>
+      </div>
+    </div>
+    <hr />
+    <label class="mb-1">Choose person to share post with:</label>
+    <div class="form-floating mb-3">
+      <datalist id="authors ">
+        {% for author in allauthors %}
+        <option value="{{author.displayName}}">{{ author.displayName }}</option>
+        {% endfor %}
+      </datalist>
+      <input
+        type="text "
+        class="form-control"
+        id="targetName"
+        autocomplete="on "
+        list="authors "
+        placeholder="Search users here... "
+        required
+      />
+      <label for="displayName " class="form-label">Username</label>
+    </div>
+    <div>
+      <button class="btn green-btn ms-auto" type="submit ">Share</button>
+    </div>
+  </form>
 </main>
 {% endblock %}

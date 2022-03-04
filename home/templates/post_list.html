@@ -7,8 +7,8 @@
   crossorigin="anonymous"
 ></script>
 {% endblock %} {% load markdown %} {% block content %}
-<header class="px-4 py-2 border-bottom">
-  <button onClick="javascript:history.go(-1);" class="btn p-1 back">
+<header class="px-3 py-2 border-bottom">
+  <button onClick="javascript:history.go(-1);" class="btn p-1 back me-auto">
     <i class="fa-solid fa-arrow-left-long"></i>Back
   </button>
   {% if edit %}
@@ -22,10 +22,7 @@
     {% for post in posts %}
     <div class="post">
       <div class="d-flex align-items-start">
-        <a
-          href="{{ post.author.url }}"
-          aria-label="Link to profile"
-        >
+        <a href="{{ post.author.url }}" aria-label="Link to profile">
           {% if post.author.profileImage %}
           <img
             class="rounded-circle profile-pic"
