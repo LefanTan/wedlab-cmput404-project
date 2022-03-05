@@ -17,7 +17,6 @@ const submitHandler = (e) => {
     if (request.readyState === 4) {
       if (request.status === 200) {
         console.log(JSON.parse(request.responseText));
-        history.back();
       } else {
         console.log("error: ", request.statusText);
         console.error(request.statusText);
