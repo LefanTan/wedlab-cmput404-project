@@ -5,6 +5,8 @@
   src="https://kit.fontawesome.com/04c5b72d3b.js"
   crossorigin="anonymous"
 ></script>
+<script src="{%static 'js/home.js' %}" defer></script>
+{{ author|json_script:"author" }}
 {% endblock %} {% load markdown %} {% block content %}
 <header class="px-4 py-2 border-bottom">
   <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm me-auto logout"
@@ -55,7 +57,8 @@
 <div class="container">
   <main>
     {% for post in posts %}
-    <div class="post">
+    <form id="{{ post.id }}" class="post">
+      {% csrf_token %}
       <div class="d-flex align-items-start">
         <a
           href="{{ post.author.url }}"
@@ -152,12 +155,15 @@
               <input
                 class="ms-3 me-2 form-control"
                 type="text"
+                name="comment"
+                id="comment"
                 placeholder="Enter your comment"
+                required
               />
               <button
                 aria-label="post comment"
-                data-comment-id="{{ post.id }}"
                 class="send-button"
+                type="submit"
               >
                 <i class="fa-solid fa-paper-plane"></i>
               </button>
@@ -166,7 +172,7 @@
         </div>
       </div>
       <hr />
-    </div>
+    </form>
     {% endfor %}
   </main>
 </div>

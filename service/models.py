@@ -95,3 +95,13 @@ class FollowRequest(models.Model):
     object = models.OneToOneField(
         Author, related_name='obj', on_delete=models.CASCADE)
     inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
+
+class Comment(models.Model):
+    type = models.CharField(default="comment", max_length=100)
+    id = models.CharField(primary_key=True, default=generate_uuid_hex, max_length=250)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    content = models.CharField(max_length=500, null=True)
+    contentType = models.CharField(max_length=50, default='text/plain')
+    publishedDate = models.DateTimeField(max_length=250, auto_now=True)
+    url = models.URLField(max_length=250)
