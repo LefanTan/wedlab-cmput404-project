@@ -16,6 +16,7 @@ const submitHandler = (e) => {
   request.onload = function (e) {
     if (request.readyState === 4) {
       if (request.status === 200) {
+        location.reload();
         console.log(JSON.parse(request.responseText));
       } else {
         console.log("error: ", request.statusText);
