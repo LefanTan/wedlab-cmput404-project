@@ -111,10 +111,10 @@
             </a>
           </div>
           <div class="mt-4 w-100">
-            {% for commentObj in post.commentsSrc.comments %}
+            {% for comment in post.comments %}
             <div class="d-flex mt-2">
               <a class="me-3" href="{{ commentObj.author.url }}">
-                {% if commentObj.author.profileImage %}
+                {% if comment.author.profileImage %}
                 <img
                   class="rounded-circle profile-pic"
                   src="{{ commentObj.author.profileImage }}"
@@ -129,12 +129,12 @@
               </a>
               <div class="comment">
                 <p class="fw-bolder mb-1">
-                  {{ commentObj.author.displayName }}
+                  {{ comment.author.displayName }}
                 </p>
-                {% if commentObj.contentType == 'text/markdown' %}
-                <p>{{ commentObj.comment | markdown_extract | safe }}</p>
+                {% if comment.contentType == 'text/markdown' %}
+                <p>{{ comment.content | markdown_extract | safe }}</p>
                 {% else %}
-                <p class="w-100">{{ commentObj.comment }}</p>
+                <p class="w-100">{{ comment.content }}</p>
                 {% endif %}
               </div>
             </div>
