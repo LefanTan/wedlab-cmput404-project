@@ -1,19 +1,19 @@
 from uuid import uuid4
-import uuid
 from django.core.paginator import Paginator
-from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from drf_yasg.utils import swagger_auto_schema
+from service.serializers import CommentSerializer
+from .models import Author, Post
 
-from service.serializers import AuthorSerializer, PostSerializer, CommentSerializer
-from .models import Author, Post, Comment
-
-
+@swagger_auto_schema(method='get', operation_description="Retrieve existing comments of a post")
+@swagger_auto_schema(method='post', operation_description="Add comment to a post")
 @ api_view(['GET', 'POST'])
 @ parser_classes([MultiPartParser, FormParser])
+# Return the list of comments of a post
+# Add comment to a post
 def comments(request, author_pk, post_pk):
 
     if request.method == 'GET':
