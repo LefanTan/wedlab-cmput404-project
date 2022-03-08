@@ -133,6 +133,8 @@ def create_post(request, author, id=None):
         author_serializer = AuthorSerializer(author)
         category_serializer = CategorySerializer(category_list, many=True)
 
+        cpy['imageSource'] = "https://gravatar.com/avatar/d7378ee64a791d524f10fa7473b823b1?s=400&d=robohash&r=x"
+
         # TODO: Use proper values later when implementing post sharing
         cpy['source'] = "https://temp.com"
         cpy['origin'] = "https://temp.com"

@@ -4,6 +4,9 @@ import markdown
 from rest_framework import serializers
 from .models import Author, Category, InboxObject, Post, FollowRequest, Comment
 from django.contrib.auth.models import User
+from django_base64field.fields import Base64Field
+import base64
+import requests
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -118,4 +121,12 @@ class CommentSerializer(serializers.ModelSerializer):
         ret = super().to_representation(instance)
         ret['id'] = ret['url']
         ret.pop('url')
+        return ret
+
+class ImagePostSerializer(serializers.Serializer):
+    image_base64 = Base64Field(blank=True, null=True)
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret["image_base64"] = base64.b64encode(requests.get(instance).content)
         return ret
