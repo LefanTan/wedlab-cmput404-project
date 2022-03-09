@@ -182,8 +182,6 @@ MEDIA_URL = '/media/'
 
 
 
-# USE_AWS_S3_STATIC = os.environ.get('USE_AWS_S3_STATIC') == 'false'
-# USE_AWS_S3_MEDIA = os.environ.get('USE_AWS_S3_MEDIA') == 'true'
 USE_AWS_S3_STATIC = False
 USE_AWS_S3_MEDIA = True
 # AWS S3 settings
