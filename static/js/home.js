@@ -1,11 +1,10 @@
 const formList = document.getElementsByClassName("post");
-console.log("formList", formList)
+// console.log("formList", formList)
 
 const authorObj = JSON.parse(document.getElementById("author").textContent);
 
 const submitHandler = (e) => {
   const form = e.currentTarget;
-  console.log("form", form)
   const id = form.id;
 
   e.preventDefault();
@@ -17,7 +16,7 @@ const submitHandler = (e) => {
     if (request.readyState === 4) {
       if (request.status === 200) {
         location.reload();
-        console.log(JSON.parse(request.responseText));
+        // console.log(JSON.parse(request.responseText));
       } else {
         console.log("error: ", request.statusText);
         console.error(request.statusText);

@@ -105,3 +105,7 @@ class Comment(models.Model):
     contentType = models.CharField(max_length=50, default='text/plain')
     publishedDate = models.DateTimeField(max_length=250, auto_now=True)
     url = models.URLField(max_length=250)
+
+class Upload(models.Model):
+    uploadedDate = models.DateTimeField(auto_now_add=True)
+    file = models.FileField(max_length=500)

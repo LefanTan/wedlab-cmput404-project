@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
 from rest_framework import status
@@ -5,9 +7,12 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from drf_yasg.utils import swagger_auto_schema
-
-from service.serializers import AuthorSerializer, CategorySerializer, PostSerializer, UserSerializer
-from .models import Author, Category, Post
+from django.conf import settings
+from django.core.files import File
+from django.core.files.storage import FileSystemStorage
+from django.templatetags.static import static
+from service.serializers import AuthorSerializer, CategorySerializer, PostSerializer
+from .models import Author, Category, Post, Upload
 
 
 @swagger_auto_schema(method='get', operation_description="Retrieve a specific post from an author")
@@ -120,7 +125,7 @@ def create_post(request, author, id=None):
     try:
         # Do something with the image file here to create an image post
         if request.data.get('imageFile'):
-            imageFile = request.data.get('imageFile').file
+            image_url = image_upload(request)
 
         # Grab category data
         category_list = []
@@ -133,7 +138,7 @@ def create_post(request, author, id=None):
         author_serializer = AuthorSerializer(author)
         category_serializer = CategorySerializer(category_list, many=True)
 
-        cpy['imageSource'] = "https://gravatar.com/avatar/d7378ee64a791d524f10fa7473b823b1?s=400&d=robohash&r=x"
+        cpy['imageSource'] = image_url
 
         # TODO: Use proper values later when implementing post sharing
         cpy['source'] = "https://temp.com"
@@ -150,3 +155,20 @@ def create_post(request, author, id=None):
     except Exception as e:
         return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
     return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Helper method to store image file locally and upload image file to AWS S3 bucket
+def image_upload(request):
+    image_file = request.FILES['imageFile']
+    local_FS = FileSystemStorage()
+    file_name = local_FS.save(name=image_file.name, content=image_file)
+    local_file_path = local_FS.path(name=file_name)
+
+    if settings.USE_AWS_S3_MEDIA:
+        with open(local_file_path, mode='rb') as f:
+            upload = Upload()
+            upload.file = File(name=os.path.basename(f.name), file=f)
+            upload.save(force_insert=True)
+            remote_file_url = upload.file.url
+    
+        return remote_file_url
+

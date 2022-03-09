@@ -16,7 +16,7 @@
   <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
 </header>
 <main class="p-4 d-flex align-items-start justify-content-center">
-  <form class="d-block">
+  <form class="d-block" enctype="multipart/form-data">
     {% csrf_token %}
     <h1 class="mb-3">{% if name == "home_post_create" %}Create{% else %}Edit{% endif %} Post</h1>
 
