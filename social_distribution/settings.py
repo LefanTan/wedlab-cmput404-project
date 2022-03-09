@@ -182,13 +182,9 @@ MEDIA_URL = '/media/'
 
 
 
-# USE_AWS_S3_STATIC = os.environ.get('USE_AWS_S3_STATIC') == 'false'
-# USE_AWS_S3_MEDIA = os.environ.get('USE_AWS_S3_MEDIA') == 'true'
 USE_AWS_S3_STATIC = False
 USE_AWS_S3_MEDIA = True
 # AWS S3 settings
-AWS_ACCESS_KEY_ID = 'AKIAXSHTXE4MO4YY5HTD'
-AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'django-static-cmput404-project'
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
