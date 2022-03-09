@@ -74,7 +74,7 @@ class Post(models.Model):
     origin = models.CharField(max_length=250)
     contentType = models.CharField(
         max_length=50, choices=CONTENT_TYPES, default=PLAIN)
-    imageSource = models.URLField(max_length=250, null=True, blank=True)
+    imageSource = models.URLField(max_length=500, null=True, blank=True)
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)

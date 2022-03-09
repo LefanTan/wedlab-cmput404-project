@@ -56,8 +56,14 @@ def post_detail(request, author_pk, post_pk):
                 author = Author.objects.get(pk=author_pk)
                 post = author.post_set.get(pk=post_pk)
 
-                postSerializer = PostSerializer(
-                    post, data=request.data, partial=True)
+                cpy = request.data.copy()
+                
+                # Upload the updated image file and store the url
+                if request.data.get('imageFile'):
+                    image_url = image_upload(request)
+                    cpy['imageSource'] = image_url
+
+                postSerializer = PostSerializer(post, data=cpy, partial=True)
                 if postSerializer.is_valid():
                     postSerializer.save()
                     return Response(postSerializer.data)
@@ -123,10 +129,6 @@ def posts(request, author_pk):
 # Helper method to create a post
 def create_post(request, author, id=None):
     try:
-        # Do something with the image file here to create an image post
-        if request.data.get('imageFile'):
-            image_url = image_upload(request)
-
         # Grab category data
         category_list = []
         for category in request.data.getlist('categories'):
@@ -135,10 +137,11 @@ def create_post(request, author, id=None):
             category_list.append(category_obj)
 
         cpy = request.data.copy()
-        author_serializer = AuthorSerializer(author)
-        category_serializer = CategorySerializer(category_list, many=True)
 
-        cpy['imageSource'] = image_url
+        # Upload the image file and store the url
+        if request.data.get('imageFile'):
+            image_url = image_upload(request)
+            cpy['imageSource'] = image_url
 
         # TODO: Use proper values later when implementing post sharing
         cpy['source'] = "https://temp.com"
@@ -147,6 +150,8 @@ def create_post(request, author, id=None):
         if id:
             cpy['id'] = id
 
+        author_serializer = AuthorSerializer(author)
+        category_serializer = CategorySerializer(category_list, many=True)
         post_serializer = PostSerializer(data=cpy)
         if post_serializer.is_valid():
             post_serializer.save(author=author_serializer.data,
