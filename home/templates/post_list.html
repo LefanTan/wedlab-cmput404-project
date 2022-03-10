@@ -74,13 +74,47 @@
           <div
             class="icons mt-3 d-flex justify-content-start align-items-center"
           >
-            <button class="me-4"><i class="fa-regular fa-heart"></i></button>
-            <button><i class="fa-solid fa-share"></i></button>
+            <button type="button" class="me-4"><i class="fa-regular fa-heart"></i></button>
+            <a href="/post/{{ post.id }}/share">
+              <button type="button"><i class="fa-solid fa-share"></i></button>
+            </a>
+          </div>
+          <div class="mt-4 w-100">
+            {% for comment in post.comments %}
+            <div class="d-flex mt-2">
+              <a class="me-3" href="{{ comment.author.url }}">
+                {% if comment.author.profileImage %}
+                <img
+                  class="rounded-circle profile-pic"
+                  src="{{ comment.author.profileImage }}"
+                  alt="profile picture"
+                />
+                {% else %}
+                <i
+                  class="rounded-circle profile-pic-default fa-solid fa-user"
+                  aria-label="profile picture"
+                ></i>
+                {% endif %}
+              </a>
+              <div class="comment">
+                <p class="fw-bolder mb-1">
+                  {{ comment.author.displayName }}
+                </p>
+                {% if comment.contentType == 'text/markdown' %}
+                <p>{{ comment.content | markdown_extract | safe }}</p>
+                {% else %}
+                <p class="w-100">{{ comment.content }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+            <div class="comment-text-box mt-2 d-flex align-items-center w-100">
+            </div>
           </div>
         </div>
       </div>
+      <hr />
     </div>
-    <hr />
     {% endfor %}
   </main>
 </div>

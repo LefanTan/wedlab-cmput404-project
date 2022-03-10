@@ -41,7 +41,7 @@ def comments(request, author_pk, post_pk):
             cp = request.data.copy()
             cp['id'] = uuid4().hex
             cp['url'] = f"{request.build_absolute_uri('/')}authors/{author_pk}/posts/{post_pk}/comments/{cp.get('id')}"
-            cp['content'] = cp.get('comment')
+            cp['content'] = cp.get('content')
 
             comment_serializer = CommentSerializer(data=cp)
             if comment_serializer.is_valid():

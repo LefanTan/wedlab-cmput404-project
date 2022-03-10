@@ -32,7 +32,7 @@ def home(request):
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
 
-        post_objs = Post.objects.filter(visibility="PUBLIC", unlisted=False)
+        post_objs = Post.objects.filter(visibility="PUBLIC", unlisted=False).order_by('-publishedDate')
 
         paginator = Paginator(post_objs, size)
         posts = paginator.get_page(page_number).object_list
