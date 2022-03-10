@@ -113,11 +113,11 @@
           <div class="mt-4 w-100">
             {% for comment in post.comments %}
             <div class="d-flex mt-2">
-              <a class="me-3" href="{{ commentObj.author.url }}">
+              <a class="me-3" href="{{ comment.author.url }}">
                 {% if comment.author.profileImage %}
                 <img
                   class="rounded-circle profile-pic"
-                  src="{{ commentObj.author.profileImage }}"
+                  src="{{ comment.author.profileImage }}"
                   alt="profile picture"
                 />
                 {% else %}
@@ -155,8 +155,8 @@
               <input
                 class="ms-3 me-2 form-control"
                 type="text"
-                name="comment"
-                id="comment"
+                name="content"
+                id="content"
                 placeholder="Enter your comment"
                 required
               />
