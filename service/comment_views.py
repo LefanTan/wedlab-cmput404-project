@@ -38,12 +38,10 @@ def comments(request, author_pk, post_pk):
 
     if request.method == 'POST':
         try:
-            cp = request.data.copy()
-            cp['id'] = uuid4().hex
-            cp['url'] = f"{request.build_absolute_uri('/')}authors/{author_pk}/posts/{post_pk}/comments/{cp.get('id')}"
-            cp['content'] = cp.get('content')
+            cpy = request.data.copy()
+            cpy['url'] = f"{request.build_absolute_uri('/')}authors/{author_pk}/posts/{post_pk}/comments/{request.data.get('id')}"
 
-            comment_serializer = CommentSerializer(data=cp)
+            comment_serializer = CommentSerializer(data=cpy)
             if comment_serializer.is_valid():
                 comment_serializer.save(
                     author=Author.objects.get(pk=author_pk),

@@ -120,7 +120,6 @@ class CommentSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret['id'] = ret['url']
-        ret.pop('url')
         return ret
 
 class ImagePostSerializer(serializers.Serializer):
