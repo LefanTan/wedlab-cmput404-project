@@ -62,7 +62,6 @@
       <div class="d-flex align-items-start">
         <a
           href="{{ post.author.url }}"
-          target="_blank"
           aria-label="Link to profile"
         >
           {% if post.author.profileImage %}
@@ -132,31 +131,36 @@
                   {{ comment.author.displayName }}
                 </p>
                 {% if comment.contentType == 'text/markdown' %}
-                <p>{{ comment.content | markdown_extract | safe }}</p>
+                <p>{{ comment.comment | markdown_extract | safe }}</p>
                 {% else %}
-                <p class="w-100">{{ comment.content }}</p>
+                <p class="w-100">{{ comment.comment }}</p>
                 {% endif %}
               </div>
             </div>
             {% endfor %}
             <div class="comment-text-box mt-2 d-flex align-items-center w-100">
-              {% if author.profileImage %}
-              <img
-                class="rounded-circle profile-pic"
-                src="{{ author.profileImage }}"
-                alt="profile picture"
-              />
-              {% else %}
-              <i
-                class="rounded-circle profile-pic-default fa-solid fa-user"
-                aria-label="profile picture"
-              ></i>
-              {% endif %}
+              <a
+                href="{{ author.url }}"
+                aria-label="Link to profile"
+              >
+                {% if author.profileImage %}
+                <img
+                  class="rounded-circle profile-pic"
+                  src="{{ author.profileImage }}"
+                  alt="profile picture"
+                />
+                {% else %}
+                <i
+                  class="rounded-circle profile-pic-default fa-solid fa-user"
+                  aria-label="profile picture"
+                ></i>
+                {% endif %}
+              </a>
               <input
                 class="ms-3 me-2 form-control"
                 type="text"
-                name="content"
-                id="content"
+                name="comment"
+                id="comment"
                 placeholder="Enter your comment"
                 required
               />
