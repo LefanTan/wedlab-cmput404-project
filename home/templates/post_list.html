@@ -6,6 +6,8 @@
   src="https://kit.fontawesome.com/04c5b72d3b.js"
   crossorigin="anonymous"
 ></script>
+<script src="{%static 'js/home.js' %}" defer></script>
+{{ author|json_script:"author" }}
 {% endblock %} {% load markdown %} {% block content %}
 <header class="px-3 py-2 border-bottom">
   <button onClick="javascript:history.go(-1);" class="btn p-1 back me-auto">
@@ -20,7 +22,8 @@
 <div class="container">
   <main>
     {% for post in posts %}
-    <div class="post">
+    <form id="{{ post.id }}" class="post">
+      {% csrf_token %}
       <div class="d-flex align-items-start">
         <a href="{{ post.author.url }}" aria-label="Link to profile">
           {% if post.author.profileImage %}
@@ -74,13 +77,79 @@
           <div
             class="icons mt-3 d-flex justify-content-start align-items-center"
           >
-            <button class="me-4"><i class="fa-regular fa-heart"></i></button>
-            <button><i class="fa-solid fa-share"></i></button>
+            <button type="button" class="me-4"><i class="fa-regular fa-heart"></i></button>
+            <a href="/post/{{ post.id }}/share">
+              <button type="button"><i class="fa-solid fa-share"></i></button>
+            </a>
+          </div>
+          <div class="mt-4 w-100">
+            {% for comment in post.comments %}
+            <div class="d-flex mt-2">
+              <a class="me-3" href="{{ comment.author.url }}">
+                {% if comment.author.profileImage %}
+                <img
+                  class="rounded-circle profile-pic"
+                  src="{{ comment.author.profileImage }}"
+                  alt="profile picture"
+                />
+                {% else %}
+                <i
+                  class="rounded-circle profile-pic-default fa-solid fa-user"
+                  aria-label="profile picture"
+                ></i>
+                {% endif %}
+              </a>
+              <div class="comment">
+                <p class="fw-bolder mb-1">
+                  {{ comment.author.displayName }}
+                </p>
+                {% if comment.contentType == 'text/markdown' %}
+                <p>{{ comment.comment | markdown_extract | safe }}</p>
+                {% else %}
+                <p class="w-100">{{ comment.comment }}</p>
+                {% endif %}
+              </div>
+            </div>
+            {% endfor %}
+            <div class="comment-text-box mt-2 d-flex align-items-center w-100">
+              <a
+                href="{{ author.url }}"
+                aria-label="Link to profile"
+              >
+                {% if author.profileImage %}
+                <img
+                  class="rounded-circle profile-pic"
+                  src="{{ author.profileImage }}"
+                  alt="profile picture"
+                />
+                {% else %}
+                <i
+                  class="rounded-circle profile-pic-default fa-solid fa-user"
+                  aria-label="profile picture"
+                ></i>
+                {% endif %}
+              </a>
+              <input
+                class="ms-3 me-2 form-control"
+                type="text"
+                name="comment"
+                id="comment"
+                placeholder="Enter your comment"
+                required
+              />
+              <button
+                aria-label="post comment"
+                class="send-button"
+                type="submit"
+              >
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <hr />
+      <hr />
+    </form>
     {% endfor %}
   </main>
 </div>

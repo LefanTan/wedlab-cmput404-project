@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +124,7 @@ else:
     }
 
 
-print('DATABASE [Current] :', DATABASES['default'])
+print('***[Database (Current)] :', DATABASES['default'])
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -174,6 +175,31 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
+
+USE_AWS_S3_STATIC = False
+USE_AWS_S3_MEDIA = True
+# AWS S3 settings
+AWS_STORAGE_BUCKET_NAME = 'django-static-cmput404-project'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400',}
+if USE_AWS_S3_STATIC:
+    print('***[Using AWS S3 static] : RUN > python manage.py collectstatic --noinput ')
+    # AWS S3 bucket static configuration
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+    STATICFILES_STORAGE = 'social_distribution.storage_backend.StaticStorage'
+if USE_AWS_S3_MEDIA:
+    print('***[Using AWS S3 media]')
+    # AWS S3 bucket media configuration
+    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+    DEFAULT_FILE_STORAGE = 'social_distribution.storage_backend.PublicMediaStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

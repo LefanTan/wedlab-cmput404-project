@@ -1,5 +1,5 @@
 from django.urls import path, include
-from service import author_views, post_views, inbox_views, followrequest_views
+from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -34,7 +34,15 @@ urlpatterns = [
         path('authors/<str:pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
 
         # Send Request Endpoints
-        path('<str:author_pk>/sendfollowrequest/', followrequest_views.send_request, name='follow_request')
+        path('<str:author_pk>/sendfollowrequest/', followrequest_views.send_request, name='follow_request'),
+
+        # Comment Endpoints
+        path('authors/<str:author_pk>/posts/<str:post_pk>/comments',
+             comment_views.comments, name='comments'),
+
+        # Image Endpoints
+        path('authors/<str:author_pk>/posts/<str:post_pk>/image',
+             imagepost_views.imagepost, name='imagepost'),
 
 
     ]))

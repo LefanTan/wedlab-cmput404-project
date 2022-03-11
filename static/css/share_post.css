@@ -60,6 +60,13 @@ h1 {
     height: 10rem;
 }
 
+.image {
+    margin-top: 1rem;
+    border-radius: 10px;
+    max-width: 80%;
+    max-height: 20rem;
+}
+
 main {
     width: 100%;
     min-height: calc(100% - 60px);
