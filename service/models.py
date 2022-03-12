@@ -92,9 +92,9 @@ class FollowRequest(models.Model):
     type = models.CharField(default="Follow", max_length=125)
     actor = models.OneToOneField(
         Author, related_name='actor', on_delete=models.CASCADE)
-    object = models.OneToOneField(
-        Author, related_name='obj', on_delete=models.CASCADE)
+    object = models.CharField(max_length=250, null=True)
     inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
+
 
 class Comment(models.Model):
     type = models.CharField(default="comment", max_length=100)
@@ -105,6 +105,7 @@ class Comment(models.Model):
     contentType = models.CharField(max_length=50, default='text/plain')
     publishedDate = models.DateTimeField(max_length=250, auto_now=True)
     url = models.URLField(max_length=250)
+
 
 class Upload(models.Model):
     uploadedDate = models.DateTimeField(auto_now_add=True)
