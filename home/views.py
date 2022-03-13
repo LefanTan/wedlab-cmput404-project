@@ -109,7 +109,8 @@ def messages(request):
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "item": item, "content": content, "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "item": item, "content": content,
+                                   "name": request.resolver_match.url_name})
     return author
 
 
@@ -132,7 +133,8 @@ def requests(request):
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "content": content,
+                                   "name": request.resolver_match.url_name})
     return author
 
 
@@ -170,6 +172,7 @@ def profile(request, author_pk):
                                    "edit": author.id == author_pk, "error": request.GET.get('error')})
     return author
 
+
 def share_post(request, post_pk):
     # Show author's profile
     author, success = auth_check_middleware(request)
@@ -178,5 +181,7 @@ def share_post(request, post_pk):
     allAuthors = Author.objects.all()
     if success:
         if request.method == 'GET':
-            return render(request, 'sharepost.html', context={"requesting_author": model_to_dict(author), "post": postData, "allauthors": allAuthors})
+            return render(request, 'sharepost.html',
+                          context={"requesting_author": model_to_dict(author), "post": postData,
+                                   "allauthors": allAuthors})
     return author

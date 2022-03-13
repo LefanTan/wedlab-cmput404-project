@@ -81,8 +81,8 @@ header {
 
 .dropdown-contents .requests-dot {
   position: absolute;
-  top: 47px;
-  right: -2px;
+  top: 38px;
+  right: 0px;
   float: right;
 }
 
@@ -90,8 +90,8 @@ header {
   position: absolute;
   top: 1px;
   right: 1px;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background-color: indianred;
   border: 1px solid white;
