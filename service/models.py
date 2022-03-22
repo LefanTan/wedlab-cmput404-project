@@ -29,11 +29,13 @@ class Category(models.Model):
 
 
 class InboxObject(models.Model):
-    id = models.CharField(primary_key=True, editable=False, default=generate_uuid_hex, max_length=250)
+    id = models.CharField(primary_key=True, editable=False,
+                          default=generate_uuid_hex, max_length=250)
     # the author that the object (follow, like, post) is sent to
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE)
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True)
+    content_type = models.ForeignKey(
+        ContentType, on_delete=models.CASCADE, null=True)
     object_id = models.CharField(max_length=250, null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
@@ -92,13 +94,15 @@ class FollowRequest(models.Model):
     type = models.CharField(default="Follow", max_length=125)
     actor = models.OneToOneField(
         Author, related_name='actor', on_delete=models.CASCADE)
-    object = models.CharField(max_length=250, null=True)
+    object = models.OneToOneField(
+        Author, related_name='obj', on_delete=models.CASCADE)
     inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
 
 
 class Comment(models.Model):
     type = models.CharField(default="comment", max_length=100)
-    id = models.CharField(primary_key=True, default=generate_uuid_hex, max_length=250)
+    id = models.CharField(
+        primary_key=True, default=generate_uuid_hex, max_length=250)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     comment = models.CharField(max_length=500, null=True)
@@ -110,3 +114,10 @@ class Comment(models.Model):
 class Upload(models.Model):
     uploadedDate = models.DateTimeField(auto_now_add=True)
     file = models.FileField(max_length=500)
+
+
+class Host(models.Model):
+    allowed = models.BooleanField(default=True)
+    url = models.URLField(max_length=250)
+    name = models.CharField(max_length=250)
+    password = models.CharField(max_length=250)
