@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Inbox Messages{% endblock %}
+{% block title %}Messages{% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="{%static 'css/inbox.css' %}" />
     <script
@@ -19,15 +19,21 @@
         {% csrf_token %}
         <h1 class="mb-3">Inbox Messages</h1>
         {% if item != None%}
-            <div class="rows">
-                <div class="column">
-                    <p>{{ content.summary }}</p>
-                <span class="actions">
-                    <button class="confirm">Confirm</button>
-                    <button class="reject">Decline</button>
-                </span>
+            {% for i in posts %}
+                <div class="rows">
+                    <div class="column">
+                        <p>From: {{ i.author.displayName }}</p><br>
+                        <p>Title: {{ i.title }}</p><br>
+                        <p>Description: {{ i.description }}</p><br>
+                        <p>Comments:</p><br>
+                            {% for j in comments %}
+                                {% if j.post_id == i.id %}
+                                    <ul style="color: black"><li>From {{ j.author.displayName }}: {{ j.comment }}</li></ul><br>
+                                {% endif %}
+                            {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         {% else %}
             <p>There is no messages in inbox right now.</p>
         {% endif %}
