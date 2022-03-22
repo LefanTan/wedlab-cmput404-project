@@ -15,6 +15,8 @@
 5. Run `heroku local` for non window user to start the server. Access it at `http://localhost:8000`
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window`
 
+# Create superuser on Heroku
+
 # Deployment to Heroku
 
 Deployment to Heroku will use PostgreSQL
