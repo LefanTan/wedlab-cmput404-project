@@ -29,7 +29,7 @@ class FollowRequestEndpointsTestCase(APITestCase):
         self.followrequest = FollowRequest.objects.create(
             summary=f"{self.sender.displayName} wants to follow {self.receiver.displayName}",
             actor=self.sender,
-            object=self.receiver
+            object=self.receiver.id
         )
         self.follow_info = {
             "id": self.followrequest.id,
@@ -44,7 +44,7 @@ class FollowRequestEndpointsTestCase(APITestCase):
             'summary': f"{self.sender.displayName} wants to follow {self.receiver.displayName}",
             'type': 'Follow',
             'actor': self.sender.id,
-            'object': self.receiver.id
+            'object': self.receiver
         }
         response = self.apiClient.post(reverse('follow_request', kwargs=params), data=self.follow_info,
                                        format='json', SERVER_NAME="test.com")
@@ -52,6 +52,6 @@ class FollowRequestEndpointsTestCase(APITestCase):
         request = FollowRequest.objects.get(actor=self.sender.id)
 
         self.assertEqual(request.actor.id, self.sender.id)
-        self.assertEqual(request.object.id, self.receiver.id)
+        self.assertEqual(request.object, self.receiver.id)
 
 
