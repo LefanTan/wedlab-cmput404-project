@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
-from service.models import Author, Post, FollowRequest, InboxObject
+from service.models import Author, Post, FollowRequest, InboxObject, Comment
 from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
 
@@ -92,39 +92,43 @@ def post_create(request):
 
 def messages(request):
     author, success = auth_check_middleware(request)
-    content = None
     item = None
+    posts = []
 
     try:
-        item = InboxObject.objects.get(author=author)
-        model = item.content_type.model_class()
+        item = InboxObject.objects.all()
+        comments = Comment.objects.all()
 
-        if model is Post:
-            pass
-        if model is FollowRequest:
-            content = FollowRequest.objects.get(id=item.object_id)
+        # Store all requests into a list
+        for i in item:
+            if i.author_id == author.id:
+                if i.content_type.model_class() is Post:
+                    posts.append(Post.objects.get(id=i.object_id))
+
     except Exception as e:
         pass
 
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "item": item, "content": content, "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "item": item, "posts": posts, "comments": comments,
+                                   "name": request.resolver_match.url_name})
     return author
 
 
 def requests(request):
     author, success = auth_check_middleware(request)
-    content = None
+    item = None
+    followRequests = []
 
     try:
-        item = InboxObject.objects.get(object=author)
-        model = item.content_type.model_class()
+        item = InboxObject.objects.all()
 
-        if model is Post:
-            pass
-        if model is FollowRequest:
-            content = FollowRequest.objects.get(id=item.object_id)
+        # Store all requests into a list
+        for i in item:
+            if i.author_id == author.id:
+                if i.content_type.model_class() is FollowRequest:
+                    followRequests.append(FollowRequest.objects.get(id=i.object_id))
 
     except Exception as e:
         pass
@@ -132,7 +136,8 @@ def requests(request):
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "content": content, "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "item": item, "content": followRequests,
+                                   "name": request.resolver_match.url_name})
     return author
 
 
