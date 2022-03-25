@@ -27,7 +27,7 @@ urlpatterns = [
         # Post Endpoints
         path('authors/<str:author_pk>/posts/<str:post_pk>',
              post_views.post_detail, name='post_detail'),
-        path('authors/<str:author_pk>/posts',
+        path('authors/<str:author_pk>/posts/',
              post_views.posts, name='post_list'),
 
         #Inbox Endpoint
