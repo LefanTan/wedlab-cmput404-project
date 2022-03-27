@@ -208,3 +208,20 @@ def share_post(request, post_pk):
         if request.method == 'GET':
             return render(request, 'sharepost.html', context={"requesting_author": model_to_dict(author), "post": postData, "allauthors": allAuthors})
     return author
+
+
+def follower_detail(request, author_pk):
+    # Show author's profile
+    author, success = auth_check_middleware(request)
+
+    try:
+        request_author = Author.objects.get(pk=author_pk)
+    except Exception as e:
+        return page_not_found(request, e)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'follower_detail.html',
+                          context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name,
+                                   "edit": author.id == author_pk, "error": request.GET.get('error')})
+    return author
