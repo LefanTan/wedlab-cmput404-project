@@ -97,7 +97,8 @@ def follow_request(request):
     if success:
         if request.method == 'GET':
             return render(request, 'followrequest_form.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name,
+                                   "error": request.GET.get('error')})
     return author
 
 

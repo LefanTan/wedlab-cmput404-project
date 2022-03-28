@@ -19,7 +19,7 @@ def serialize_inbox_item(item):
     if model is Post:
         serializer = PostSerializer
     elif model is FollowRequest:
-       serializer = FollowRequestSerializer
+        serializer = FollowRequestSerializer
     # elif model is Like:
     #    serializer = LikeSerializer
     return serializer(item.content_object).data
@@ -30,14 +30,16 @@ def get_inbox_object(data):
     if type == 'post':
         object = Post.objects.get(pk=data['id'])
     elif type == 'Follow':
-       object = FollowRequest.objects.get(pk=data['id'])
+        object = FollowRequest.objects.get(pk=data['id'])
     # elif type == 'Like':
     #    object = Like.objects.get(pk=data['id'])
     return object
 
+
 @swagger_auto_schema(method='get', operation_description="Retrieve a list of inbox items of an author")
 @swagger_auto_schema(method='post', operation_description="Posts a post/like/follow request to an author's inbox")
-@api_view(['GET', 'POST'])
+@swagger_auto_schema(method='delete', operation_description="Clear the current author's inbox")
+@api_view(['GET', 'POST', 'DELETE'])
 @parser_classes([MultiPartParser, FormParser])
 # Return a list of posts in inbox
 def inbox_list(request, pk):
@@ -71,3 +73,6 @@ def inbox_list(request, pk):
             inbox_item.save()
             return Response({'request': request.data, 'saved': model_to_dict(inbox_item)})
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'DELETE':
+        pass

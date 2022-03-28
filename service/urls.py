@@ -1,5 +1,5 @@
 from django.urls import path, include
-from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views, \
+from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views,\
     followers_views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view

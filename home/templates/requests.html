@@ -7,6 +7,7 @@
       src="https://kit.fontawesome.com/04c5b72d3b.js"
       crossorigin="anonymous"
     ></script>
+    <script src="{%static 'js/requests.js' %}" crossorigin="anonymous" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -22,12 +23,12 @@
             {% for i in content %}
                 <div class="rows">
                     <div class="column">
-                        <p>
+                        <p class="summary">
                             {{ i.summary }}
                         </p>
                     <span class="actions">
-                        <button class="confirm">Confirm</button>
-                        <button class="reject">Decline</button>
+                        <button onclick="confirmRequest()">Confirm</button>
+                        <button onclick="rejectRequest()">Decline</button>
                     </span>
                     </div>
                 </div>

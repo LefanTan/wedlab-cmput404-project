@@ -13,6 +13,10 @@ const handleSubmit = (e) => {
       if (xhr.status === 200) {
         //console.log(JSON.parse(xhr.responseText));
         history.back();
+      } else {
+        console.log("error: ", xhr.statusText);
+        console.error(xhr.statusText);
+        history.back();
       }
     }
   };
