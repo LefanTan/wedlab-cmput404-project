@@ -75,4 +75,13 @@ def inbox_list(request, pk):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'DELETE':
-        pass
+        try:
+            author = Author.objects.get(pk=pk)
+        except:
+            return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
+        inboxAll = InboxObject.objects.filter(author=author)
+        receiver = FollowRequest.objects.all().filter(object=author.id)
+        inboxAll.delete()
+        receiver.delete()
+
+        return Response(f"Clear the inbox successfully")
