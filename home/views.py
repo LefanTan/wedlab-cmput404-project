@@ -1,9 +1,11 @@
+import base64
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
-from service.models import Author, Post, FollowRequest, InboxObject
+from service.models import Author, Host, Post, FollowRequest, InboxObject, Comment
 from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
+from requests import get
 
 
 def auth_check_middleware(request):
@@ -29,17 +31,36 @@ def home(request):
 
     # TODO: Use posts that has arrived in user's Inbox
     try:
+        hosts = Host.objects.filter(allowed=True)
+        other_posts = []
+
+        for host in hosts:
+            get_authors_url = host.url + 'authors/'
+            encoded_basic = base64.b64encode(
+                bytes(f'{host.name}:{host.password}', 'utf-8')).decode('utf-8')
+            headers = {'Authorization': f'Basic {encoded_basic}'}
+            result = get(get_authors_url, headers=headers).json()
+            other_authors = result.get('items')
+            for other_author in other_authors:
+                other_author_id = other_author.get('id').split('/')[-1]
+                author_posts_url = f"{get_authors_url}{other_author_id}/posts"
+                posts_result = get(author_posts_url, headers=headers).json()
+                if posts_result.get('items'):
+                    other_posts += posts_result.get('items')
+
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
 
-        post_objs = Post.objects.filter(visibility="PUBLIC", unlisted=False).order_by('-publishedDate')
+        post_objs = Post.objects.filter(
+            visibility="PUBLIC", unlisted=False).order_by('-publishedDate')
 
         paginator = Paginator(post_objs, size)
         posts = paginator.get_page(page_number).object_list
 
-        postsData = PostSerializer(posts, many=True).data
+        postsData = PostSerializer(posts, many=True).data + other_posts
+
     except Exception as e:
-        pass
+        print(e)
 
     if success:
         return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData})
@@ -76,7 +97,8 @@ def follow_request(request):
     if success:
         if request.method == 'GET':
             return render(request, 'followrequest_form.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name,
+                                   "error": request.GET.get('error')})
     return author
 
 
@@ -92,40 +114,44 @@ def post_create(request):
 
 def messages(request):
     author, success = auth_check_middleware(request)
-    content = None
     item = None
+    posts = []
 
     try:
-        item = InboxObject.objects.get(author=author)
-        model = item.content_type.model_class()
+        item = InboxObject.objects.all()
+        comments = Comment.objects.all()
 
-        if model is Post:
-            pass
-        if model is FollowRequest:
-            content = FollowRequest.objects.get(id=item.object_id)
+        # Store all requests into a list
+        for i in item:
+            if i.author_id == author.id:
+                if i.content_type.model_class() is Post:
+                    posts.append(Post.objects.get(id=i.object_id))
+
     except Exception as e:
         pass
 
     if success:
         if request.method == 'GET':
             return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "item": item, "content": content,
+                          context={"author": model_to_dict(author), "item": item, "posts": posts, "comments": comments,
                                    "name": request.resolver_match.url_name})
     return author
 
 
 def requests(request):
     author, success = auth_check_middleware(request)
-    content = None
+    item = None
+    followRequests = []
 
     try:
-        item = InboxObject.objects.get(object=author)
-        model = item.content_type.model_class()
+        item = InboxObject.objects.all()
 
-        if model is Post:
-            pass
-        if model is FollowRequest:
-            content = FollowRequest.objects.get(id=item.object_id)
+        # Store all requests into a list
+        for i in item:
+            if i.author_id == author.id:
+                if i.content_type.model_class() is FollowRequest:
+                    followRequests.append(
+                        FollowRequest.objects.get(id=i.object_id))
 
     except Exception as e:
         pass
@@ -133,7 +159,7 @@ def requests(request):
     if success:
         if request.method == 'GET':
             return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "content": content,
+                          context={"author": model_to_dict(author), "item": item, "content": followRequests,
                                    "name": request.resolver_match.url_name})
     return author
 
@@ -181,7 +207,22 @@ def share_post(request, post_pk):
     allAuthors = Author.objects.all()
     if success:
         if request.method == 'GET':
-            return render(request, 'sharepost.html',
-                          context={"requesting_author": model_to_dict(author), "post": postData,
-                                   "allauthors": allAuthors})
+            return render(request, 'sharepost.html', context={"requesting_author": model_to_dict(author), "post": postData, "allauthors": allAuthors})
+    return author
+
+
+def follower_detail(request, author_pk):
+    # Show author's profile
+    author, success = auth_check_middleware(request)
+
+    try:
+        request_author = Author.objects.get(pk=author_pk)
+    except Exception as e:
+        return page_not_found(request, e)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'follower_detail.html',
+                          context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name,
+                                   "edit": author.id == author_pk, "error": request.GET.get('error')})
     return author

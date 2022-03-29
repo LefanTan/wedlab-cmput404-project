@@ -29,7 +29,7 @@ p {
   margin-top: 10px;
 }
 
-.actions .confirm, .reject {
+.actions {
   color: #778377;
   border-style: solid;
   border-color: var(--primary-500);

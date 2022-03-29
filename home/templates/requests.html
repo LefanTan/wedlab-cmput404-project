@@ -7,22 +7,35 @@
       src="https://kit.fontawesome.com/04c5b72d3b.js"
       crossorigin="anonymous"
     ></script>
+    <script src="{%static 'js/requests.js' %}" crossorigin="anonymous" defer></script>
 {% endblock %}
 
 {% block content %}
 <header class="py-2 px-3 border-bottom">
   <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
 </header>
-<div class="container">
-  <main>
-    {% for request in requests %}
-    <div class="re">
-      <div class="d-flex align-items-start">
-        <h2 class="mt-3 post-title">{{ request.summary }}</h2>
-      </div>
-    </div>
-    <hr />
-    {% endfor %}
-  </main>
-</div>
+<main class="p-4 d-flex align-items-start justify-content-center">
+
+    <form method="get">
+        {% csrf_token %}
+        <h1 class="mb-3">Follow Requests</h1>
+        {% if item != None%}
+            {% for i in content %}
+                <div class="rows">
+                    <div class="column">
+                        <p class="summary">
+                            {{ i.summary }}
+                        </p>
+                    <span class="actions">
+                        <button onclick="confirmRequest()">Confirm</button>
+                        <button onclick="rejectRequest()">Decline</button>
+                    </span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>There is no messages in inbox right now.</p>
+        {% endif %}
+    </form>
+</main>
 {% endblock %}
