@@ -81,7 +81,6 @@ def home(request):
 
 def post_list(request, author_pk):
     # Show a list of post made by author_pk
-
     author, success = auth_check_middleware(request)
 
     try:
@@ -189,6 +188,22 @@ def post_edit(request, post_pk):
     if success:
         if request.method == 'GET':
             return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": postData,
+                                                              "name": request.resolver_match.url_name})
+    return author
+
+
+def post_view(request, post_pk):
+    author, success = auth_check_middleware(request)
+
+    try:
+        post = Post.objects.get(pk=post_pk)
+        postData = PostSerializer(post).data
+    except Exception as e:
+        return page_not_found(request, e)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'post_view.html', context={"author": model_to_dict(author), "post": postData,
                                                               "name": request.resolver_match.url_name})
     return author
 

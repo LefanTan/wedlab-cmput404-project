@@ -17,3 +17,7 @@
   color: var(--primary-800);
   transform: scale(1.2);
 }
+
+.send-button[type="submit"] {
+  background-color: transparent;
+}

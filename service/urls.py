@@ -25,16 +25,17 @@ urlpatterns = [
         path('authors/<str:pk>', author_views.author_detail, name='author_detail'),
 
         # Post Endpoints
-        path('authors/<str:author_pk>/posts/<str:post_pk>',
+        path('authors/<str:author_pk>/posts/<str:post_pk>/',
              post_views.post_detail, name='post_detail'),
         path('authors/<str:author_pk>/posts/',
              post_views.posts, name='post_list'),
 
-        #Inbox Endpoint
+        # Inbox Endpoint
         path('authors/<str:pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
 
         # Send Request Endpoints
-        path('<str:author_pk>/sendfollowrequest/', followrequest_views.send_request, name='follow_request'),
+        path('<str:author_pk>/sendfollowrequest/',
+             followrequest_views.send_request, name='follow_request'),
 
         # Comment Endpoints
         path('authors/<str:author_pk>/posts/<str:post_pk>/comments',
