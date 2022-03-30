@@ -34,19 +34,30 @@ def home(request):
         hosts = Host.objects.filter(allowed=True)
         other_posts = []
 
-        for host in hosts:
-            get_authors_url = host.url + 'authors/'
-            encoded_basic = base64.b64encode(
-                bytes(f'{host.name}:{host.password}', 'utf-8')).decode('utf-8')
-            headers = {'Authorization': f'Basic {encoded_basic}'}
-            result = get(get_authors_url, headers=headers).json()
-            other_authors = result.get('items')
-            for other_author in other_authors:
-                other_author_id = other_author.get('id').split('/')[-1]
-                author_posts_url = f"{get_authors_url}{other_author_id}/posts"
-                posts_result = get(author_posts_url, headers=headers).json()
-                if posts_result.get('items'):
-                    other_posts += posts_result.get('items')
+        # for host in hosts:
+        #     get_authors_url = host.url + 'authors/'
+        #     encoded_basic = base64.b64encode(
+        #         bytes(f'{host.name}:{host.password}', 'utf-8')).decode('utf-8')
+        #     headers = {'Authorization': f'Basic {encoded_basic}'}
+        #     result = get(get_authors_url, headers=headers).json()
+        #     other_authors = result.get('items')
+        #     print("result", result)
+        #     for other_author in other_authors:
+        #         other_author_id = other_author.get('id').split('/')[-1]
+        #         author_posts_url = f"{get_authors_url}{other_author_id}/posts"
+        #         posts_result = get(author_posts_url, headers=headers).json()
+        #         if posts_result.get('items'):
+        #             other_posts += posts_result.get('items')
+
+        github_name = author.github.split('/')[-1]
+        url = f"https://api.github.com/users/{github_name}/events/public?per_page=5"
+        github_results = get(url).json()
+
+        for github_post in github_results:
+            new_post = {"type": github_post['type'], "repo": github_post['repo'],
+                        'author': author,
+                        'publishedDate': github_post['created_at']}
+            other_posts.append(new_post)
 
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
@@ -58,12 +69,13 @@ def home(request):
         posts = paginator.get_page(page_number).object_list
 
         postsData = PostSerializer(posts, many=True).data + other_posts
+        postsData.sort(key=lambda x: x['publishedDate'], reverse=True)
 
     except Exception as e:
         print(e)
 
     if success:
-        return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData})
+        return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData or []})
     return author
 
 
