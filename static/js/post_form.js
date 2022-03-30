@@ -38,7 +38,7 @@ const submitHandler = (e) => {
     "POST",
     `../../service/authors/${authorObj.id}/posts${
       nameObj === "home_post_edit" ? "/" + postObj.id : ""
-    }`
+    }/`
   );
   request.send(formData);
 };

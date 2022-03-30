@@ -57,7 +57,7 @@ def post_detail(request, author_pk, post_pk):
                 post = author.post_set.get(pk=post_pk)
 
                 cpy = request.data.copy()
-                
+
                 # Upload the updated image file and store the url
                 if request.data.get('imageFile'):
                     image_url = image_upload(request)
@@ -107,7 +107,9 @@ def posts(request, author_pk):
                 posts = paginator.get_page(page_number).object_list
             postsData = PostSerializer(posts, many=True).data
 
-            return Response(postsData)
+            finalData = {"type": "posts", "items": postsData}
+
+            return Response(finalData)
         except Author.DoesNotExist:
             return Response('Author doesn\'t exist', status=status.HTTP_404_NOT_FOUND)
     if request.method == 'POST':
@@ -162,6 +164,8 @@ def create_post(request, author, id=None):
     return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Helper method to store image file locally and upload image file to AWS S3 bucket
+
+
 def image_upload(request):
     image_file = request.FILES['imageFile']
     local_FS = FileSystemStorage()
@@ -174,6 +178,5 @@ def image_upload(request):
             upload.file = File(name=os.path.basename(f.name), file=f)
             upload.save(force_insert=True)
             remote_file_url = upload.file.url
-    
-        return remote_file_url
 
+        return remote_file_url
