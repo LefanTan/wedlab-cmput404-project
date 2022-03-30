@@ -1,11 +1,13 @@
 import uuid
 from django.core.paginator import Paginator
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
+from django.contrib.auth import authenticate, login as auth_login
 
 from service.serializers import AuthorSerializer
 from .models import Author
@@ -44,6 +46,20 @@ def signup(request):
             return render(request, status=status.HTTP_400_BAD_REQUEST, template_name='registration/signup.html', context={"error": author_serializer.errors})
     if request.method == 'GET':
         return render(request, 'registration/signup.html')
+
+
+def login(request):
+    if request.method == 'POST':
+        user = authenticate(request, username=request.POST['username'],
+                            password=request.POST['password'])
+        print(user)
+        if user is not None:
+            auth_login(request, user)
+            return redirect('home')
+        else:
+            return redirect('login')
+    if request.method == 'GET':
+        return render(request, 'registration/login.html')
 
 
 @swagger_auto_schema(method='get', operation_description="Get a list of author")
