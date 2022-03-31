@@ -42,10 +42,10 @@ def get_inbox_object(data):
 @api_view(['GET', 'POST', 'DELETE'])
 @parser_classes([MultiPartParser, FormParser])
 # Return a list of posts in inbox
-def inbox_list(request, pk):
+def inbox_list(request, author_pk):
     if request.method == 'GET':
         try:
-            author = Author.objects.get(pk=pk)
+            author = Author.objects.get(pk=author_pk)
         except:
             return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
         author_url = AuthorSerializer(author).data['id']
@@ -59,10 +59,10 @@ def inbox_list(request, pk):
 
     if request.method == 'POST':
         try:
-            author = Author.objects.get(pk=pk)
+            author = Author.objects.get(pk=author_pk)
         except:
             try:
-                author = Author.objects.get(displayName=pk)
+                author = Author.objects.get(displayName=author_pk)
             except:
                 return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
@@ -76,11 +76,11 @@ def inbox_list(request, pk):
 
     if request.method == 'DELETE':
         try:
-            author = Author.objects.get(pk=pk)
+            author = Author.objects.get(pk=author_pk)
         except:
             return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
-        inboxAll = InboxObject.objects.filter(author=author)
+        inboxAll = InboxObject.objects.all()
         receiver = FollowRequest.objects.all().filter(object=author.id)
         inboxAll.delete()
         receiver.delete()

@@ -13,7 +13,7 @@
 {% block content %}
 <header class="py-2 px-3 border-bottom">
     <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
-    <button id="delete" type="button"><i class="fa fa-trash-o"></i></button>
+    <button onclick="clearInbox()"><i class="fa fa-trash-o"></i></button>
 </header>
 <main class="p-4 d-flex align-items-start justify-content-center">
     <form method="get">
@@ -38,7 +38,7 @@
         {% else %}
             <p>There is no messages for this part right now.</p>
         {% endif %}
-
+        <br><br>
         <h1 class="mb-3">Follow Requests</h1>
         {% if requests != None%}
             {% for i in content %}

@@ -32,7 +32,7 @@ urlpatterns = [
              post_views.posts, name='post_list'),
 
         # Inbox Endpoint
-        path('authors/<str:pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
+        path('authors/<str:author_pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
 
         # Send Request Endpoints
         path('<str:author_pk>/sendfollowrequest/', followrequest_views.send_request, name='follow_request'),
