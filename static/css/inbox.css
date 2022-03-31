@@ -45,7 +45,7 @@ p {
 .clear-btn {
   float: right;
   background-color: transparent;
-  color: indianred;
+  color: var(--primary-800);;
   border: none;
   outline: none;
   position: relative;
@@ -56,6 +56,11 @@ p {
   height: 30px;
   font-size: 25px;
   margin-left: 1rem;
+}
+
+.clear-btn:hover {
+  transform: scale(1.1);
+  color: #e07a5f;
 }
 
 .column {
