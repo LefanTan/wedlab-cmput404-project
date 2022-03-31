@@ -23,17 +23,10 @@
         {% endif %}
     </button>
     <div class="dropdown-contents">
-            <a href="{% url 'messages' %}">
-                Messages
+            <a href="{% url 'inbox' %}">
+                Inbox
             {% if item != None %}
                 <span class="dot messages-dot"></span>
-            {% endif %}
-            </a>
-            {# This page will not be built for now #}
-            <a href="{% url 'requests' %}">
-                Friend Requests
-            {% if item != None %}
-                <span class="dot requests-dot"></span>
             {% endif %}
             </a>
     </div>

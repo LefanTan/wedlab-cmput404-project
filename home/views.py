@@ -112,44 +112,32 @@ def post_create(request):
     return author
 
 
-def messages(request):
+def inbox(request):
     author, success = auth_check_middleware(request)
-    item = None
+    otherMessage = None
+    requests = None
+    comments = None
+    followRequests = []
     posts = []
 
     try:
-        item = InboxObject.objects.all()
+        allMessage = InboxObject.objects.all()
+        # otherMessage = InboxObject.objects.all().exclude(content_type=FollowRequest)
+        # requests = InboxObject.objects.all().filter(content_type=FollowRequest)
         comments = Comment.objects.all()
 
-        # Store all requests into a list
-        for i in item:
+        # Store all messages into a list
+        for i in allMessage:
             if i.author_id == author.id:
                 if i.content_type.model_class() is Post:
+                    otherMessage = 1
                     posts.append(Post.objects.get(id=i.object_id))
 
-    except Exception as e:
-        pass
-
-    if success:
-        if request.method == 'GET':
-            return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "item": item, "posts": posts, "comments": comments,
-                                   "name": request.resolver_match.url_name})
-    return author
-
-
-def requests(request):
-    author, success = auth_check_middleware(request)
-    item = None
-    followRequests = []
-
-    try:
-        item = InboxObject.objects.all()
-
         # Store all requests into a list
-        for i in item:
+        for i in allMessage:
             if i.author_id == author.id:
                 if i.content_type.model_class() is FollowRequest:
+                    requests = 1
                     followRequests.append(
                         FollowRequest.objects.get(id=i.object_id))
 
@@ -158,8 +146,9 @@ def requests(request):
 
     if success:
         if request.method == 'GET':
-            return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "item": item, "content": followRequests,
+            return render(request, 'inbox.html',
+                          context={"author": model_to_dict(author), "messages": otherMessage, "requests": requests,
+                                   "posts": posts, "comments": comments, "content": followRequests,
                                    "name": request.resolver_match.url_name})
     return author
 
