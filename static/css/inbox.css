@@ -42,6 +42,22 @@ p {
   margin: 5px;
 }
 
+.clear-btn {
+  float: right;
+  background-color: transparent;
+  color: indianred;
+  border: none;
+  outline: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 25px;
+  margin-left: 1rem;
+}
+
 .column {
   background-color:transparent;
   font-size: medium;

@@ -12,13 +12,15 @@
 
 {% block content %}
 <header class="py-2 px-3 border-bottom">
-  <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+    <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+    <button class="clear-btn"><i class="fa fa-trash-o"></i></button>
 </header>
 <main class="p-4 d-flex align-items-start justify-content-center">
 
     <form method="get">
         {% csrf_token %}
-        <h1 class="mb-3">Follow Requests</h1>
+        <h1 class="mb-3">Follow Requests </h1>
+
         {% if item != None%}
             {% for i in content %}
                 <div class="rows">
@@ -26,10 +28,10 @@
                         <p class="summary">
                             {{ i.summary }}
                         </p>
-                    <span class="actions">
-                        <button onclick="confirmRequest()">Confirm</button>
-                        <button onclick="rejectRequest()">Decline</button>
-                    </span>
+                        <span>
+                            <button class="actions" onclick="confirmRequest()">Fo Back</button>
+                            <button class="actions" onclick="rejectRequest()">OK</button>
+                        </span>
                     </div>
                 </div>
             {% endfor %}
