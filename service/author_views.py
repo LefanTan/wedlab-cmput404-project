@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 
 from service.serializers import AuthorSerializer
 from .models import Author
@@ -48,15 +49,22 @@ def signup(request):
         return render(request, 'registration/signup.html')
 
 
-def login(request):
+def author_login(request):
     if request.method == 'POST':
-        user = authenticate(request, username=request.POST['username'],
-                            password=request.POST['password'])
-        print(user)
-        if user is not None:
-            auth_login(request, user)
-            return redirect('home')
-        else:
+        try:
+            user = authenticate(username=request.POST['username'],
+                                password=request.POST['password'])
+            if user is not None:
+                author = Author.objects.get(user_id=user.id)
+                if user.is_active and author.approved:
+                    login(request, user)
+                    return redirect('home')
+                else:
+                    return redirect('login')
+            else:
+                return redirect('login')
+        except Exception as e:
+            print(e)
             return redirect('login')
     if request.method == 'GET':
         return render(request, 'registration/login.html')

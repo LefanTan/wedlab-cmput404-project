@@ -16,7 +16,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('auth/signup/', author_views.signup, name='signup'),
-    path('auth/login/', author_views.login, name='login'),
+    path('auth/login/', author_views.author_login, name='login'),
     path('service/', include([
         # API Docs
         path('docs', schema_view.with_ui('swagger', cache_timeout=0)),
