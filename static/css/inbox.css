@@ -30,7 +30,7 @@ h1 {
     float: bottom;
     text-align: center;
     display: block;
-    color: var(--primary-400);
+    color: var(--primary-800);
     padding: 10px 10px;
     text-decoration: none;
 }
