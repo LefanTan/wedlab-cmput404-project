@@ -132,6 +132,16 @@ def followers(request):
     return author
 
 
+def follower_details(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'follower_detail.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+    return author
+
+
 def inbox(request):
     author, success = auth_check_middleware(request)
     otherMessage = None

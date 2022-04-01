@@ -11,5 +11,6 @@ urlpatterns = [
     path('post/<str:post_pk>/edit', post_edit, name='home_post_edit'),
     path('post/<str:post_pk>/share', share_post, name='share_post'),
     path('inbox', inbox, name='inbox'),
-    path('authors/<str:author_pk>/followers/<str:foreign_author_pk>', follower_detail, name='')
+    path('authors/<str:author_pk>/followers/<str:foreign_author_pk>', follower_detail, name=''),
+    path('followerDetails', follower_details, name='follower_details')
 ]

@@ -22,3 +22,34 @@ h1 {
   color: var(--primary-800);
   text-align: center;
 }
+
+p {
+  display: inline-block;
+  vertical-align: bottom;
+  color: var(--primary-800);
+  margin-top: 10px;
+  text-align: center;
+}
+
+.rows {
+  margin-top: 20px;
+  border-bottom: darkolivegreen 1px solid;
+  background-color:transparent;
+  font-size: medium;
+  color: var(--primary-800);
+}
+
+.list {
+    float: bottom;
+    text-align: center;
+    display: block;
+    color: var(--primary-800);
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.list:hover {
+  text-decoration: underline;
+  background-color: transparent;
+  color: darkolivegreen;
+}
