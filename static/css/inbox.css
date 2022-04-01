@@ -21,8 +21,8 @@ form {
 h1 {
   color: var(--primary-800);
   text-align: center;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 15%;
+  margin-right: 15%;
 }
 
 
@@ -30,7 +30,7 @@ h1 {
     float: bottom;
     text-align: center;
     display: block;
-    color: var(--primary-800);
+    color: var(--primary-400);
     padding: 10px 10px;
     text-decoration: none;
 }
@@ -46,7 +46,7 @@ p {
   vertical-align: bottom;
   color: var(--primary-800);
   margin-top: 10px;
-  text-align: center;
+  font-family: Courier, serif;
 }
 
 .actions {

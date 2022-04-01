@@ -18,6 +18,7 @@
 <main class="p-4 d-flex align-items-start justify-content-center">
     <form method="get">
         {% csrf_token %}
+        <h1 class="mb-3">Messages</h1>
         <div class="nav-content">
             <h1 class="mb-3">Content</h1>
             <ul class = "navbar">
@@ -46,6 +47,8 @@
         {% else %}
             <p>There is no messages for this part right now.</p>
         {% endif %}
+        <br><br>
+        <h1 class="mb-3">Follow Requests</h1>
         <br><hr /><br>
         <h1 class="mb-3" id="Requests">Follow Requests</h1>
         {% if requests != None%}
