@@ -4,7 +4,7 @@ header {
   justify-content: flex-end;
   width: 100%;
 }
-
+.followers,
 .add,
 .create {
   display: flex;
@@ -38,52 +38,12 @@ header {
   margin-left: 1rem;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-contents {
-  display: none;
-  position: absolute;
-  font-size: small;
-  border-radius: 10px;
-  border: 1.5px solid var(--primary-400);
-  overflow: hidden;
-  min-width: 100%;
-  z-index: 1;
-}
-
-.dropdown-contents a {
-  background-color: white;
-  color: var(--primary-800);
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  display: flex;
-  text-align: center;
-}
-
-.dropdown-contents a:hover {
-  background-color: #d3e4cd;
-}
-
 .inbox:hover {
   transform: scale(1.1);
 }
 
-.dropdown:hover .dropdown-contents {
-  display: block;
-}
-
 .inbox > i {
   font-size: 1.5rem;
-}
-
-.dropdown-contents .requests-dot {
-  position: absolute;
-  top: 38px;
-  right: 0px;
-  float: right;
 }
 
 .dot {
@@ -99,10 +59,6 @@ header {
   font-size: x-small;
 }
 
-.messages-dot {
-  position: absolute;
-  float: right;
-}
 
 .profile-link {
   margin-left: 1rem;

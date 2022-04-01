@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Follower List{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{%static 'css/followers.css' %}" />
+{% endblock %}
+
+{% block content %}
+<header class="py-2 px-3 border-bottom">
+  <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+</header>
+    <main class="p-4 d-flex align-items-start justify-content-center">
+
+    <form class="d-block">
+        {% csrf_token %}
+        <h1 class="mb-3">Follower List</h1>
+        <p>follower 1</p>
+        <p>follower 2</p>
+
+    </form>
+</main>
+{% endblock %}

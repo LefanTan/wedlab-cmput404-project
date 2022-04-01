@@ -112,6 +112,17 @@ def post_create(request):
     return author
 
 
+def followers(request):
+    author, success = auth_check_middleware(request)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'followers.html',
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name,
+                                   "error": request.GET.get('error')})
+    return author
+
+
 def inbox(request):
     author, success = auth_check_middleware(request)
     otherMessage = None
@@ -196,7 +207,9 @@ def share_post(request, post_pk):
     allAuthors = Author.objects.all()
     if success:
         if request.method == 'GET':
-            return render(request, 'sharepost.html', context={"requesting_author": model_to_dict(author), "post": postData, "allauthors": allAuthors})
+            return render(request, 'sharepost.html',
+                          context={"requesting_author": model_to_dict(author), "post": postData,
+                                   "allauthors": allAuthors})
     return author
 
 
