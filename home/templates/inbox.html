@@ -18,7 +18,15 @@
 <main class="p-4 d-flex align-items-start justify-content-center">
     <form method="get">
         {% csrf_token %}
-        <h1 class="mb-3">Messages</h1>
+        <div class="nav-content">
+            <h1 class="mb-3">Content</h1>
+            <ul class = "navbar">
+                <li><a href="#Messages">Messages</a></li>
+                <li><a href="#Requests">Follow Requests</a></li>
+            </ul>
+        </div>
+        <hr /><br>
+        <h1 class="mb-3" id="Messages">Messages</h1>
         {% if messages != None%}
             {% for i in posts %}
                 <div class="rows">
@@ -38,8 +46,8 @@
         {% else %}
             <p>There is no messages for this part right now.</p>
         {% endif %}
-        <br><br>
-        <h1 class="mb-3">Follow Requests</h1>
+        <br><hr /><br>
+        <h1 class="mb-3" id="Requests">Follow Requests</h1>
         {% if requests != None%}
             {% for i in content %}
                 <div class="rows">

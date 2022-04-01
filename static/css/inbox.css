@@ -20,13 +20,35 @@ form {
 
 h1 {
   color: var(--primary-800);
+  text-align: center;
+  margin-left: 10%;
+  margin-right: 10%;
 }
+
+
+.nav-content .navbar li a{
+    float: bottom;
+    text-align: center;
+    display: block;
+    color: var(--primary-800);
+    padding: 10px 10px;
+    text-decoration: none;
+    font-family: Courier;
+}
+
+.navbar li a:hover {
+  text-decoration: underline;
+  background-color: transparent;
+}
+
 
 p {
   display: inline-block;
   vertical-align: bottom;
   color: var(--primary-800);
   margin-top: 10px;
+  font-family: Courier, serif;
+  text-align: center;
 }
 
 .actions {
