@@ -132,13 +132,18 @@ def followers(request):
     return author
 
 
-def follower_details(request):
+def follower_details(request, foreign_author_pk):
     author, success = auth_check_middleware(request)
+
+    try:
+        request_author = Author.objects.get(pk=foreign_author_pk)
+    except Exception as e:
+        return page_not_found(request, e)
 
     if success:
         if request.method == 'GET':
             return render(request, 'follower_detail.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name})
     return author
 
 

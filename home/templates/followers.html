@@ -3,6 +3,7 @@
 {% block title %}Follower List{% endblock %}
 {% block stylesheet %}
     <link rel="stylesheet" href="{%static 'css/followers.css' %}" />
+    {{ author|json_script:"author" }}
 {% endblock %}
 
 {% block content %}
@@ -17,7 +18,9 @@
         {% if items != None %}
             {% for i in items %}
                 <div class="rows">
-                    <a href="follower_detail.html" class="list">{{ i.actor.displayName }}</a>
+                    <a href="{% url 'follower_details' foreign_author_pk=i.actor.id %}" class="list">
+                        {{ i.actor.displayName }}
+                    </a>
                 </div>
             {% endfor %}
         {% else %}
