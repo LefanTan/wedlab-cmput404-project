@@ -14,8 +14,15 @@
     <form class="d-block">
         {% csrf_token %}
         <h1 class="mb-3">Follower List</h1>
-        <p>follower 1</p>
-        <p>follower 2</p>
+        {% if items != None %}
+            {% for i in items %}
+                <div class="rows">
+                    {{ i.actor.displayName }}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>You don't have followers.</p>
+        {% endif %}
 
     </form>
 </main>
