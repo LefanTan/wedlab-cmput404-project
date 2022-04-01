@@ -41,7 +41,9 @@
         {% if error %}
             <p class="text-danger">{{ error }}</p>
         {% endif %}
-        {% if edit %}<button type="submit" class="btn">Save</button>{% endif %}
+        <div>
+        <input type="button" class="btn green-btn followers" value="follow">
+        </div>
     </form>
 </main>
 {% endblock %}

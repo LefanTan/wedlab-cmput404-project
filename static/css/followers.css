@@ -53,3 +53,9 @@ p {
   background-color: transparent;
   color: darkolivegreen;
 }
+
+.followers {
+  display: flex;
+  justify-content: space-between;
+  float: right;
+}
