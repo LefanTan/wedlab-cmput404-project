@@ -33,7 +33,6 @@ h1 {
     color: var(--primary-800);
     padding: 10px 10px;
     text-decoration: none;
-    font-family: Courier;
 }
 
 .navbar li a:hover {
@@ -47,7 +46,6 @@ p {
   vertical-align: bottom;
   color: var(--primary-800);
   margin-top: 10px;
-  font-family: Courier, serif;
   text-align: center;
 }
 

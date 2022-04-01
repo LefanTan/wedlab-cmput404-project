@@ -22,3 +22,11 @@ h1 {
   color: var(--primary-800);
   text-align: center;
 }
+
+p {
+  display: inline-block;
+  vertical-align: bottom;
+  color: var(--primary-800);
+  margin-top: 10px;
+  text-align: center;
+}
