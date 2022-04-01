@@ -42,11 +42,11 @@ h1 {
 
 
 p {
-  display: inline-block;
+  /*display: inline-block;*/
   vertical-align: bottom;
   color: var(--primary-800);
   margin-top: 10px;
-  font-family: Courier, serif;
+  text-align: center;
 }
 
 .actions {
@@ -87,10 +87,11 @@ p {
   background-color:transparent;
   font-size: medium;
   color: white;
-  font-family: Courier, serif;
+  text-align: center;
 }
 
 .rows {
   margin-top: 20px;
   border-bottom: darkolivegreen 1px solid;
+  text-align: center;
 }
