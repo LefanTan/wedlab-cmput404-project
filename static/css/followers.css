@@ -30,3 +30,15 @@ p {
   margin-top: 10px;
   text-align: center;
 }
+
+.column {
+  background-color:transparent;
+  font-size: medium;
+  color: white;
+  font-family: Courier, serif;
+}
+
+.rows {
+  margin-top: 20px;
+  border-bottom: darkolivegreen 1px solid;
+}
