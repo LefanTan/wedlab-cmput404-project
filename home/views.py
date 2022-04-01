@@ -240,8 +240,10 @@ def follower_detail(request, author_pk):
     author, success = auth_check_middleware(request)
     isFollowed = False
 
-    try:
+    if FollowRequest.objects.get(actor=author.id, object=author_pk) is not None:
+        isFollowed = True
 
+    try:
         request_author = Author.objects.get(pk=author_pk)
     except Exception as e:
         return page_not_found(request, e)
