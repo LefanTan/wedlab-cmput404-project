@@ -115,11 +115,20 @@ def post_create(request):
 def followers(request):
     author, success = auth_check_middleware(request)
 
+    # Get a list of followers
+    items = None
+
+    try:
+        items = FollowRequest.objects.all().filter(object=author.id)  # Filter the request received by currAuthor
+
+    except Exception as e:
+        pass
+
     if success:
         if request.method == 'GET':
             return render(request, 'followers.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name,
-                                   "error": request.GET.get('error')})
+                          context={"author": model_to_dict(author), "items": items,
+                                   "name": request.resolver_match.url_name, "error": request.GET.get('error')})
     return author
 
 
@@ -133,8 +142,6 @@ def inbox(request):
 
     try:
         allMessage = InboxObject.objects.all()
-        # otherMessage = InboxObject.objects.all().exclude(content_type=FollowRequest)
-        # requests = InboxObject.objects.all().filter(content_type=FollowRequest)
         comments = Comment.objects.all()
 
         # Store all messages into a list
