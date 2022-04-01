@@ -117,14 +117,9 @@ def followers(request):
 
     # Get a list of followers
     items = None
-    # followerList = []
 
     try:
         items = FollowRequest.objects.all().filter(object=author.id)  # Filter the request received by currAuthor
-
-        # # Store all followers' objects into a list
-        # for i in items:
-        #     followerList.append(i)
 
     except Exception as e:
         pass
@@ -133,7 +128,6 @@ def followers(request):
         if request.method == 'GET':
             return render(request, 'followers.html',
                           context={"author": model_to_dict(author), "items": items,
-                                   # "followList": followerList,
                                    "name": request.resolver_match.url_name, "error": request.GET.get('error')})
     return author
 
