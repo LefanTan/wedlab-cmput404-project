@@ -22,7 +22,7 @@
             <h1 class="mb-3">Content</h1>
             <ul class = "navbar">
                 <li><a href="#Messages">Messages</a></li>
-                <li><a href="#Requests">Follow Requests</a></li>
+                <li><a href="#Requests">Follow Information</a></li>
             </ul>
         </div>
         <hr /><br>
@@ -47,13 +47,13 @@
             <p>There is no messages for this part right now.</p>
         {% endif %}
         <br><hr /><br>
-        <h1 class="mb-3" id="Requests">Follow Requests</h1>
+        <h1 class="mb-3" id="Requests">Follow Information</h1>
         {% if requests != None%}
             {% for i in content %}
                 <div class="rows">
                     <div class="column">
                         <p class="summary">
-                            {{ i.summary }}
+                            {{ i.actor.displayName }} is following you!
                         </p>
                     </div>
                 </div>
