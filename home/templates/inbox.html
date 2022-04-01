@@ -8,6 +8,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="{%static 'js/inbox.js' %}" crossorigin="anonymous" defer></script>
+    {{ author|json_script:"author" }}
 {% endblock %}
 
 {% block content %}
