@@ -37,5 +37,19 @@ p {
   background-color:transparent;
   font-size: medium;
   color: var(--primary-800);
-  font-family: Courier, serif;
+}
+
+.list {
+    float: bottom;
+    text-align: center;
+    display: block;
+    color: var(--primary-800);
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.list:hover {
+  text-decoration: underline;
+  background-color: transparent;
+  color: darkolivegreen;
 }

@@ -17,7 +17,7 @@
         {% if items != None %}
             {% for i in items %}
                 <div class="rows">
-                    {{ i.actor.displayName }}
+                    <a href="follower_detail.html" class="list">{{ i.actor.displayName }}</a>
                 </div>
             {% endfor %}
         {% else %}
