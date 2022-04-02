@@ -59,3 +59,7 @@ p {
   justify-content: space-between;
   float: right;
 }
+
+.mention {
+  display: inline-block;
+}

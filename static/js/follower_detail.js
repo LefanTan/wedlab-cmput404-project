@@ -1,6 +1,7 @@
 const form = document.querySelector("form");
-
 const authorObj = JSON.parse(document.getElementById("author").textContent);
+const button = document.querySelector('input');
+const paragraph = document.querySelector('p');
 
 const handleSubmit = (e) => {
   e.preventDefault();
@@ -25,3 +26,14 @@ const handleSubmit = (e) => {
 };
 
 form.addEventListener("submit", handleSubmit);
+
+
+function updateButton() {
+  if (button.value === 'follow') {
+    button.value = 'unfollow';
+    paragraph.textContent = 'You followed this user back, you become friends!';
+  } else {
+    button.value = 'follow';
+    paragraph.textContent = 'You did not follow this user';
+  }
+}
