@@ -42,10 +42,15 @@
             <p class="text-danger">{{ error }}</p>
         {% endif %}
         <div>
-        <input type="button" class="btn green-btn followers" value="follow" onclick=updateButton()>
+            {% if isFollowed %}
+                <button id="unfollow" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Unfollow</button>
+                <p style="color: var(--primary-800)" class="mention">You've followed this user.</p>
+            {% else %}
+                <button id="follow" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Follow</button>
+                <p style="color: var(--primary-800)" class="mention">You didn't follow this user.</p>
+            {% endif %}
+
         </div>
-        <br>
-        <p style="color: var(--primary-800)" class="mention">You did not follow this user.</p>
     </form>
 </main>
 {% endblock %}
