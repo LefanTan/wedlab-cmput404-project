@@ -31,22 +31,22 @@ def home(request):
 
     # TODO: Use posts that has arrived in user's Inbox
     try:
-        hosts = Host.objects.filter(allowed=True)
-        other_posts = []
+        # hosts = Host.objects.filter(allowed=True)
+        # other_posts = []
 
-        for host in hosts:
-            get_authors_url = host.url + 'authors/'
-            encoded_basic = base64.b64encode(
-                bytes(f'{host.name}:{host.password}', 'utf-8')).decode('utf-8')
-            headers = {'Authorization': f'Basic {encoded_basic}'}
-            result = get(get_authors_url, headers=headers).json()
-            other_authors = result.get('items')
-            for other_author in other_authors:
-                other_author_id = other_author.get('id').split('/')[-1]
-                author_posts_url = f"{get_authors_url}{other_author_id}/posts"
-                posts_result = get(author_posts_url, headers=headers).json()
-                if posts_result.get('items'):
-                    other_posts += posts_result.get('items')
+        # for host in hosts:
+        #     get_authors_url = host.url + 'authors/'
+        #     encoded_basic = base64.b64encode(
+        #         bytes(f'{host.name}:{host.password}', 'utf-8')).decode('utf-8')
+        #     headers = {'Authorization': f'Basic {encoded_basic}'}
+        #     result = get(get_authors_url, headers=headers).json()
+        #     other_authors = result.get('items')
+        #     for other_author in other_authors:
+        #         other_author_id = other_author.get('id').split('/')[-1]
+        #         author_posts_url = f"{get_authors_url}{other_author_id}/posts"
+        #         posts_result = get(author_posts_url, headers=headers).json()
+        #         if posts_result.get('items'):
+        #             other_posts += posts_result.get('items')
 
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
@@ -57,7 +57,7 @@ def home(request):
         paginator = Paginator(post_objs, size)
         posts = paginator.get_page(page_number).object_list
 
-        postsData = PostSerializer(posts, many=True).data + other_posts
+        postsData = PostSerializer(posts, many=True).data #+ other_posts
 
     except Exception as e:
         print(e)
