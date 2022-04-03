@@ -2,7 +2,7 @@ from unicodedata import category
 from datetime import date, datetime
 import markdown
 from rest_framework import serializers
-from .models import Author, Category, InboxObject, Post, FollowRequest, Comment
+from .models import Author, Category, InboxObject, LikeComment, LikePost, Post, FollowRequest, Comment
 from django.contrib.auth.models import User
 from django_base64field.fields import Base64Field
 import base64
@@ -33,7 +33,6 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['id'] = ret['url']
         ret.pop('user')
         return ret
 
@@ -72,6 +71,9 @@ class PostSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
+        post_like = LikePost.objects.filter(post_id=ret["id"])
+        ret["like_posts"] = LikePostSerializer(post_like, many=True).data
+        ret["like_posts_count"] = len(ret["like_posts"])
         comments = Comment.objects.filter(post=instance)
         ret["comments"] = CommentSerializer(comments, many=True).data
         return ret
@@ -119,7 +121,9 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['id'] = ret['url']
+        comment_like = LikeComment.objects.filter(comment_id=ret["id"])
+        ret["like_comments"] = LikeCommentSerializer(comment_like, many=True).data
+        ret["like_comments_count"] = len(ret["like_comments"])
         return ret
 
 class ImagePostSerializer(serializers.Serializer):
@@ -128,4 +132,30 @@ class ImagePostSerializer(serializers.Serializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret["image_base64"] = base64.b64encode(requests.get(instance).content)
+        return ret
+
+class LikePostSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(required=False)
+
+    class Meta:
+        model = LikePost
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['object'] = ret['url']
+        ret.pop('url')
+        return ret
+
+class LikeCommentSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(required=False)
+
+    class Meta:
+        model = LikeComment
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['object'] = ret['url']
+        ret.pop('url')
         return ret
