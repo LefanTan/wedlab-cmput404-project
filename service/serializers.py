@@ -33,6 +33,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
+        ret['id'] = ret['url']
         ret.pop('user')
         return ret
 
