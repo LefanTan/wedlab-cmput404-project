@@ -7,7 +7,7 @@ const handleSubmit = (e) => {
   let formData = new FormData(form);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", `../../service/${authorObj.id}/sendfollowrequest/`, true);
+  xhr.open("POST", `../../service/${authorObj.id}/sendfollowrequest/`);
   xhr.onload = function (e) {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
@@ -16,12 +16,12 @@ const handleSubmit = (e) => {
       } else {
         console.log("error: ", xhr.statusText);
         console.error(xhr.statusText);
-        history.back();
+        // history.back();
       }
     }
   };
-  xhr.setRequestHeader("X-CSRFToken", formData.get('csrfmiddlewaretoken'))
-  xhr.send(formData)
+  xhr.setRequestHeader("X-CSRFToken", formData.get("csrfmiddlewaretoken"));
+  xhr.send(formData);
 };
 
 form.addEventListener("submit", handleSubmit);

@@ -45,8 +45,12 @@ def home(request):
                 other_author_id = other_author.get('id').split('/')[-1]
                 author_posts_url = f"{get_authors_url}{other_author_id}/posts"
                 posts_result = get(author_posts_url, headers=headers).json()
-                if posts_result.get('items'):
-                    other_posts += posts_result.get('items')
+                posts_item = posts_result.get('items')
+                for post_item in posts_item:
+                    comment_result = get(
+                        f"{author_posts_url}/{post_item.get('id').split('/')[-1]}/comments", headers=headers).json()
+                    post_item['comments'] = comment_result.get('items')
+                other_posts += posts_item
 
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
@@ -119,7 +123,8 @@ def followers(request):
     items = None
 
     try:
-        items = FollowRequest.objects.all().filter(object=author.id)  # Filter the request received by currAuthor
+        # Filter the request received by currAuthor
+        items = FollowRequest.objects.all().filter(object=author.id)
 
     except Exception as e:
         pass
@@ -143,7 +148,8 @@ def follower_detail(request, foreign_author_pk):
         return page_not_found(request, e)
 
     try:
-        forward = FollowRequest.objects.get(actor=author, object=foreign_author_pk)
+        forward = FollowRequest.objects.get(
+            actor=author, object=foreign_author_pk)
         if forward is not None:
             isFollowed = True
         else:
@@ -246,4 +252,3 @@ def share_post(request, post_pk):
                           context={"requesting_author": model_to_dict(author), "post": postData,
                                    "allauthors": allAuthors})
     return author
-

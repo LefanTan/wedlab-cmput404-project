@@ -45,7 +45,7 @@
       {% csrf_token %}
       <div class="d-flex align-items-start">
         <a
-          href="{{ post.author.url }}"
+          href="{{ post.author.id }}"
           aria-label="Link to profile"
         >
           {% if post.author.profileImage %}
