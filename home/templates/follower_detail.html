@@ -8,6 +8,7 @@
 <script src="https://kit.fontawesome.com/04c5b72d3b.js" crossorigin="anonymous"></script>
 <script src="{%static 'js/follower_detail.js' %}" defer></script>
 {{ author|json_script:"author" }}
+{{ current|json_script:"current" }}
 {% endblock %}
 
 {% block content %}
@@ -20,7 +21,8 @@
         <h1 class="mb-3">{% if edit %}Edit Your{% else %}{{ author.displayName }}'s{% endif %} Profile</h1>
         <div class="mb-3">
             <label for="displayName" class="form-label">Display/User Name</label>
-            <input {% if not edit %}disabled{% endif %} type="text" class="form-control" name="displayName" id="displayName" value="{{ author.displayName }}" required>
+            <input {% if not edit %}disabled{% endif %} type="text" class="form-control" name="displayName"
+                   id="displayName" value="{{ author.displayName }}" required>
         </div>
         
         {% if edit %}
@@ -43,13 +45,12 @@
         {% endif %}
         <div>
             {% if isFollowed %}
-                <button id="unfollow" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Unfollow</button>
+                <button onclick="unfollow()" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Unfollow</button>
                 <p style="color: var(--primary-800)" class="mention">You've followed this user.</p>
             {% else %}
-                <button id="follow" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Follow</button>
+                <button onclick="follow()" type="button" class="btn p-1 px-2 btn-outline-danger ms-auto">Follow</button>
                 <p style="color: var(--primary-800)" class="mention">You didn't follow this user.</p>
             {% endif %}
-
         </div>
     </form>
 </main>

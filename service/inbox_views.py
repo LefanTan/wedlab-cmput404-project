@@ -80,7 +80,7 @@ def inbox_list(request, author_pk):
         except:
             return Response("Author doesn't exist", status=status.HTTP_404_NOT_FOUND)
 
-        inboxAll = InboxObject.objects.get(author=author)
+        inboxAll = InboxObject.objects.all().filter(author=author)
         inboxAll.delete()
 
         return Response(f"Clear the inbox successfully")

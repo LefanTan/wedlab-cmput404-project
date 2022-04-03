@@ -160,7 +160,8 @@ def follower_detail(request, foreign_author_pk):
     if success:
         if request.method == 'GET':
             return render(request, 'follower_detail.html',
-                          context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name,
+                          context={"author": model_to_dict(request_author), "current": model_to_dict(author),
+                                   "name": request.resolver_match.url_name,
                                    "isFollowed": isFollowed, "edit": author.id == foreign_author_pk,
                                    "error": request.GET.get('error')})
     return author
