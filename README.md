@@ -16,7 +16,7 @@
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window`
 
 # Create superuser on Heroku
-`heroku run -a social-dist-wed python manage.py create_admin`
+Run `heroku run -a social-dist-wed python manage.py create_admin`
 # Deployment to Heroku
 
 Deployment to Heroku will use PostgreSQL
