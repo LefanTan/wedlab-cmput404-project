@@ -122,6 +122,7 @@ class Host(models.Model):
     name = models.CharField(max_length=250)
     password = models.CharField(max_length=250)
 
+
 class LikePost(models.Model):
     id = models.CharField(primary_key=True, default=generate_uuid_hex, max_length=250)
     type = models.CharField(default="Like", max_length=125)
@@ -129,6 +130,7 @@ class LikePost(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     summary = models.CharField(max_length=500)
     url = models.URLField(max_length=250)
+
 
 class LikeComment(models.Model):
     id = models.CharField(primary_key=True, default=generate_uuid_hex, max_length=250)

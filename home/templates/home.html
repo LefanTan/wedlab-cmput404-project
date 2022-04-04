@@ -16,9 +16,6 @@
   
     <a href="{% url 'inbox' %}">
         <button class="inbox fa-solid fa-inbox" aria-label="inbox"></button>
-        {% if item != None %}
-            <span class="dot button_dot"></span>
-        {% endif %}
     </a>
 
   <a class="profile-link" href="{{ author.url }}">
