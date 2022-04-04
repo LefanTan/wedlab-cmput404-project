@@ -8,16 +8,16 @@ Thus in the spirit of diaspora https://diasporafoundation.org/ we want to build 
 This blogging/social network platform will allow the importing of other sources of posts (github, twitter, etc.) as well allow the distributing sharing of posts and content.
 
 ## Heroku Deployment (Active)
->  - [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
+> [cmput404-project-w22.herokuapp.com](https://cmput404-project-w22.herokuapp.com)
 >  - Approved Login Credentials for Public:
 >    - Username: `team02user`
 >    - Password: `user`
 #### Web Service API Endpoint
-- [social-dist-wed.herokuapp.com/service](https://social-dist-wed.herokuapp.com/service)
+- [cmput404-project-w22.herokuapp.com/service](https://cmput404-project-w22.herokuapp.com/service)
 #### API Endpoints Documentation
-- [social-dist-wed.herokuapp.com/service/docs](https://social-dist-wed.herokuapp.com/service/docs)
+- [cmput404-project-w22.herokuapp.com/service/docs](https://cmput404-project-w22.herokuapp.com/service/docs)
 #### Example HTTPIE command for authenticated get authors
-- `http --auth team02admin:admin GET https://social-dist-wed.herokuapp.com/service/authors/`
+- `http --auth team02admin:admin GET https://cmput404-project-w22.herokuapp.com/service/authors/`
 
 ## Local Deployment
 #### Instructions
@@ -39,7 +39,7 @@ This blogging/social network platform will allow the importing of other sources 
    - If you want to test locally but use the heroku postgres server instead of the above local docker postgres server, change `TEST` to `true`
 8. Create superuser:
    - Local: Run `python manage.py create_admin`
-   - Heroku: Run `heroku run -a social-dist-wed python manage.py create_admin` 
+   - Heroku: Run `heroku run -a cmput404-project-w22 python manage.py create_admin` 
 9. Run `heroku local` for non window user to start the server. Access it at `http://localhost:8000`
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window` 
 10. All the sign ups need to be approved by the superuser through admin panel before any login attempt
