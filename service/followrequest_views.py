@@ -30,26 +30,30 @@ def send_request(request, author_pk):
                 author = Author.objects.get(
                     displayName=body.get('displayName'))  # Receiver
                 current = Author.objects.get(pk=author_pk)
-                data = {
-                    'id': uuid.uuid4().hex,
-                    'summary': f"{current.displayName} wants to follow {author.displayName}",
-                    'type': 'Follow',
-                    'actor': current.id,
-                    'object': author.id
-                }
 
-                follow_serializer = FollowRequestSerializer(data=data)
+                if author.displayName == current.displayName:
+                    return Response("You can't follow yourself!", status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    data = {
+                        'id': uuid.uuid4().hex,
+                        'summary': f"{current.displayName} wants to follow {author.displayName}",
+                        'type': 'Follow',
+                        'actor': current.id,
+                        'object': author.id
+                    }
 
-                if follow_serializer.is_valid():
-                    follow_serializer.save()
+                    follow_serializer = FollowRequestSerializer(data=data)
 
-                    # Send the request data to the receiver's inbox
-                    object = FollowRequest.objects.get(pk=data['id'])
-                    inbox_item = InboxObject(
-                        content_object=object, author=author)
-                    inbox_item.save()
-                    # , model_to_dict(inbox_item)
-                    return Response(follow_serializer.data)
-                return Response("Data not valid", status=status.HTTP_400_BAD_REQUEST)
+                    if follow_serializer.is_valid():
+                        follow_serializer.save()
+
+                        # Send the request data to the receiver's inbox
+                        object = FollowRequest.objects.get(pk=data['id'])
+                        inbox_item = InboxObject(
+                            content_object=object, author=author)
+                        inbox_item.save()
+                        # , model_to_dict(inbox_item)
+                        return Response(follow_serializer.data)
+                    return Response("Data not valid", status=status.HTTP_400_BAD_REQUEST)
             except Author.DoesNotExist:
                 return Response("Display Name does not exist!", status=status.HTTP_400_BAD_REQUEST)

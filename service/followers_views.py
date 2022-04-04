@@ -53,7 +53,7 @@ def follower_detail(request, author_pk, foreign_author_pk):
     # Unfollow the current follower
     if request.method == 'DELETE':
         try:
-            follower = FollowRequest.objects.get(actor=foreign_author_pk)
+            follower = FollowRequest.objects.get(actor__id=author_pk, object=foreign_author_pk)
             name = Author.objects.get(pk=foreign_author_pk).displayName
 
             follower.delete()
@@ -82,14 +82,14 @@ def follower_detail(request, author_pk, foreign_author_pk):
 
 def sendRequest(author_pk, foreign_pk):
     try:
-        sender = Author.objects.get(pk=foreign_pk)  # Sender
-        receiver = Author.objects.get(pk=author_pk)  # Receiver
-        allRequests = FollowRequest.objects.all().filter(actor_id=foreign_pk).values_list('actor')
+        sender = Author.objects.get(pk=author_pk)  # Sender
+        receiver = Author.objects.get(pk=foreign_pk)  # Receiver
+        allRequests = FollowRequest.objects.all().filter(actor_id=foreign_pk).values_list('actor_id')
 
         if sender.id not in allRequests:
             data = {
                 'id': uuid.uuid4().hex,
-                'summary': f"{receiver.displayName} wants to invite you as a follower",
+                'summary': f"{sender.displayName} wants to follow {receiver.displayName}",
                 'type': 'Follow',
                 'actor': sender.id,
                 'object': receiver.id
@@ -111,4 +111,4 @@ def sendRequest(author_pk, foreign_pk):
             return Response("You've sent request to this author!", status=status.HTTP_400_BAD_REQUEST)
 
     except Author.DoesNotExist:
-        return Response("Username does not exist!", status=status.HTTP_400_BAD_REQUEST)
+        return Response("Display Name does not exist!", status=status.HTTP_400_BAD_REQUEST)

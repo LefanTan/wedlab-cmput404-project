@@ -5,6 +5,7 @@ from django.views.defaults import page_not_found
 from service.models import Author, Host, Post, FollowRequest, InboxObject, Comment
 from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
+from itertools import chain
 from requests import get
 
 
@@ -24,6 +25,7 @@ def auth_check_middleware(request):
 def home(request):
     author, success = auth_check_middleware(request)
     item = None
+
     try:
         item = InboxObject.objects.get(author=author)
     except Exception as e:
@@ -68,7 +70,22 @@ def home(request):
         post_objs = Post.objects.filter(
             visibility="PUBLIC", unlisted=False).order_by('-publishedDate')
 
-        paginator = Paginator(post_objs, size)
+        # Friend only posts display
+        friends_posts = Post.objects.filter(
+            visibility="FRIENDS", unlisted=False).order_by('-publishedDate')
+        for post in friends_posts:
+            if post.author.id != author.id:
+                try:
+                    sender = FollowRequest.objects.get(actor__id=author.id, object=post.author.id)
+                    receiver = FollowRequest.objects.get(actor__id=post.author.id, object=author.id)
+                except Exception as e:
+                    sender = None
+                    receiver = None
+                if sender is None or receiver is None:
+                    friends_posts = friends_posts.exclude(author=post.author.id)
+
+        combined = list(chain(post_objs, friends_posts))
+        paginator = Paginator(combined, size)
         posts = paginator.get_page(page_number).object_list
 
         postsData = PostSerializer(posts, many=True).data + other_posts
@@ -170,7 +187,8 @@ def follower_detail(request, foreign_author_pk):
     if success:
         if request.method == 'GET':
             return render(request, 'follower_detail.html',
-                          context={"author": model_to_dict(request_author), "name": request.resolver_match.url_name,
+                          context={"author": model_to_dict(request_author), "current": model_to_dict(author),
+                                   "name": request.resolver_match.url_name,
                                    "isFollowed": isFollowed, "edit": author.id == foreign_author_pk,
                                    "error": request.GET.get('error')})
     return author
