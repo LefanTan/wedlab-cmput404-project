@@ -1,5 +1,5 @@
-﻿# CMPUT404 Project - Distributed Social Networking
- [Project Details](/project-details.org)
+# CMPUT404 Project - Distributed Social Networking
+- [Project Details](/project-details.org)
  
 The web is fundamentally interconnected and peer to peer. There’s no really great reason why we should all use facebook.com or google+ or myspace or something like that. If these social networks came up with an API you could probably link between them and use the social network you wanted. Furthermore you might gain some autonomy.
 
@@ -9,10 +9,16 @@ This blogging/social network platform will allow the importing of other sources 
 
 ## Heroku Deployment (Active)
 
-[Distributed Social Networking](https://social-dist-wed.herokuapp.com)
+- [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
+#### Web Service API Endpoint
+- [social-dist-wed.herokuapp.com/service](https://social-dist-wed.herokuapp.com/service)
+#### API Endpoints Documentation
+- [social-dist-wed.herokuapp.com/service/docs](https://social-dist-wed.herokuapp.com/service/docs)
+#### Example HTTPIE command for authenticated get authors
+- `http --auth team02admin:admin GET https://social-dist-wed.herokuapp.com/service/authors/`
 
 ## Local Deployment
-### Instructions
+#### Instructions
 1. `git clone` this repo
 2. `cd wedlab-cmput404-project` to navigate to the project folder
 3. Create a python virtual environment in the project folder and activate the environment
@@ -33,11 +39,11 @@ This blogging/social network platform will allow the importing of other sources 
    - Local: Run `python manage.py create_admin`
    - Heroku: Run `heroku run -a social-dist-wed python manage.py create_admin` 
 9. Run `heroku local` for non window user to start the server. Access it at `http://localhost:8000`
-   - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window`
-10. Credentials of superuser for accessing `http://localhost:8000/admin`:
-   - username: `team02admin`
-   - password: `admin`  
-11. All the sign ups need to be approved by the superuser through admin panel before any login attempt
+   - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window` 
+10. All the sign ups need to be approved by the superuser through admin panel before any login attempt
+11. Credentials of superuser for accessing `http://localhost:8000/admin`:
+    - username: `team02admin`
+    - password: `admin`
 
 ## Contributors
 
@@ -50,7 +56,7 @@ This blogging/social network platform will allow the importing of other sources 
 
 ## License
 
-[License Details](/LICENSE.md)
+- [License Details](/LICENSE.md)
 
 ```
                                  Apache License
