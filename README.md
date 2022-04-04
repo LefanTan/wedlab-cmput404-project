@@ -7,7 +7,7 @@ Thus in the spirit of diaspora https://diasporafoundation.org/ we want to build 
 
 This blogging/social network platform will allow the importing of other sources of posts (github, twitter, etc.) as well allow the distributing sharing of posts and content.
 
-## Heroku Deployment (Active)
+## PaaS Deployment - Heroku (Active)
 >  - [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
 >  - Approved Login Credentials for Public:
 >    - Username: `team02user`
@@ -36,10 +36,10 @@ This blogging/social network platform will allow the importing of other sources 
 7. Create a copy of the `.env.example` and name it `.env`. Then: 
    - Add a secret key (for example `SECRET_KEY = *`)
    - Change `USE_AWS_S3_MEDIA` to `false`
-   - If you want to test locally but use the heroku postgres database server instead of the above local docker postgres database server, change `TEST` to `true`
+   - [Not For Public] If you want to test locally but use the heroku postgres database server instead of the above local docker postgres database server, change `TEST` to `true`
 8. Create superuser:
    - Local: Run `python manage.py create_admin`
-   - Heroku: Run `heroku run -a social-dist-wed python manage.py create_admin` 
+   - [Not For Public] Heroku: Run `heroku run -a social-dist-wed python manage.py create_admin` 
 9. Run `heroku local` for non window user to start the application server. Access it at `http://localhost:8000`
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window` 
 10. All the sign ups need to be approved by the superuser through admin panel before any login attempt
