@@ -10,34 +10,18 @@
 {% endblock %} {% load markdown %} {% block content %}
 <header class="px-4 py-2 border-bottom">
   <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm me-auto logout"
-    >Logout</a
-  >
-  <a href="{% url 'follow_request' %}" class="btn green-btn add">Add Friends</a>
-  <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
+    >Logout</a>
+    <a href="{% url 'followers' %}" class="btn green-btn followers">Followers</a>
+    <a href="{% url "follow_request" %}" class="btn green-btn add">Add Friends</a>
+    <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
 
-  <div class="dropdown">
-    <button aria-label="inbox" class="inbox">
-        <span class="fa-solid fa-inbox"></span>
+
+    <a href="{% url 'inbox' %}">
+        <button class="inbox fa-solid fa-inbox" aria-label="inbox"></button>
         {% if item != None %}
             <span class="dot button_dot"></span>
         {% endif %}
-    </button>
-    <div class="dropdown-contents">
-            <a href="{% url 'messages' %}">
-                Messages
-                {% if item != None %}
-                    <span class="dot messages-dot"></span>
-                {% endif %}
-            </a>
-            {# This page will not be built for now #}
-            <a href="{% url 'requests' %}">
-                Friend Requests
-                {% if item != None %}
-                    <span class="dot requests-dot"></span>
-                {% endif %}
-            </a>
-    </div>
-  </div>
+    </a>
 
   <a class="profile-link" href="{{ author.url }}">
     {% if author.profileImage %}
@@ -59,9 +43,10 @@
     {% for post in posts %}
     <form id="{{ post.id }}" class="post">
       {% csrf_token %}
+      {% if post.type == "post" %}
       <div class="d-flex align-items-start">
         <a
-          href="{{ post.author.url }}"
+          href="{{ post.author.id }}"
           aria-label="Link to profile"
         >
           {% if post.author.profileImage %}
@@ -182,6 +167,39 @@
           </div>
         </div>
       </div>
+      {% else %}
+      <div class="d-flex align-items-start">
+        <a
+          href="{{ post.author.url }}"
+          aria-label="Link to profile"
+        >
+          {% if post.author.profileImage %}
+          <img
+            class="rounded-circle profile-pic"
+            src="{{ post.author.profileImage }}"
+            alt="profile picture"
+          />
+          {% else %}
+          <i
+            class="rounded-circle profile-pic-default fa-solid fa-user"
+            aria-label="profile picture"
+          ></i>
+          {% endif %}
+        </a>
+        <div class="ms-3 w-100">
+          <div class="d-flex">
+            <p class="mt-1 mb-0 fw-bolder">{{ post.author.displayName }}</p>
+          </div>
+          <h2 class="mt-3 post-title">{{ post.type }}</h2>
+          <div aria-label="description" class="description w-100">
+            <p class="w-100"><b>{{ post.author.displayName }}</b> just had a {{ post.type }} to the <i>{{ post.repo.name }}</i> repo</p>
+          </div>
+          <div class="mt-2 d-flex justify-content-start align-items-center">
+            <p class="category-button">github activity</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
       <hr />
     </form>
     {% endfor %}
