@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Inbox Messages{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{%static 'css/inbox.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/04c5b72d3b.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{%static 'js/inbox.js' %}" crossorigin="anonymous" defer></script>
+    {{ author|json_script:"author" }}
+{% endblock %}
+
+{% block content %}
+<header class="py-2 px-3 border-bottom">
+    <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+    <button class="clear-btn" onclick="clearInbox()"><i class="fa fa-trash-o"></i></button>
+</header>
+<main class="p-4 d-flex align-items-start justify-content-center">
+    <form method="get">
+        {% csrf_token %}
+        <div class="nav-content">
+            <h1 class="mb-3">Content</h1>
+            <ul class = "navbar">
+                <li><a href="#Messages">Messages</a></li>
+                <li><a href="#Requests">Follow Information</a></li>
+            </ul>
+        </div>
+        <hr /><br>
+        <h1 class="mb-3" id="Messages">Messages</h1>
+        {% if messages != None%}
+            {% for i in posts %}
+                <div class="rows">
+                    <div class="column">
+                        <p>From: {{ i.author.displayName }}</p><br>
+                        <p>Title: {{ i.title }}</p><br>
+                        <p>Description: {{ i.description }}</p><br>
+                        <p>Comments:</p><br>
+                            {% for j in comments %}
+                                {% if j.post_id == i.id %}
+                                    <ul style="color: black"><li>From {{ j.author.displayName }}: {{ j.comment }}</li></ul><br>
+                                {% endif %}
+                            {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>There is no messages for this part right now.</p>
+        {% endif %}
+        <br><hr /><br>
+        <h1 class="mb-3" id="Requests">Follow Information</h1>
+        {% if requests != None%}
+            {% for i in content %}
+                <div class="rows">
+                    <div class="column">
+                        <p class="summary">
+                            {{ i.actor.displayName }} started following you!
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>There is no follow requests right now.</p>
+        {% endif %}
+    </form>
+</main>
+{% endblock %}

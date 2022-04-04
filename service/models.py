@@ -92,8 +92,8 @@ class FollowRequest(models.Model):
         primary_key=True, default=generate_uuid_hex, max_length=250)
     summary = models.CharField(max_length=500)
     type = models.CharField(default="Follow", max_length=125)
-    actor = models.OneToOneField(
-        Author, related_name='actor', on_delete=models.CASCADE)
+    actor = models.ForeignKey(
+        Author, on_delete=models.CASCADE, unique=False)
     object = models.CharField(max_length=250, null=True)
     inbox_object = GenericRelation(InboxObject, on_delete=models.CASCADE)
 
