@@ -22,7 +22,7 @@ def like_post(request, author_pk, post_pk):
             author = Author.objects.get(pk=author_pk)
             post = author.post_set.get(pk=post_pk)
             post_id = PostSerializer(post).data["id"]
-            likes = LikePost.objects.all().filter(post_id=post_id)
+            likes = LikePost.objects.filter(post_id=post_id)
 
             if page_number and size:
                 paginator = Paginator(likes, size)
@@ -75,7 +75,7 @@ def like_comment(request, author_pk, post_pk, comment_pk):
             post = author.post_set.get(pk=post_pk)
             comment = post.comment_set.get(pk=comment_pk)
             comment_id = CommentSerializer(comment).data["id"]
-            likes = LikeComment.objects.all().filter(comment_id=comment_id)
+            likes = LikeComment.objects.filter(comment_id=comment_id)
 
             if page_number and size:
                 paginator = Paginator(likes, size)
