@@ -17,6 +17,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('auth/signup/', author_views.signup, name='signup'),
+    path('auth/login/', author_views.author_login, name='login'),
     path('service/', include([
         # API Docs
         path('docs', schema_view.with_ui('swagger', cache_timeout=0)),
@@ -26,7 +27,7 @@ urlpatterns = [
         path('authors/<str:pk>', author_views.author_detail, name='author_detail'),
 
         # Post Endpoints
-        path('authors/<str:author_pk>/posts/<str:post_pk>',
+        path('authors/<str:author_pk>/posts/<str:post_pk>/',
              post_views.post_detail, name='post_detail'),
         path('authors/<str:author_pk>/posts/',
              post_views.posts, name='post_list'),
@@ -35,7 +36,8 @@ urlpatterns = [
         path('authors/<str:author_pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
 
         # Send Request Endpoints
-        path('<str:author_pk>/sendfollowrequest/', followrequest_views.send_request, name='follow_request'),
+        path('<str:author_pk>/sendfollowrequest/',
+             followrequest_views.send_request, name='follow_request'),
 
         # Followers List Endpoints
         path('authors/<str:author_pk>/followers', followers_views.follower_list, name='followers'),

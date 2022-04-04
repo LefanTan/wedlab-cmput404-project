@@ -52,6 +52,16 @@ def home(request):
                     post_item['comments'] = comment_result.get('items')
                 other_posts += posts_item
 
+        github_name = author.github.split('/')[-1]
+        url = f"https://api.github.com/users/{github_name}/events/public?per_page=5"
+        github_results = get(url).json()
+
+        for github_post in github_results:
+            new_post = {"type": github_post['type'], "repo": github_post['repo'],
+                        'author': author,
+                        'publishedDate': github_post['created_at']}
+            other_posts.append(new_post)
+
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
 
@@ -62,18 +72,18 @@ def home(request):
         posts = paginator.get_page(page_number).object_list
 
         postsData = PostSerializer(posts, many=True).data + other_posts
+        postsData.sort(key=lambda x: x['publishedDate'], reverse=True)
 
     except Exception as e:
         print(e)
 
     if success:
-        return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData})
+        return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData or []})
     return author
 
 
 def post_list(request, author_pk):
     # Show a list of post made by author_pk
-
     author, success = auth_check_middleware(request)
 
     try:
@@ -219,6 +229,22 @@ def post_edit(request, post_pk):
     if success:
         if request.method == 'GET':
             return render(request, 'post_form.html', context={"author": model_to_dict(author), "post": postData,
+                                                              "name": request.resolver_match.url_name})
+    return author
+
+
+def post_view(request, post_pk):
+    author, success = auth_check_middleware(request)
+
+    try:
+        post = Post.objects.get(pk=post_pk)
+        postData = PostSerializer(post).data
+    except Exception as e:
+        return page_not_found(request, e)
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'post_view.html', context={"author": model_to_dict(author), "post": postData,
                                                               "name": request.resolver_match.url_name})
     return author
 

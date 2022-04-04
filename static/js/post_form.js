@@ -20,13 +20,13 @@ const submitHandler = (e) => {
 
   let type = formData.get("markdown") === "on" ? "text/markdown" : "text/plain";
   formData.append("contentType", type);
+  formData.append("unlisted", formData.get("unlisted") === null ? false : true);
 
   var request = new XMLHttpRequest();
   request.onload = function (e) {
     if (request.readyState === 4) {
       if (request.status === 200) {
-        // console.log(JSON.parse(request.responseText));
-
+        //console.log(JSON.parse(request.responseText));
         history.back();
       } else {
         console.error(request.statusText);
