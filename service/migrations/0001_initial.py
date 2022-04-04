@@ -74,6 +74,28 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='LikePost',
+            fields=[
+                ('id', models.CharField(default=service.models.generate_uuid_hex, max_length=250, primary_key=True, serialize=False)),
+                ('type', models.CharField(default='Like', max_length=125)),
+                ('post_id', models.CharField(max_length=500, null=True)),
+                ('summary', models.CharField(max_length=500)),
+                ('url', models.URLField(max_length=250)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='service.author')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='LikeComment',
+            fields=[
+                ('id', models.CharField(default=service.models.generate_uuid_hex, max_length=250, primary_key=True, serialize=False)),
+                ('type', models.CharField(default='Like', max_length=125)),
+                ('comment_id', models.CharField(max_length=500, null=True)),
+                ('summary', models.CharField(max_length=500)),
+                ('url', models.URLField(max_length=250)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='service.author')),
+            ],
+        ),
+        migrations.CreateModel(
             name='InboxObject',
             fields=[
                 ('id', models.CharField(default=service.models.generate_uuid_hex, editable=False, max_length=250, primary_key=True, serialize=False)),

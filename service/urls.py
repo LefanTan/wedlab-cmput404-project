@@ -1,6 +1,5 @@
 from django.urls import path, include
-from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views,\
-    followers_views
+from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views, like_views,followers_views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -50,6 +49,18 @@ urlpatterns = [
         # Image Endpoints
         path('authors/<str:author_pk>/posts/<str:post_pk>/image',
              imagepost_views.imagepost, name='imagepost'),
+
+        # Like Post Endpoints
+        path('authors/<str:author_pk>/posts/<str:post_pk>/likes',
+             like_views.like_post, name='like_post'),
+
+        # Like Comment Endpoints
+        path('authors/<str:author_pk>/posts/<str:post_pk>/comments/<str:comment_pk>/likes',
+             like_views.like_comment, name='like_comment'),
+
+        # Author Liked Endpoints
+        path('authors/<str:author_pk>/liked',
+             like_views.author_liked, name='author_liked'),
 
     ]))
 ]
