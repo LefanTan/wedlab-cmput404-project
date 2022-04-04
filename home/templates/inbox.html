@@ -45,6 +45,11 @@
                             {% for j in comments %}
                                 {% if j.post_id == i.id %}
                                     <ul style="color: black"><li>From {{ j.author.displayName }}: {{ j.comment }}</li></ul><br>
+                                    {% for k in likeComment %}
+                                        {% if k.comment_id == j.id %}
+                                            <p style="color: black">{{ k.author.displayName }} liked this comment</p><br>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
                             {% endfor %}
                     </div>
