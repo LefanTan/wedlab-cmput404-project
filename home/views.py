@@ -2,7 +2,7 @@ import base64
 from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.views.defaults import page_not_found
-from service.models import Author, Host, Post, FollowRequest, InboxObject, Comment
+from service.models import Author, Host, Post, FollowRequest, InboxObject, Comment, LikePost
 from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
 from itertools import chain
@@ -199,12 +199,14 @@ def inbox(request):
     otherMessage = None
     requests = None
     comments = None
+    likes = None
     followRequests = []
     posts = []
 
     try:
         allMessage = InboxObject.objects.all()
         comments = Comment.objects.all()
+        likes = LikePost.objects.all()
 
         # Store all messages into a list
         for i in allMessage:
@@ -228,7 +230,7 @@ def inbox(request):
         if request.method == 'GET':
             return render(request, 'inbox.html',
                           context={"author": model_to_dict(author), "messages": otherMessage, "requests": requests,
-                                   "posts": posts, "comments": comments, "content": followRequests,
+                                   "posts": posts, "comments": comments, "content": followRequests, "likes": likes,
                                    "name": request.resolver_match.url_name})
     return author
 
