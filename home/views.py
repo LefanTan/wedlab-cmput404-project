@@ -71,7 +71,6 @@ def home(request):
                 except Exception as e:
                     sender = None
                     receiver = None
-                print(sender, receiver)
                 if sender is None or receiver is None:
                     friends_posts = friends_posts.exclude(author=post.author.id)
 
