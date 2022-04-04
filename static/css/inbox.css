@@ -20,16 +20,36 @@ form {
 
 h1 {
   color: var(--primary-800);
+  text-align: center;
+  margin-left: 8%;
+  margin-right: 8%;
 }
 
+
+.nav-content .navbar li a{
+    float: bottom;
+    text-align: center;
+    display: block;
+    color: var(--primary-800);
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.navbar li a:hover {
+  text-decoration: underline;
+  background-color: transparent;
+}
+
+
 p {
-  display: inline-block;
+  /*display: inline-block;*/
   vertical-align: bottom;
   color: var(--primary-800);
   margin-top: 10px;
+  text-align: center;
 }
 
-.actions .confirm, .reject {
+.actions {
   color: #778377;
   border-style: solid;
   border-color: var(--primary-500);
@@ -42,14 +62,36 @@ p {
   margin: 5px;
 }
 
+.clear-btn {
+  float: right;
+  background-color: transparent;
+  color: var(--primary-800);;
+  border: none;
+  outline: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 25px;
+  margin-left: 1rem;
+}
+
+.clear-btn:hover {
+  transform: scale(1.1);
+  color: #e07a5f;
+}
+
 .column {
   background-color:transparent;
   font-size: medium;
   color: white;
-  font-family: Courier, serif;
+  text-align: center;
 }
 
 .rows {
   margin-top: 20px;
   border-bottom: darkolivegreen 1px solid;
+  text-align: center;
 }

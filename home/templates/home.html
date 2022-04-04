@@ -10,34 +10,18 @@
 {% endblock %} {% load markdown %} {% block content %}
 <header class="px-4 py-2 border-bottom">
   <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm me-auto logout"
-    >Logout</a
-  >
-  <a href="{% url "follow_request" %}" class="btn green-btn add">Add Friends</a>
-  <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
+    >Logout</a>
+    <a href="{% url 'followers' %}" class="btn green-btn followers">Followers</a>
+    <a href="{% url "follow_request" %}" class="btn green-btn add">Add Friends</a>
+    <a href="{% url 'home_post_create' %}" class="btn green-btn create">+ Create</a>
 
-  <div class="dropdown">
-    <button aria-label="inbox" class="inbox">
-        <span class="fa-solid fa-inbox"></span>
+
+    <a href="{% url 'inbox' %}">
+        <button class="inbox fa-solid fa-inbox" aria-label="inbox"></button>
         {% if item != None %}
             <span class="dot button_dot"></span>
         {% endif %}
-    </button>
-    <div class="dropdown-contents">
-            <a href="{% url 'messages' %}">
-                Messages
-                {% if item != None %}
-                    <span class="dot messages-dot"></span>
-                {% endif %}
-            </a>
-            {# This page will not be built for now #}
-            <a href="{% url 'requests' %}">
-                Friend Requests
-                {% if item != None %}
-                    <span class="dot requests-dot"></span>
-                {% endif %}
-            </a>
-    </div>
-  </div>
+    </a>
 
   <a class="profile-link" href="{{ author.url }}">
     {% if author.profileImage %}
@@ -61,7 +45,7 @@
       {% csrf_token %}
       <div class="d-flex align-items-start">
         <a
-          href="{{ post.author.url }}"
+          href="{{ post.author.id }}"
           aria-label="Link to profile"
         >
           {% if post.author.profileImage %}

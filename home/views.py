@@ -5,6 +5,7 @@ from django.views.defaults import page_not_found
 from service.models import Author, Host, Post, FollowRequest, InboxObject, Comment
 from service.serializers import PostSerializer, FollowRequestSerializer
 from django.forms.models import model_to_dict
+from itertools import chain
 from requests import get
 
 
@@ -24,6 +25,7 @@ def auth_check_middleware(request):
 def home(request):
     author, success = auth_check_middleware(request)
     item = None
+
     try:
         item = InboxObject.objects.get(author=author)
     except Exception as e:
@@ -45,8 +47,12 @@ def home(request):
                 other_author_id = other_author.get('id').split('/')[-1]
                 author_posts_url = f"{get_authors_url}{other_author_id}/posts"
                 posts_result = get(author_posts_url, headers=headers).json()
-                if posts_result.get('items'):
-                    other_posts += posts_result.get('items')
+                posts_item = posts_result.get('items')
+                for post_item in posts_item:
+                    comment_result = get(
+                        f"{author_posts_url}/{post_item.get('id').split('/')[-1]}/comments", headers=headers).json()
+                    post_item['comments'] = comment_result.get('items')
+                other_posts += posts_item
 
         page_number = request.GET.get('page') or 1
         size = request.GET.get('size') or 5
@@ -54,7 +60,22 @@ def home(request):
         post_objs = Post.objects.filter(
             visibility="PUBLIC", unlisted=False).order_by('-publishedDate')
 
-        paginator = Paginator(post_objs, size)
+        # Friend only posts display
+        friends_posts = Post.objects.filter(
+            visibility="FRIENDS", unlisted=False).order_by('-publishedDate')
+        for post in friends_posts:
+            if post.author.id != author.id:
+                try:
+                    sender = FollowRequest.objects.get(actor__id=author.id, object=post.author.id)
+                    receiver = FollowRequest.objects.get(actor__id=post.author.id, object=author.id)
+                except Exception as e:
+                    sender = None
+                    receiver = None
+                if sender is None or receiver is None:
+                    friends_posts = friends_posts.exclude(author=post.author.id)
+
+        combined = list(chain(post_objs, friends_posts))
+        paginator = Paginator(combined, size)
         posts = paginator.get_page(page_number).object_list
 
         postsData = PostSerializer(posts, many=True).data + other_posts
@@ -97,7 +118,8 @@ def follow_request(request):
     if success:
         if request.method == 'GET':
             return render(request, 'followrequest_form.html',
-                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name})
+                          context={"author": model_to_dict(author), "name": request.resolver_match.url_name,
+                                   "error": request.GET.get('error')})
     return author
 
 
@@ -111,44 +133,81 @@ def post_create(request):
     return author
 
 
-def messages(request):
+def followers(request):
     author, success = auth_check_middleware(request)
-    item = None
-    posts = []
+
+    # Get a list of followers
+    items = None
 
     try:
-        item = InboxObject.objects.all()
-        comments = Comment.objects.all()
-
-        # Store all requests into a list
-        for i in item:
-            if i.author_id == author.id:
-                if i.content_type.model_class() is Post:
-                    posts.append(Post.objects.get(id=i.object_id))
+        # Filter the request received by currAuthor
+        items = FollowRequest.objects.all().filter(object=author.id)
 
     except Exception as e:
         pass
 
     if success:
         if request.method == 'GET':
-            return render(request, 'messages.html',
-                          context={"author": model_to_dict(author), "item": item, "posts": posts, "comments": comments,
-                                   "name": request.resolver_match.url_name})
+            return render(request, 'followers.html',
+                          context={"author": model_to_dict(author), "items": items,
+                                   "name": request.resolver_match.url_name, "error": request.GET.get('error')})
     return author
 
 
-def requests(request):
+def follower_detail(request, foreign_author_pk):
     author, success = auth_check_middleware(request)
-    item = None
-    followRequests = []
+    isFollowed = False
 
     try:
-        item = InboxObject.objects.all()
+        request_author = Author.objects.get(pk=foreign_author_pk)
+
+    except Exception as e:
+        return page_not_found(request, e)
+
+    try:
+        forward = FollowRequest.objects.get(
+            actor=author, object=foreign_author_pk)
+        if forward is not None:
+            isFollowed = True
+        else:
+            isFollowed = False
+    except Exception:
+        pass
+
+    if success:
+        if request.method == 'GET':
+            return render(request, 'follower_detail.html',
+                          context={"author": model_to_dict(request_author), "current": model_to_dict(author),
+                                   "name": request.resolver_match.url_name,
+                                   "isFollowed": isFollowed, "edit": author.id == foreign_author_pk,
+                                   "error": request.GET.get('error')})
+    return author
+
+
+def inbox(request):
+    author, success = auth_check_middleware(request)
+    otherMessage = None
+    requests = None
+    comments = None
+    followRequests = []
+    posts = []
+
+    try:
+        allMessage = InboxObject.objects.all()
+        comments = Comment.objects.all()
+
+        # Store all messages into a list
+        for i in allMessage:
+            if i.author_id == author.id:
+                if i.content_type.model_class() is Post:
+                    otherMessage = 1
+                    posts.append(Post.objects.get(id=i.object_id))
 
         # Store all requests into a list
-        for i in item:
+        for i in allMessage:
             if i.author_id == author.id:
                 if i.content_type.model_class() is FollowRequest:
+                    requests = 1
                     followRequests.append(
                         FollowRequest.objects.get(id=i.object_id))
 
@@ -157,8 +216,9 @@ def requests(request):
 
     if success:
         if request.method == 'GET':
-            return render(request, 'requests.html',
-                          context={"author": model_to_dict(author), "item": item, "content": followRequests,
+            return render(request, 'inbox.html',
+                          context={"author": model_to_dict(author), "messages": otherMessage, "requests": requests,
+                                   "posts": posts, "comments": comments, "content": followRequests,
                                    "name": request.resolver_match.url_name})
     return author
 
@@ -206,5 +266,7 @@ def share_post(request, post_pk):
     allAuthors = Author.objects.all()
     if success:
         if request.method == 'GET':
-            return render(request, 'sharepost.html', context={"requesting_author": model_to_dict(author), "post": postData, "allauthors": allAuthors})
+            return render(request, 'sharepost.html',
+                          context={"requesting_author": model_to_dict(author), "post": postData,
+                                   "allauthors": allAuthors})
     return author
