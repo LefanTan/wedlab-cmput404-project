@@ -57,7 +57,7 @@ def home(request):
         paginator = Paginator(post_objs, size)
         posts = paginator.get_page(page_number).object_list
 
-        postsData = PostSerializer(posts, many=True).data #+ other_posts
+        postsData = PostSerializer(posts, many=True).data + other_posts
 
     except Exception as e:
         print(e)
