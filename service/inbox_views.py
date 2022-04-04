@@ -40,7 +40,7 @@ def get_inbox_object(data):
 @swagger_auto_schema(method='post', operation_description="Posts a post/like/follow request to an author's inbox")
 @swagger_auto_schema(method='delete', operation_description="Clear the current author's inbox")
 @api_view(['GET', 'POST', 'DELETE'])
-@parser_classes([MultiPartParser, FormParser])
+@parser_classes([MultiPartParser, FormParser, JSONParser])
 # Return a list of posts in inbox
 def inbox_list(request, author_pk):
     if request.method == 'GET':
