@@ -32,7 +32,7 @@ This blogging/social network platform will allow the importing of other sources 
    - Password: root
 6. Run `python manage.py migrate` to apply migration to the postgres server
 7. Create a copy of the `.env.example` and name it `.env`. Then: 
-   - Add a secret key (for example `SECRET_KEY = "*"`)
+   - Add a secret key (for example `SECRET_KEY = *`)
    - Change `USE_AWS_S3_MEDIA` to `false`
    - If you want to test locally but use the heroku postgres server instead of the above local docker postgres server, change `TEST` to `true`
 8. Create superuser:
