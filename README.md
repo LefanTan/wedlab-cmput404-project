@@ -35,15 +35,15 @@ This blogging/social network platform will allow the importing of other sources 
    - Add a secret key (for example `SECRET_KEY = "*"`)
    - Change `USE_AWS_S3_MEDIA` to `false`
    - If you want to test locally but use the heroku postgres server instead of the above local docker postgres server, change `TEST` to `true`
-8. To create superuser:
+8. Create superuser:
    - Local: Run `python manage.py create_admin`
    - Heroku: Run `heroku run -a social-dist-wed python manage.py create_admin` 
 9. Run `heroku local` for non window user to start the server. Access it at `http://localhost:8000`
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window` 
 10. All the sign ups need to be approved by the superuser through admin panel before any login attempt
 11. Credentials of superuser for accessing `http://localhost:8000/admin`:
-    - username: `team02admin`
-    - password: `admin`
+    - Username: `team02admin`
+    - Password: `admin`
 
 ## Contributors
 
