@@ -29,6 +29,8 @@ DEBUG = True
 # Secret Key
 if 'SECRET_KEY' in os.environ:
     SECRET_KEY = os.environ['SECRET_KEY']
+else:
+    SECRET_KEY = '*'
 
 ALLOWED_HOSTS = ['*']
 
