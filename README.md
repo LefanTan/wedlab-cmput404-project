@@ -8,8 +8,9 @@ Thus in the spirit of diaspora https://diasporafoundation.org/ we want to build 
 This blogging/social network platform will allow the importing of other sources of posts (github, twitter, etc.) as well allow the distributing sharing of posts and content.
 
 ## Heroku Deployment (Active)
-
-- [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
+> [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
+>  - Username: `team02user`
+>  - Password: `user`
 #### Web Service API Endpoint
 - [social-dist-wed.herokuapp.com/service](https://social-dist-wed.herokuapp.com/service)
 #### API Endpoints Documentation
