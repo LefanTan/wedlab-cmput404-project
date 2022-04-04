@@ -72,11 +72,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
+        comments = Comment.objects.filter(post=instance)
+        ret["comments"] = CommentSerializer(comments, many=True).data
+        
         post_like = LikePost.objects.filter(post_id=ret["id"])
         ret["like_posts"] = LikePostSerializer(post_like, many=True).data
         ret["like_posts_count"] = len(ret["like_posts"])
-        comments = Comment.objects.filter(post=instance)
-        ret["comments"] = CommentSerializer(comments, many=True).data
         return ret
 
 
