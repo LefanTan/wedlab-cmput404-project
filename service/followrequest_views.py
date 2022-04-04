@@ -27,7 +27,8 @@ def send_request(request, author_pk):
             body = request.data
 
             try:
-                author = Author.objects.get(displayName=body.get('displayName'))  # Receiver
+                author = Author.objects.get(
+                    displayName=body.get('displayName'))  # Receiver
                 current = Author.objects.get(pk=author_pk)
                 data = {
                     'id': uuid.uuid4().hex,
@@ -44,10 +45,11 @@ def send_request(request, author_pk):
 
                     # Send the request data to the receiver's inbox
                     object = FollowRequest.objects.get(pk=data['id'])
-                    inbox_item = InboxObject(content_object=object, author=author)
+                    inbox_item = InboxObject(
+                        content_object=object, author=author)
                     inbox_item.save()
                     # , model_to_dict(inbox_item)
                     return Response(follow_serializer.data)
                 return Response("Data not valid", status=status.HTTP_400_BAD_REQUEST)
             except Author.DoesNotExist:
-                return Response("Username does not exist!", status=status.HTTP_400_BAD_REQUEST)
+                return Response("Display Name does not exist!", status=status.HTTP_400_BAD_REQUEST)

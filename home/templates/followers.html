@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Follower List{% endblock %}
+{% block stylesheet %}
+    <link rel="stylesheet" href="{%static 'css/followers.css' %}" />
+    {{ author|json_script:"author" }}
+{% endblock %}
+
+{% block content %}
+<header class="py-2 px-3 border-bottom">
+  <button onClick="javascript:history.go(-1);" class="btn p-1 back"><i class="fa-solid fa-arrow-left-long"></i>Back</button>
+</header>
+    <main class="p-4 d-flex align-items-start justify-content-center">
+
+    <form class="d-block">
+        {% csrf_token %}
+        <h1 class="mb-3">Follower List</h1>
+        {% if items != None %}
+            {% for i in items %}
+                <div class="rows">
+                    <a href="{% url 'follower_details' foreign_author_pk=i.actor.id %}" class="list">
+                        {{ i.actor.displayName }}
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <br><br>
+            <p>You don't have followers.</p>
+        {% endif %}
+
+    </form>
+</main>
+{% endblock %}
