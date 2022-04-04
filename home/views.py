@@ -31,8 +31,8 @@ def home(request):
 
     # TODO: Use posts that has arrived in user's Inbox
     try:
-        hosts = Host.objects.filter(allowed=True)
-        other_posts = []
+        # hosts = Host.objects.filter(allowed=True)
+        # other_posts = []
 
         # for host in hosts:
         #     get_authors_url = host.url + 'authors/'
@@ -61,7 +61,7 @@ def home(request):
         postsData = PostSerializer(posts, many=True).data
 
     except Exception as e:
-        print(e)
+        pass
 
     if success:
         return render(request, 'home.html', {"author": model_to_dict(author), "item": item, "posts": postsData})
