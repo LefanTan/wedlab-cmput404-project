@@ -26,6 +26,9 @@
             <input type="text" class="form-control" name="displayName" id="displayName" placeholder="Enter the username you want to send a request" required/>
             <label for="displayName" class="form-label">Username</label>
         </div>
+        {% if error %}
+            <p class="text-danger">{{ error }}</p>
+        {% endif %}
         <div>
             <button class="btn" type="submit">Send</button>
         </div>

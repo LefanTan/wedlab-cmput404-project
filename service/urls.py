@@ -1,5 +1,5 @@
 from django.urls import path, include
-from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views
+from service import author_views, post_views, inbox_views, followrequest_views, comment_views, imagepost_views, like_views,followers_views
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -32,11 +32,16 @@ urlpatterns = [
              post_views.posts, name='post_list'),
 
         # Inbox Endpoint
-        path('authors/<str:pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
+        path('authors/<str:author_pk>/inbox', inbox_views.inbox_list, name="inbox_list"),
+
 
         # Send Request Endpoints
         path('<str:author_pk>/sendfollowrequest/',
              followrequest_views.send_request, name='follow_request'),
+
+        # Followers List Endpoints
+        path('authors/<str:author_pk>/followers', followers_views.follower_list, name='followers'),
+        path('authors/<str:author_pk>/followers/<str:foreign_author_pk>', followers_views.follower_detail, name='single_follower'),
 
         # Comment Endpoints
         path('authors/<str:author_pk>/posts/<str:post_pk>/comments',
@@ -46,6 +51,17 @@ urlpatterns = [
         path('authors/<str:author_pk>/posts/<str:post_pk>/image',
              imagepost_views.imagepost, name='imagepost'),
 
+        # Like Post Endpoints
+        path('authors/<str:author_pk>/posts/<str:post_pk>/likes',
+             like_views.like_post, name='like_post'),
+
+        # Like Comment Endpoints
+        path('authors/<str:author_pk>/posts/<str:post_pk>/comments/<str:comment_pk>/likes',
+             like_views.like_comment, name='like_comment'),
+
+        # Author Liked Endpoints
+        path('authors/<str:author_pk>/liked',
+             like_views.author_liked, name='author_liked'),
 
     ]))
 ]
