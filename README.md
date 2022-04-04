@@ -7,6 +7,11 @@ Thus in the spirit of diaspora https://diasporafoundation.org/ we want to build 
 
 This blogging/social network platform will allow the importing of other sources of posts (github, twitter, etc.) as well allow the distributing sharing of posts and content.
 
+<img src="/home.gif" width="792" height="400" />
+
+## Demo Clips
+- [Clip 1](https://drive.google.com/file/d/1SxSe0UVCg7scICfTunEF8sjMY7t-AXpn/view?usp=sharing)
+
 ## PaaS Deployment - Heroku (Active)
 >  - [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
 >  - Approved Login Credentials for Public:
