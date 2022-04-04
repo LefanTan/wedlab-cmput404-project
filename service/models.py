@@ -19,6 +19,7 @@ class Author(models.Model):
     host = models.URLField(max_length=250)
     github = models.URLField(max_length=250)
     profileImage = models.URLField(max_length=250, null=True, blank=True)
+    approved = models.BooleanField(default=False)
 
 
 class Category(models.Model):

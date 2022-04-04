@@ -41,7 +41,7 @@ class PostEndpointsTestCase(APITestCase):
         response = self.apiClient.get(reverse('post_list', kwargs={
             "author_pk": self.author.id}), SERVER_NAME="test.com")
 
-        dict = get_dict(response.content)
+        dict = get_dict(response.content).get('items')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual("title1", dict[0].get('title'))
