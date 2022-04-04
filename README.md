@@ -39,7 +39,7 @@ This blogging/social network platform will allow the importing of other sources 
    - [Not For Public] If you want to test locally but use the heroku postgres database server instead of the above local docker postgres database server, change `TEST` to `true`
 8. Create superuser:
    - Local: Run `python manage.py create_admin`
-   - [Not For Public] Heroku: Run `heroku run -a social-dist-wed python manage.py create_admin` 
+   - [Not For Public] Heroku CLI: Run `heroku run -a social-dist-wed python manage.py create_admin` 
 9. Run `heroku local` for non window user to start the application server. Access it at `http://localhost:8000`
    - Window doesn't support gunicorn so you'll have to do `heroku local -f Procfile.window` 
 10. All the sign ups need to be approved by the superuser through admin panel before any login attempt
