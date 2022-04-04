@@ -35,6 +35,12 @@
                         <p>From: {{ i.author.displayName }}</p><br>
                         <p>Title: {{ i.title }}</p><br>
                         <p>Description: {{ i.description }}</p><br>
+                        <p>Likes:</p><br>
+                            {% for j in likes %}
+                                {% if j.post_id == i.id %}
+                                    <ul style="color: black"><li>{{ j.author.displayName }} liked this post</li></ul><br>
+                                {% endif %}
+                            {% endfor %}
                         <p>Comments:</p><br>
                             {% for j in comments %}
                                 {% if j.post_id == i.id %}
