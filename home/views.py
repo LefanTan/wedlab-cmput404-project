@@ -22,6 +22,7 @@ def auth_check_middleware(request):
 
 
 def home(request):
+    global postsData
     author, success = auth_check_middleware(request)
     item = None
     try:
