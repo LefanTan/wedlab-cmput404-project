@@ -11,6 +11,7 @@ This blogging/social network platform will allow the importing of other sources 
 
 ## Demo Clips
 - [Clip 1](https://drive.google.com/file/d/1SxSe0UVCg7scICfTunEF8sjMY7t-AXpn/view?usp=sharing)
+- [Clip 2](https://drive.google.com/file/d/1RFAQ-s8O77Ji9C37s2U3ibHabzEfy27k/view?usp=sharing)
 
 ## PaaS Deployment - Heroku (Active)
 >  - [social-dist-wed.herokuapp.com](https://social-dist-wed.herokuapp.com)
